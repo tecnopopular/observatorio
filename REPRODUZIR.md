@@ -67,18 +67,18 @@ Estado do último ciclo registrado no manifesto:
 
 | Medida | Valor |
 | :--- | :--- |
-| Ciclo | 2026-10-24T04:55:22Z |
+| Ciclo | 2026-10-24T05:56:33Z |
 | Iniciativas no catálogo | 174 |
 | Laudos emitidos | 171 |
 | Puladas por `robots.txt` | 3 |
 | Certificadas (selo) | 28 |
-| Catalogadas no diretório aberto | 113 |
+| Catalogadas no diretório aberto | 112 |
 | Rejeitadas | 25 |
-| Não inspecionadas | 5 |
-| Com hash de HTML registrado | 166 |
-| Inspeções completas / parciais | 144 / 27 |
-| Iniciativas com hash novo ou alterado no ciclo | 11 |
-| Tamanho do manifesto | 89.850 bytes |
+| Não inspecionadas | 6 |
+| Com hash de HTML registrado | 165 |
+| Inspeções completas / parciais | 143 / 28 |
+| Iniciativas com hash novo ou alterado no ciclo | 36 |
+| Tamanho do manifesto | 89.805 bytes |
 
 Para conferir localmente depois de um ciclo:
 
@@ -147,6 +147,7 @@ transforma uma página lida pela metade em leitura completa.
 | Consulta de `robots.txt` | não | um host pode publicar ou revogar a diretiva a qualquer momento |
 | Preservação no Internet Archive | não | a API recusa requisições não autenticadas, e o link pode não existir |
 | Camada semântica (JEV) | não | depende de API externa e de chave; ajusta a nota só acima de confiança 0,90 |
+| Números de um ciclo anterior | não | cada release carrega o ciclo em que foi gerada, com data própria no `PROCEDENCIA.txt` |
 
 O uso de inteligência artificial generativa na produção deste repositório, e a camada semântica
 opcional que pode ajustar notas, estão declarados em `DECLARACAO_IA.md`, conforme a Portaria CNPq
