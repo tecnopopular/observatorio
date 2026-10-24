@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       url:
-        description: "Endereço público da aplicação, com https://"
+        description: "Endereço público da aplicação. Obrigatoriamente https; se o esquema for omitido, é assumido https e confirmado antes de gravar."
         required: true
         type: string
       nome:

@@ -297,3 +297,26 @@ class ContentFetcher(Protocol):
             `FetchResult` do provedor, com erro registrado em caso de falha.
         """
         ...
+
+
+def probe_https(url: str, timeout: float = 10.0) -> tuple[bool, str]:
+    """Confirma que um endereço responde em https antes de gravá-lo no catálogo.
+
+    Qualquer resposta HTTP serve como prova de que o host existe no esquema: um 403 ou um 404 são
+    respostas de um servidor, e o que se quer descartar é host que não atende em https.
+
+    Args:
+        url: Endereço completo a sondar.
+        timeout: Tempo máximo de espera em segundos.
+
+    Returns:
+        Par com indicador de resposta e motivo legível.
+    """
+    pedido = urllib.request.Request(url, headers={"User-Agent": INSTITUTIONAL_USER_AGENT}, method="GET")
+    try:
+        with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
+            return True, f"HTTP {resposta.status}"
+    except urllib.error.HTTPError as erro:
+        return True, f"HTTP {erro.code}"
+    except (urllib.error.URLError, TimeoutError, ssl.SSLError) as erro:
+        return False, type(erro).__name__

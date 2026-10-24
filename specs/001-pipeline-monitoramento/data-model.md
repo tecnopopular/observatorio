@@ -358,7 +358,7 @@ O manifesto omite `summary_markdown` e o texto de `guidance`, que são derivados
 
 O arquivo é append-only e guarda eventos, não estado: o estado vigente de um endereço é o último
 evento registrado para ele. Endereços são comparados pela chave normalizada (host sem `www` e caminho
-sem barra final, em minúsculas), de modo que `http://www.exemplo.org/` e `https://exemplo.org` são a
+sem barra final, em minúsculas), de modo que `https://www.exemplo.org/` e `https://exemplo.org` são a
 mesma iniciativa. Retirada de endereço já retirado e readmissão de endereço não retirado são
 recusadas, de modo que o histórico nunca fica ambíguo.
 

@@ -28,7 +28,39 @@ CATEGORIES = (
 
 CATEGORIAS_CONHECIDAS = ", ".join(CATEGORIES)
 
-ACCEPTED_SCHEMES = ("http", "https")
+ACCEPTED_SCHEMES = ("https",)
+
+BARE_HOST = re.compile(r"^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)+(?::\d+)?(?:[/?].*)?$", re.I)
+
+
+def normalize_url(raw: str) -> tuple[str, str | None]:
+    """Completa o esquema ausente e recusa o que não for https.
+
+    Endereço sem esquema é ambíguo apenas quanto ao transporte; o host está declarado. Como o
+    catálogo publica o endereço exato que o motor vai buscar, o esquema assumido precisa ser
+    confirmado antes de gravar — quem chama é que faz a consulta, porque esta função não vai à rede.
+
+    Args:
+        raw: Endereço como informado pelo operador.
+
+    Returns:
+        Par com o endereço normalizado e o problema encontrado, quando houver.
+    """
+    texto = raw.strip()
+    if not texto:
+        return "", "sem endereço"
+
+    partes = urlsplit(texto)
+    esquema = partes.scheme.lower()
+    if esquema == "https":
+        if not partes.hostname or "." not in partes.hostname:
+            return texto, f"endereço sem host utilizável ({texto})"
+        return texto, None
+    if esquema:
+        return texto, f"o catálogo só aceita https, e chegou {esquema}:// ({texto})"
+    if not BARE_HOST.match(texto):
+        return texto, f"endereço sem esquema e sem forma de host ({texto})"
+    return f"https://{texto}", None
 
 
 def slugify(text: str) -> str:
@@ -175,7 +207,7 @@ def validate_catalog(catalog: list[dict]) -> list[str]:
 
         esquema = urlsplit(url).scheme.lower()
         if esquema not in ACCEPTED_SCHEMES:
-            problemas.append(f"{rotulo}: URL sem esquema http/https ({url})")
+            problemas.append(f"{rotulo}: URL precisa de https ({url})")
 
         alvo = url_key(url)
         if alvo in vistos_endereco:

@@ -9,7 +9,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
+from urllib.error import URLError
 
 from observatorio.catalog import (
     CATEGORIES,
@@ -100,7 +101,12 @@ class TestValidacaoDoCatalogo(unittest.TestCase):
     def test_url_sem_esquema(self):
         """URL sem esquema falharia em silêncio no ciclo; o portão recusa antes."""
         problemas = validate_catalog([{"nome": "A", "url": "a.org"}])
-        self.assertTrue(any("esquema" in p for p in problemas))
+        self.assertTrue(any("https" in p for p in problemas))
+
+    def test_url_em_http_e_recusada(self):
+        """O catálogo publica https: endereço em http é recusado, não convertido em silêncio."""
+        problemas = validate_catalog([{"nome": "A", "url": "http://a.org"}])
+        self.assertTrue(any("precisa de https" in p for p in problemas))
 
     def test_fragmento_nao_separa_enderecos(self):
         """Ancora de página não cria iniciativa nova: o servidor nunca a recebe."""
@@ -110,7 +116,7 @@ class TestValidacaoDoCatalogo(unittest.TestCase):
         """Duas grafias do mesmo endereço são a mesma iniciativa."""
         catalog = [
             {"nome": "A", "url": "https://exemplo.org"},
-            {"nome": "B", "url": "http://www.exemplo.org/"},
+            {"nome": "B", "url": "https://www.exemplo.org/"},
         ]
         problemas = validate_catalog(catalog)
         self.assertTrue(any("mesmo endereço" in p for p in problemas))
@@ -228,7 +234,7 @@ class TestComandoAdicionar(unittest.TestCase):
             tmp = Path(tmp)
             catalog, registry = self._preparar(tmp)
             primeiro = _executar(catalog, registry)
-            segundo = _executar(catalog, registry, url="http://www.novo-exemplo.org/")
+            segundo = _executar(catalog, registry, url="https://www.novo-exemplo.org/")
             gravado = json.loads(catalog.read_text(encoding="utf-8"))
 
         self.assertEqual(primeiro, 0)
@@ -354,6 +360,105 @@ class TestCatalogoVersionado(unittest.TestCase):
         catalog = json.loads(CATALOGO_REAL.read_text(encoding="utf-8"))
         ids = [item["tool_id"] for item in catalog]
         self.assertEqual(len(ids), len(set(ids)))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+class TestEsquemaDoEndereco(unittest.TestCase):
+    """Cobre a regra de esquema: só https, com confirmação quando o esquema é assumido."""
+
+    def _preparar(self, tmp):
+        """Cria catálogo e registro vazios.
+
+        Args:
+            tmp: Diretório temporário.
+
+        Returns:
+            Par com os caminhos do catálogo e do registro.
+        """
+        catalog = tmp / "catalogo.json"
+        catalog.write_text("[]", encoding="utf-8")
+        registry = tmp / "retiradas.json"
+        registry.write_text('{"versao": 1, "eventos": []}', encoding="utf-8")
+        return catalog, registry
+
+    def test_endereco_em_http_e_recusado_sem_converter(self):
+        """http não é promovido a https em silêncio: o operador informou outro transporte."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            catalog, registry = self._preparar(tmp)
+            with patch("observatorio.cli.probe_https") as sonda:
+                codigo = _executar(catalog, registry, url="http://exemplo.org")
+            gravado = json.loads(catalog.read_text(encoding="utf-8"))
+
+        self.assertEqual(codigo, 1)
+        self.assertEqual(gravado, [])
+        sonda.assert_not_called()
+
+    def test_host_sem_esquema_e_gravado_em_https(self):
+        """Faltar o esquema é erro de digitação: assume https e registra o endereço normalizado."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            catalog, registry = self._preparar(tmp)
+            with patch("observatorio.cli.probe_https", return_value=(True, "HTTP 200")):
+                codigo = _executar(catalog, registry, url="exemplo.org")
+            gravado = json.loads(catalog.read_text(encoding="utf-8"))
+
+        self.assertEqual(codigo, 0)
+        self.assertEqual(gravado[0]["url"], "https://exemplo.org")
+        self.assertEqual(gravado[0]["dominio"], "exemplo.org")
+
+    def test_host_que_nao_responde_em_https_e_recusado(self):
+        """Sem resposta em https, incluir publicaria entrada que nunca recebe laudo."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            catalog, registry = self._preparar(tmp)
+            with patch("observatorio.cli.probe_https", return_value=(False, "ConnectError")):
+                codigo = _executar(catalog, registry, url="exemplo.org")
+            gravado = json.loads(catalog.read_text(encoding="utf-8"))
+
+        self.assertEqual(codigo, 1)
+        self.assertEqual(gravado, [])
+
+    def test_sonda_real_recusa_host_fora_do_https(self):
+        """A sonda é exercitada de verdade: dublar a função esconderia o transporte errado."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            catalog, registry = self._preparar(tmp)
+            with patch("observatorio.fetch.urllib.request.urlopen", side_effect=URLError("dns")):
+                codigo = _executar(catalog, registry, url="exemplo.org")
+            gravado = json.loads(catalog.read_text(encoding="utf-8"))
+
+        self.assertEqual(codigo, 1)
+        self.assertEqual(gravado, [])
+
+    def test_sonda_real_aceita_host_que_responde(self):
+        """Resposta HTTP de qualquer código prova que o host atende em https."""
+        resposta = MagicMock()
+        resposta.__enter__.return_value = resposta
+        resposta.status = 403
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            catalog, registry = self._preparar(tmp)
+            with patch("observatorio.fetch.urllib.request.urlopen", return_value=resposta):
+                codigo = _executar(catalog, registry, url="exemplo.org")
+            gravado = json.loads(catalog.read_text(encoding="utf-8"))
+
+        self.assertEqual(codigo, 0)
+        self.assertEqual(gravado[0]["url"], "https://exemplo.org")
+
+    def test_endereco_ja_https_nao_consulta_a_rede(self):
+        """Quem informa o esquema certo não paga requisição extra."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            catalog, registry = self._preparar(tmp)
+            with patch("observatorio.cli.probe_https") as sonda:
+                codigo = _executar(catalog, registry, url="https://exemplo.org")
+            sonda.assert_not_called()
+
+        self.assertEqual(codigo, 0)
 
 
 if __name__ == "__main__":

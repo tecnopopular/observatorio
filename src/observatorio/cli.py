@@ -19,10 +19,12 @@ from .catalog import (
     append_entry,
     extract_domain,
     new_tool_id,
+    normalize_url,
     strip_fragment,
     validate_entry,
 )
 from .engine import run_batch_audit
+from .fetch import probe_https
 from .privacy_guard import CivicPrivacyGuard, ViolationSeverity
 from .robots import RobotsPolicy
 from .withdrawals import (
@@ -316,7 +318,23 @@ def cmd_add(args: argparse.Namespace) -> int:
         return 1
 
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
-    url = strip_fragment(args.url)
+    normalizada, problema = normalize_url(args.url)
+    if problema:
+        print(f"[-] Endereço recusado: {problema}", file=sys.stderr)
+        return 1
+    if not args.url.strip().lower().startswith("https://"):
+        respondeu, motivo = probe_https(normalizada)
+        if not respondeu:
+            print(f"[-] Esquema assumido não respondeu: {normalizada} ({motivo})", file=sys.stderr)
+            print(
+                "[*] O endereço chegou sem esquema e este host não atende em https. "
+                "Confira o endereço antes de incluir.",
+                file=sys.stderr,
+            )
+            return 1
+        print(f"[*] Esquema ausente: assumindo {normalizada} ({motivo})")
+
+    url = strip_fragment(normalizada)
     alvo = url_key(url)
 
     if any(url_key(str(item.get("url") or "")) == alvo for item in catalog):
@@ -468,7 +486,11 @@ def build_parser() -> argparse.ArgumentParser:
     add_command_parser = subparsers.add_parser(
         "adicionar", help="Inclui uma iniciativa no catálogo com identificador congelado"
     )
-    add_command_parser.add_argument("--url", required=True, help="Endereço público da aplicação")
+    add_command_parser.add_argument(
+        "--url",
+        required=True,
+        help="Endereço público da aplicação, em https (o esquema é assumido se ausente)",
+    )
     add_command_parser.add_argument("--nome", required=True, help="Nome público da iniciativa")
     add_command_parser.add_argument(
         "--categoria",
