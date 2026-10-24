@@ -1586,5 +1586,12 @@
     "url": "https://voz.social.br",
     "dominio": "voz.social.br",
     "adicionado_em": "2026-10-24"
+  },
+  {
+    "nome": "Fediverse",
+    "tool_id": "fediverse",
+    "url": "https://fediverse.info",
+    "dominio": "fediverse.info",
+    "adicionado_em": "2026-10-24"
   }
 ]
