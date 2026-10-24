@@ -18,6 +18,7 @@ from observatorio.preservation import (
     ArchiveJob,
     auth_headers,
     await_archives,
+    find_snapshot,
     poll_archive,
     snapshot_url,
     submit_archive,
@@ -323,6 +324,125 @@ class TestAutenticacao(unittest.TestCase):
 
         self.assertEqual(resultado.status, "refused")
         self.assertIn("limit", resultado.detail or "")
+
+
+class TestParametrosDaSubmissao(unittest.TestCase):
+    """Os parâmetros enviados seguem a documentação do SPN2, e não o nome que parece intuitivo."""
+
+    @patch("urllib.request.urlopen")
+    def test_envia_deduplicacao_do_servidor(self, mock_urlopen: MagicMock) -> None:
+        """A deduplicação é pedida ao serviço, que reaproveita captura recente.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        mock_urlopen.return_value.__enter__.return_value = resposta(PAGINA_DE_SUBMISSAO)
+
+        submit_archive("https://exemplo.org/")
+
+        corpo = mock_urlopen.call_args.args[0].data.decode()
+        self.assertIn("if_not_archived_within=30d", corpo)
+        self.assertIn("skip_first_archive=1", corpo)
+
+    @patch("urllib.request.urlopen")
+    def test_nao_envia_capture_all(self, mock_urlopen: MagicMock) -> None:
+        """`capture_all` significa capturar página com erro HTTP, não capturar tudo.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        mock_urlopen.return_value.__enter__.return_value = resposta(PAGINA_DE_SUBMISSAO)
+
+        submit_archive("https://exemplo.org/")
+
+        corpo = mock_urlopen.call_args.args[0].data.decode()
+        self.assertNotIn("capture_all", corpo)
+        self.assertNotIn("capture_outlinks", corpo)
+
+    @patch("observatorio.preservation.find_snapshot")
+    @patch("urllib.request.urlopen")
+    def test_captura_dispensada_vira_endereco_existente(
+        self, mock_urlopen: MagicMock, mock_find: MagicMock
+    ) -> None:
+        """Quando o serviço dispensa a captura, o endereço do snapshot existente é adotado.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+            mock_find: Substituto da consulta ao índice do Wayback.
+        """
+        corpo = json.dumps(
+            {
+                "url": "https://exemplo.org/",
+                "job_id": None,
+                "message": "The same snapshot had been made 263 hours ago.",
+            }
+        )
+        mock_urlopen.return_value.__enter__.return_value = resposta(corpo)
+        mock_find.return_value = "https://web.archive.org/web/20261024225155/https://exemplo.org/"
+
+        resultado = submit_archive("https://exemplo.org/")
+
+        self.assertEqual(resultado.status, "captured")
+        self.assertEqual(resultado.url, "https://web.archive.org/web/20261024225155/https://exemplo.org/")
+        self.assertIn("reaproveitado", resultado.detail or "")
+
+    @patch("observatorio.preservation.find_snapshot", return_value=None)
+    @patch("urllib.request.urlopen")
+    def test_captura_dispensada_sem_endereco_vira_reused(
+        self, mock_urlopen: MagicMock, mock_find: MagicMock
+    ) -> None:
+        """Sem endereço localizável, o laudo diz `reused` e não inventa URL.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+            mock_find: Substituto da consulta ao índice do Wayback.
+        """
+        corpo = json.dumps({"url": "https://exemplo.org/", "job_id": None, "message": "recente"})
+        mock_urlopen.return_value.__enter__.return_value = resposta(corpo)
+
+        resultado = submit_archive("https://exemplo.org/")
+
+        self.assertEqual(resultado.status, "reused")
+        self.assertIsNone(resultado.url)
+
+
+class TestIndiceDoWayback(unittest.TestCase):
+    """Consulta ao índice público de snapshots existentes."""
+
+    @patch("urllib.request.urlopen")
+    def test_endereco_http_do_indice_vira_https(self, mock_urlopen: MagicMock) -> None:
+        """O índice devolve `http://web.archive.org/...`; o laudo publica https.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        corpo = json.dumps(
+            {
+                "archived_snapshots": {
+                    "closest": {
+                        "available": True,
+                        "url": "http://web.archive.org/web/20261024225155/https://exemplo.org/",
+                    }
+                }
+            }
+        )
+        mock_urlopen.return_value.__enter__.return_value = resposta(corpo)
+
+        self.assertEqual(
+            find_snapshot("https://exemplo.org/"),
+            "https://web.archive.org/web/20261024225155/https://exemplo.org/",
+        )
+
+    @patch("urllib.request.urlopen")
+    def test_indice_sem_captura_devolve_nulo(self, mock_urlopen: MagicMock) -> None:
+        """Endereço nunca capturado devolve nulo, sem inventar snapshot.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        mock_urlopen.return_value.__enter__.return_value = resposta(json.dumps({"archived_snapshots": {}}))
+
+        self.assertIsNone(find_snapshot("https://exemplo.org/"))
 
 
 if __name__ == "__main__":

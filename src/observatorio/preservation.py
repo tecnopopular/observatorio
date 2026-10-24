@@ -30,10 +30,13 @@ from .fetch import INSTITUTIONAL_USER_AGENT
 from .models import ArchiveStatus
 
 SAVE_ENDPOINT = "https://web.archive.org/save"
+AVAILABILITY_ENDPOINT = "https://archive.org/wayback/available?url={target}"
 STATUS_ENDPOINT = "https://web.archive.org/save/status/{job_id}"
 SNAPSHOT_ENDPOINT = "https://web.archive.org/web/{timestamp}/{target}"
 JOB_PATTERN = re.compile(r"spn2-[a-z0-9]+")
 EXISTING_SNAPSHOT_PATTERN = re.compile(r"web\.archive\.org/web/(\d{14})/")
+
+IF_NOT_ARCHIVED_WITHIN = "30d"
 
 DEFAULT_ARCHIVE_BUDGET = 60.0
 POLL_INTERVAL = 5.0
@@ -151,7 +154,13 @@ def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
         Resultado `pending` com o identificador do trabalho quando a submissão é aceita, ou
         `refused`/`failed` com o motivo quando não é.
     """
-    dados = urllib.parse.urlencode({"url": target_url, "capture_all": "on"}).encode()
+    dados = urllib.parse.urlencode(
+        {
+            "url": target_url,
+            "if_not_archived_within": IF_NOT_ARCHIVED_WITHIN,
+            "skip_first_archive": "1",
+        }
+    ).encode()
     cabecalhos = auth_headers()
     cabecalhos["Content-Type"] = "application/x-www-form-urlencoded"
     pedido = urllib.request.Request(SAVE_ENDPOINT, data=dados, headers=cabecalhos)
@@ -163,7 +172,7 @@ def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
     except Exception as erro:
         return ArchiveOutcome(status="failed", detail=f"falha de rede na submissão: {type(erro).__name__}")
 
-    resposta_json = _json_da_submissao(corpo)
+    resposta_json = _json_da_submissao(corpo, target_url)
     if resposta_json is not None:
         return resposta_json
 
@@ -270,15 +279,20 @@ def await_archives(
     return resultados
 
 
-def _json_da_submissao(corpo: str) -> ArchiveOutcome | None:
+def _json_da_submissao(corpo: str, target_url: str) -> ArchiveOutcome | None:
     """Interpreta a resposta JSON da submissão, quando o serviço responde em JSON.
 
     Com `Accept: application/json` o serviço devolve o identificador do trabalho em JSON, e não a
     página HTML que o modo anônimo entrega. Respostas de erro também vêm em JSON, com `message` e
     `status_ext`, o que permite registrar o motivo real em vez de supor.
 
+    Quando a captura é dispensada porque já existe snapshot recente, o serviço devolve
+    `job_id` nulo; nesse caso o endereço perene é buscado no índice público, em vez de o laudo
+    registrar uma recusa que não houve.
+
     Args:
         corpo: Corpo da resposta da submissão.
+        target_url: Endereço submetido, usado para resolver o snapshot já existente.
 
     Returns:
         Resultado da submissão, ou None quando o corpo não é JSON.
@@ -294,6 +308,19 @@ def _json_da_submissao(corpo: str) -> ArchiveOutcome | None:
     if job_id:
         return ArchiveOutcome(status="pending", job_id=str(job_id))
 
+    if "job_id" in dados and dados.get("url"):
+        existente = find_snapshot(target_url)
+        if existente:
+            return ArchiveOutcome(
+                status="captured",
+                url=existente,
+                detail="o Internet Archive já tinha captura recente; endereço reaproveitado",
+            )
+        return ArchiveOutcome(
+            status="reused",
+            detail=("captura dispensada por já existir snapshot recente, sem endereço localizável agora"),
+        )
+
     situacao = str(dados.get("status") or "").lower()
     motivo = dados.get("message") or dados.get("status_ext") or situacao or "sem motivo informado"
     if situacao in ("error", "fatal"):
@@ -304,6 +331,42 @@ def _json_da_submissao(corpo: str) -> ArchiveOutcome | None:
     if dados.get("url"):
         return ArchiveOutcome(status="pending", detail="submissão aceita sem identificador de trabalho")
     return None
+
+
+def find_snapshot(target_url: str, timeout: int = 15) -> str | None:
+    """Consulta o índice público do Wayback pelo snapshot mais próximo do endereço.
+
+    Serve para reaproveitar captura que já existe — inclusive a feita por terceiros — em vez de
+    gastar uma submissão. O índice é consultado sem autenticação; quando ele responde com limite
+    de requisições, a resposta é ausência de endereço, e não erro do ciclo.
+
+    Args:
+        target_url: Endereço público procurado.
+        timeout: Tempo limite da consulta, em segundos.
+
+    Returns:
+        Endereço perene do snapshot mais próximo, ou None quando não há captura ou a consulta falha.
+    """
+    alvo = urllib.parse.quote(target_url, safe="")
+    pedido = urllib.request.Request(
+        AVAILABILITY_ENDPOINT.format(target=alvo), headers={"User-Agent": INSTITUTIONAL_USER_AGENT}
+    )
+    try:
+        with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
+            corpo = resposta.read(200_000).decode("utf-8", "ignore")
+    except Exception:
+        return None
+    try:
+        dados = json.loads(corpo)
+    except json.JSONDecodeError:
+        return None
+    mais_proximo = (dados.get("archived_snapshots") or {}).get("closest") or {}
+    if not mais_proximo.get("available"):
+        return None
+    endereco = str(mais_proximo.get("url") or "")
+    if not endereco:
+        return None
+    return endereco.replace("http://web.archive.org/", "https://web.archive.org/")
 
 
 def _reason_text(erro: Exception) -> str:

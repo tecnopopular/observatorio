@@ -31,8 +31,9 @@ Utilizar o hash criptográfico **SHA-256 do corpo HTTP bruto (HTML limpo)** deco
 ### Decisão
 Integrar a API **Save Page Now (SPN)** do **Internet Archive (Wayback Machine)** pela interface de
 tarefas, com orçamento de espera por ciclo:
-* Submissão: `POST https://web.archive.org/save` com `url=<endereço>&capture_all=on`; a resposta é uma
-  página que carrega o identificador de tarefa `spn2-...`.
+* Submissão: `POST https://web.archive.org/save` com `url=<endereço>` e `if_not_archived_within=30d`,
+  que faz o serviço reaproveitar captura recente em vez de criar outra; a resposta autenticada é JSON
+  com `job_id`, e a anônima é uma página que carrega o identificador `spn2-...`.
 * Acompanhamento: `GET https://web.archive.org/save/status/<job_id>` devolve JSON com `status`
   (`pending`, `success`, `error`), `timestamp` e `original_url`.
 * Endereço perene: montado como `https://web.archive.org/web/<timestamp>/<original_url>` a partir da

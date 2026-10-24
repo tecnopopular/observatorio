@@ -128,6 +128,10 @@ A preservação perene é delegada ao Internet Archive, e o laudo carrega o ende
 endereço, recebe um identificador de trabalho e consulta o estado até concluir. O endereço perene é
 montado a partir do carimbo devolvido (`/web/AAAAMMDDhhmmss/<url>`), não de cabeçalho de resposta.
 
+- **Deduplicação pedida ao serviço.** A submissão leva `if_not_archived_within=30d`: quando já
+  existe captura recente — inclusive feita por terceiros — o Internet Archive dispensa a nova e o
+  cliente resolve o endereço no índice público, em uma consulta. O laudo registra isso como
+  `captured`, e não como recusa.
 - **Envio serial, com intervalo.** As capturas são submetidas uma de cada vez, com 12 s entre
   envios. Medido em 2026-10-24: em rajada de 6 envios simultâneos, todos falharam com `Connection
   refused`; 4 envios com 8 s de intervalo terminaram em `HTTP 429`, enquanto 6 envios com 12 s
@@ -146,6 +150,10 @@ montado a partir do carimbo devolvido (`/web/AAAAMMDDhhmmss/<url>`), não de cab
 - **Estado preservado entre ciclos.** O manifesto versionado guarda `archive_url` e
   `archive_status` por iniciativa, então o ciclo sabe o que já tem snapshot e não recaptura conteúdo
   idêntico.
+- **Parâmetros pelo significado, não pelo nome.** `capture_all=1` no Save Page Now significa
+  "capturar também páginas com erro HTTP", e não "capturar tudo"; `capture_outlinks=1` captura todos
+  os links de saída de uma página, o que multiplicaria a carga por dezenas num acervo de 183
+  endereços. Nenhum dos dois é usado: o objeto da preservação é a página auditada.
 
 O modo síncrono (`GET /save/<url>`) não é usado: ele só responde depois de a captura terminar, e uma
 página pesada leva minutos. Medido em 2026-10-24, uma página com aplicação JavaScript não devolveu
