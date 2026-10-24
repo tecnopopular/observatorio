@@ -1543,5 +1543,15 @@
     "fontes_primarias": [
       "https://www.tesourotransparente.gov.br/temas/divida-publica-federal"
     ]
+  },
+  {
+    "nome": "Obras do Governo Federal",
+    "tool_id": "obras-do-governo-federal",
+    "url": "https://obrasbr.online",
+    "dominio": "obrasbr.online",
+    "adicionado_em": "2026-10-24",
+    "fontes_primarias": [
+      "https://api-publica.obrasgov.gestao.gov.br"
+    ]
   }
 ]
