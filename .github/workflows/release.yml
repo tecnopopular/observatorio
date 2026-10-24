@@ -42,6 +42,18 @@ jobs:
       - name: Sincronizar dependências
         run: uv sync
 
+      - name: Portão de versão
+        env:
+          TAG: ${{ env.TAG }}
+        run: |
+          declarada=$(uv run python -c "import observatorio; print(observatorio.__version__)")
+          if [ "v$declarada" != "$TAG" ]; then
+            echo "Tag $TAG não corresponde à versão declarada $declarada."
+            echo "Suba a versão em pyproject.toml e __init__.py antes de taguear."
+            exit 1
+          fi
+          echo "Versão declarada confere com a tag: $TAG"
+
       - name: Portão de formatação
         run: uv run ruff format --check .
 
