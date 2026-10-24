@@ -61,12 +61,15 @@ jobs:
         run: uv run python -m unittest discover tests
 
       - name: Executar Esteira de Monitoramento e Avaliação Cívica
+        env:
+          ENTRADA_REFRESH: ${{ inputs.refresh }}
+          ENTRADA_SKIP_ARCHIVE: ${{ inputs.skip_archive }}
         run: |
-          ARGS="
-          if [ "${{ github.event.inputs.refresh }}" = "true" ]; then
+          ARGS=""
+          if [ "$ENTRADA_REFRESH" = "true" ]; then
             ARGS="$ARGS --refresh"
           fi
-          if [ "${{ github.event.inputs.skip_archive }}" = "true" ]; then
+          if [ "$ENTRADA_SKIP_ARCHIVE" = "true" ]; then
             ARGS="$ARGS --skip-archive"
           fi
           uv run python -m observatorio.cli audit-all $ARGS
