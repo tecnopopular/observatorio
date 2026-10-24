@@ -24,6 +24,7 @@ from .preservation import (
     await_archives,
     calculate_sha256,
     check_content_changed,
+    has_credentials,
     submit_archive,
 )
 from .robots import RobotsPolicy
@@ -374,6 +375,9 @@ def _preserve(
                 relatorio.archive_status = "skipped"
         print("[*] Preservação: dispensada por --skip-archive")
         return
+
+    modo = "conta do Internet Archive" if has_credentials() else "anônima"
+    print(f"[*] Preservação: submissão com {modo}")
 
     fila = [relatorio for relatorio in reports if _needs_capture(relatorio, previous)]
     fila.sort(key=lambda r: (_archive_priority(r, previous), r.tool_id))

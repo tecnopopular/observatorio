@@ -144,6 +144,19 @@ def auth_headers() -> dict[str, str]:
     return cabecalhos
 
 
+def has_credentials() -> bool:
+    """Indica se as chaves do Internet Archive estão configuradas, sem revelar valor algum.
+
+    O ciclo imprime essa informação para que o log baste na hora de diagnosticar: uma execução
+    anônima tem limites menores, e saber qual dos dois modos rodou evita atribuir ao código o que
+    é configuração ausente.
+
+    Returns:
+        True quando o par de chaves está disponível no ambiente ou no Keychain.
+    """
+    return get_internet_archive_keys() is not None
+
+
 def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
     """Submete uma captura ao Save Page Now e devolve o identificador do trabalho.
 
