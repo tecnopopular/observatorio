@@ -152,6 +152,30 @@ página pesada leva minutos. Medido em 2026-10-24, uma página com aplicação J
 nada em 90 s pelo modo síncrono, enquanto pelo modo de tarefas o snapshot de `tecnopopular.org`
 ficou pronto em 14,21 s.
 
+### Chaves do Internet Archive
+
+A submissão anônima funciona, mas o Save Page Now aplica a ela um limite baixo: depois de dezenas de
+pedidos seguidos o serviço responde `429` e passa a recusar conexões. Com uma conta, a esteira
+autentica cada pedido e o limite sobe.
+
+1. Entre em `https://archive.org/account/s3.php`, marque a caixa e clique em **Generate New Keys**.
+   Você recebe duas partes: a chave de acesso e a chave secreta.
+2. Guarde as duas no Keychain do macOS. O comando abaixo pede o valor de forma oculta, para o segredo
+   não passar pelo histórico do shell:
+
+```bash
+security add-generic-password -U -a "$USER" -s IA_S3_ACCESS_KEY -w
+security add-generic-password -U -a "$USER" -s IA_S3_SECRET_KEY -w
+```
+
+3. No GitHub Actions, cadastre `IA_S3_ACCESS_KEY` e `IA_S3_SECRET_KEY` em *Settings → Secrets and
+   variables → Actions*. O workflow de monitoramento já os repassa ao ciclo.
+
+A precedência é a mesma das demais chaves do projeto: variável de ambiente primeiro, Keychain
+depois. Meia credencial não autentica — com apenas uma das partes, o ciclo segue anônimo. As chaves
+nunca entram em arquivo, laudo, log ou mensagem de erro, e a troca é feita no mesmo endereço, seguida
+da atualização dos dois lados.
+
 ### Proveniência: declaração só pontua com link que a confirme
 
 A dimensão de proveniência (peso 25, piso 60) tem duas evidências independentes:

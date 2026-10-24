@@ -10,7 +10,7 @@ import subprocess
 import unittest
 from unittest.mock import patch
 
-from observatorio.credentials import get_api_key, get_keychain_secret
+from observatorio.credentials import get_api_key, get_internet_archive_keys, get_keychain_secret
 
 
 class TestKeychain(unittest.TestCase):
@@ -61,3 +61,37 @@ class TestPrecedencia(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestChavesDoInternetArchive(unittest.TestCase):
+    """O par de chaves S3 só é usado quando as duas partes existem."""
+
+    def test_uma_parte_ausente_e_ausencia_de_credencial(self) -> None:
+        """Meia credencial não autentica: o cliente segue anônimo."""
+        ambiente = {"IA_S3_ACCESS_KEY": "acesso"}
+        with (
+            patch.dict(os.environ, ambiente, clear=True),
+            patch("observatorio.credentials.get_keychain_secret", return_value=None),
+        ):
+            self.assertIsNone(get_internet_archive_keys())
+
+    def test_ambiente_tem_precedencia_sobre_keychain(self) -> None:
+        """As duas variáveis de ambiente bastam, sem consultar o Keychain."""
+        ambiente = {"IA_S3_ACCESS_KEY": "acesso", "IA_S3_SECRET_KEY": "segredo"}
+        with (
+            patch.dict(os.environ, ambiente, clear=True),
+            patch("observatorio.credentials.get_keychain_secret") as mock_keychain,
+        ):
+            self.assertEqual(get_internet_archive_keys(), ("acesso", "segredo"))
+        mock_keychain.assert_not_called()
+
+    def test_par_completo_vindo_do_keychain(self) -> None:
+        """Sem variáveis de ambiente, o par vem do Keychain local."""
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch(
+                "observatorio.credentials.get_keychain_secret",
+                side_effect=lambda nome: {"IA_S3_ACCESS_KEY": "a", "IA_S3_SECRET_KEY": "s"}.get(nome),
+            ),
+        ):
+            self.assertEqual(get_internet_archive_keys(), ("a", "s"))

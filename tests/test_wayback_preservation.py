@@ -16,6 +16,7 @@ from unittest.mock import MagicMock, patch
 from observatorio.fetch import INSTITUTIONAL_USER_AGENT
 from observatorio.preservation import (
     ArchiveJob,
+    auth_headers,
     await_archives,
     poll_archive,
     snapshot_url,
@@ -263,6 +264,65 @@ class TestOrcamento(unittest.TestCase):
 
         self.assertEqual(resultados["exemplo"].status, "pending")
         self.assertIn("orçamento", resultados["exemplo"].detail or "")
+
+
+class TestAutenticacao(unittest.TestCase):
+    """Autenticação pela conta do Internet Archive, quando as chaves estão configuradas."""
+
+    def test_sem_chaves_a_submissao_segue_anonima(self) -> None:
+        """Sem chaves, nem autorização nem resposta JSON são pedidas: a interface devolve 401."""
+        with patch("observatorio.preservation.get_internet_archive_keys", return_value=None):
+            cabecalhos = auth_headers()
+
+        self.assertNotIn("Authorization", cabecalhos)
+        self.assertNotIn("Accept", cabecalhos)
+
+    def test_chaves_configuradas_usam_esquema_low(self) -> None:
+        """Com chaves, o cabeçalho usa o esquema `LOW` do Save Page Now."""
+        with patch(
+            "observatorio.preservation.get_internet_archive_keys",
+            return_value=("acesso", "segredo"),
+        ):
+            cabecalhos = auth_headers()
+
+        self.assertEqual(cabecalhos["Authorization"], "LOW acesso:segredo")
+        self.assertEqual(cabecalhos["Accept"], "application/json")
+
+    @patch("urllib.request.urlopen")
+    def test_resposta_json_de_submissao_devolve_trabalho(self, mock_urlopen: MagicMock) -> None:
+        """Com `Accept: application/json`, o identificador vem no corpo JSON.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        corpo = json.dumps({"url": "https://exemplo.org/", "job_id": "ac58789b-f3ca-48d0-9ea6"})
+        mock_urlopen.return_value.__enter__.return_value = resposta(corpo)
+
+        resultado = submit_archive("https://exemplo.org/")
+
+        self.assertEqual(resultado.status, "pending")
+        self.assertEqual(resultado.job_id, "ac58789b-f3ca-48d0-9ea6")
+
+    @patch("urllib.request.urlopen")
+    def test_resposta_json_de_limite_vira_recusa_com_motivo(self, mock_urlopen: MagicMock) -> None:
+        """Erro JSON do serviço vira `refused` com a mensagem, e não falha silenciosa.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        corpo = json.dumps(
+            {
+                "status": "error",
+                "status_ext": "error:too-many-active-sessions",
+                "message": "You have already reached the limit of active sessions",
+            }
+        )
+        mock_urlopen.return_value.__enter__.return_value = resposta(corpo)
+
+        resultado = submit_archive("https://exemplo.org/")
+
+        self.assertEqual(resultado.status, "refused")
+        self.assertIn("limit", resultado.detail or "")
 
 
 if __name__ == "__main__":

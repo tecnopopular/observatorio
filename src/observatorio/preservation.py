@@ -25,6 +25,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 
+from .credentials import get_internet_archive_keys
 from .fetch import INSTITUTIONAL_USER_AGENT
 from .models import ArchiveStatus
 
@@ -113,6 +114,29 @@ def snapshot_url(timestamp: str, target_url: str) -> str:
     return SNAPSHOT_ENDPOINT.format(timestamp=timestamp, target=target_url)
 
 
+def auth_headers() -> dict[str, str]:
+    """Monta os cabeçalhos de identificação e autenticação do Save Page Now.
+
+    A conta do Internet Archive eleva o limite de capturas, e a autenticação usa o esquema `LOW`
+    com o par de chaves S3. Sem as chaves, a submissão segue anônima: o ciclo funciona, com o
+    limite menor que o serviço aplica a quem não se identifica.
+
+    A resposta JSON é pedida apenas com chaves: sem conta, a mesma interface devolve HTTP 401, e o
+    único caminho anônimo disponível é a página HTML de submissão.
+
+    Returns:
+        Cabeçalhos HTTP com o User-Agent institucional e, quando houver chaves, o pedido de
+        resposta JSON e o cabeçalho de autorização.
+    """
+    cabecalhos = {"User-Agent": INSTITUTIONAL_USER_AGENT}
+    chaves = get_internet_archive_keys()
+    if chaves:
+        acesso, segredo = chaves
+        cabecalhos["Authorization"] = f"LOW {acesso}:{segredo}"
+        cabecalhos["Accept"] = "application/json"
+    return cabecalhos
+
+
 def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
     """Submete uma captura ao Save Page Now e devolve o identificador do trabalho.
 
@@ -128,14 +152,9 @@ def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
         `refused`/`failed` com o motivo quando não é.
     """
     dados = urllib.parse.urlencode({"url": target_url, "capture_all": "on"}).encode()
-    pedido = urllib.request.Request(
-        SAVE_ENDPOINT,
-        data=dados,
-        headers={
-            "User-Agent": INSTITUTIONAL_USER_AGENT,
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    )
+    cabecalhos = auth_headers()
+    cabecalhos["Content-Type"] = "application/x-www-form-urlencoded"
+    pedido = urllib.request.Request(SAVE_ENDPOINT, data=dados, headers=cabecalhos)
     try:
         with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
             corpo = resposta.read(400_000).decode("utf-8", "ignore")
@@ -143,6 +162,10 @@ def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
         return _outcome_from_http_error(erro)
     except Exception as erro:
         return ArchiveOutcome(status="failed", detail=f"falha de rede na submissão: {type(erro).__name__}")
+
+    resposta_json = _json_da_submissao(corpo)
+    if resposta_json is not None:
+        return resposta_json
 
     achado = JOB_PATTERN.search(corpo)
     if achado:
@@ -169,10 +192,7 @@ def poll_archive(job: ArchiveJob, timeout: int = 15) -> ArchiveOutcome:
         Resultado `captured` com o endereço perene quando a captura concluiu, `pending` enquanto
         não concluiu, ou `failed` com o motivo quando o trabalho termina sem êxito.
     """
-    pedido = urllib.request.Request(
-        STATUS_ENDPOINT.format(job_id=job.job_id),
-        headers={"User-Agent": INSTITUTIONAL_USER_AGENT},
-    )
+    pedido = urllib.request.Request(STATUS_ENDPOINT.format(job_id=job.job_id), headers=auth_headers())
     try:
         with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
             corpo = resposta.read(400_000).decode("utf-8", "ignore")
@@ -248,6 +268,42 @@ def await_archives(
             detail=f"captura não concluída no orçamento de {budget:.0f}s do ciclo",
         )
     return resultados
+
+
+def _json_da_submissao(corpo: str) -> ArchiveOutcome | None:
+    """Interpreta a resposta JSON da submissão, quando o serviço responde em JSON.
+
+    Com `Accept: application/json` o serviço devolve o identificador do trabalho em JSON, e não a
+    página HTML que o modo anônimo entrega. Respostas de erro também vêm em JSON, com `message` e
+    `status_ext`, o que permite registrar o motivo real em vez de supor.
+
+    Args:
+        corpo: Corpo da resposta da submissão.
+
+    Returns:
+        Resultado da submissão, ou None quando o corpo não é JSON.
+    """
+    try:
+        dados = json.loads(corpo)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(dados, dict):
+        return None
+
+    job_id = dados.get("job_id")
+    if job_id:
+        return ArchiveOutcome(status="pending", job_id=str(job_id))
+
+    situacao = str(dados.get("status") or "").lower()
+    motivo = dados.get("message") or dados.get("status_ext") or situacao or "sem motivo informado"
+    if situacao in ("error", "fatal"):
+        recusa = "invalid" in str(dados.get("status_ext") or "") or "limit" in str(motivo).lower()
+        return ArchiveOutcome(
+            status="refused" if recusa else "failed", detail=f"o Internet Archive recusou: {motivo}"
+        )
+    if dados.get("url"):
+        return ArchiveOutcome(status="pending", detail="submissão aceita sem identificador de trabalho")
+    return None
 
 
 def _reason_text(erro: Exception) -> str:

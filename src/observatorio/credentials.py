@@ -9,6 +9,9 @@ Precedência de carregamento:
 import os
 import subprocess
 
+INTERNET_ARCHIVE_ACCESS_VAR = "IA_S3_ACCESS_KEY"
+INTERNET_ARCHIVE_SECRET_VAR = "IA_S3_SECRET_KEY"
+
 
 def _consultar(cmd: list[str]) -> str | None:
     """Executa um comando de consulta ao Keychain.
@@ -70,3 +73,20 @@ def get_api_key(key_name: str) -> str | None:
     if env_val:
         return env_val
     return get_keychain_secret(key_name)
+
+
+def get_internet_archive_keys() -> tuple[str, str] | None:
+    """Carrega o par de chaves S3 do Internet Archive, quando ambas existem.
+
+    O Save Page Now autentica com o cabeçalho `Authorization: LOW <acesso>:<segredo>`, e as duas
+    partes só valem juntas: meia credencial é ausência de credencial. Os valores nunca são
+    impressos nem gravados em arquivo — nem em mensagem de erro.
+
+    Returns:
+        Par (chave de acesso, chave secreta), ou None quando alguma das duas está ausente.
+    """
+    acesso = get_api_key(INTERNET_ARCHIVE_ACCESS_VAR)
+    segredo = get_api_key(INTERNET_ARCHIVE_SECRET_VAR)
+    if acesso and segredo:
+        return acesso, segredo
+    return None
