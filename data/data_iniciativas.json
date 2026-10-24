@@ -1506,5 +1506,15 @@
     "url": "https://crimetarussa.com",
     "dominio": "crimetarussa.com",
     "adicionado_em": "2026-10-24"
+  },
+  {
+    "nome": "Transporte Gratuito na Eleição",
+    "tool_id": "transporte-gratuito-na-eleicao",
+    "url": "https://transportenaeleicao.ascaribe.tech",
+    "dominio": "transportenaeleicao.ascaribe.tech",
+    "adicionado_em": "2026-10-24",
+    "fontes_primarias": [
+      "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-751-de-26-de-fevereiro-de-2026"
+    ]
   }
 ]
