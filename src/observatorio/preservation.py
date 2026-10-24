@@ -432,10 +432,14 @@ def _reason_text(erro: Exception) -> str:
         Texto curto com a causa, quando identificável, ou o nome do tipo do erro.
     """
     motivo = getattr(erro, "reason", None)
+    if isinstance(motivo, BaseException):
+        return f"{type(motivo).__name__}: {motivo}"[:120]
     if motivo is not None:
-        return str(motivo)[:80]
+        return str(motivo)[:120]
     texto = str(erro).strip()
-    return texto[:80] if texto else type(erro).__name__
+    if texto and texto != type(erro).__name__:
+        return f"{type(erro).__name__}: {texto}"[:120]
+    return type(erro).__name__
 
 
 def _outcome_from_http_error(erro: urllib.error.HTTPError, job_id: str | None = None) -> ArchiveOutcome:

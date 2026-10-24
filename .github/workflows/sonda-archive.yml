@@ -1,0 +1,102 @@
+name: Sonda do Internet Archive
+
+# Diagnóstico de rede e autenticação contra o Internet Archive, disparado à mão.
+# Existe porque a esteira pode falhar na preservação por motivo que o resumo esconde:
+# DNS, bloqueio de IP de datacenter, TLS ou recusa do serviço. A sonda separa as causas
+# sem imprimir nenhum valor de chave.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Sincronizar Dependências Python
+        run: uv sync
+
+      - name: Resolver Nome e Alcançar o Serviço
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import socket
+          import urllib.error
+          import urllib.request
+
+          for host in ("web.archive.org", "archive.org"):
+              try:
+                  print(host, "->", socket.gethostbyname(host))
+              except Exception as erro:
+                  print(host, "-> falha de DNS:", type(erro).__name__, erro)
+
+          for url in (
+              "https://archive.org/wayback/available?url=https://www.gov.br/",
+              "https://web.archive.org/cdx/search/cdx?url=https://www.gov.br/&output=json&limit=-1",
+          ):
+              pedido = urllib.request.Request(url, headers={"User-Agent": "TecnoPopular-Observatorio/1.0"})
+              try:
+                  with urllib.request.urlopen(pedido, timeout=20) as resposta:
+                      print(url[:70], "-> HTTP", resposta.status, "|", len(resposta.read(200)), "bytes")
+              except urllib.error.HTTPError as erro:
+                  print(url[:70], "-> HTTP", erro.code, erro.reason)
+              except Exception as erro:
+                  print(url[:70], "->", type(erro).__name__, repr(getattr(erro, "reason", erro))[:120])
+          PY
+
+      - name: Submeter Captura com e sem Autenticação
+        continue-on-error: true
+        env:
+          IA_S3_ACCESS_KEY: ${{ secrets.IA_S3_ACCESS_KEY }}
+          IA_S3_SECRET_KEY: ${{ secrets.IA_S3_SECRET_KEY }}
+        run: |
+          python - <<'PY'
+          import os
+          import time
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          acesso = os.getenv("IA_S3_ACCESS_KEY")
+          segredo = os.getenv("IA_S3_SECRET_KEY")
+          print("chaves presentes:", bool(acesso and segredo))
+
+          def submeter(rotulo, cabecalhos):
+              dados = urllib.parse.urlencode(
+                  {"url": "https://tecnopopular.org/", "if_not_archived_within": "7d"}
+              ).encode()
+              cabecalhos = dict(cabecalhos)
+              cabecalhos["Content-Type"] = "application/x-www-form-urlencoded"
+              pedido = urllib.request.Request(
+                  "https://web.archive.org/save", data=dados, headers=cabecalhos
+              )
+              try:
+                  with urllib.request.urlopen(pedido, timeout=30) as resposta:
+                      corpo = resposta.read(600).decode("utf-8", "ignore")
+                      print(rotulo, "-> HTTP", resposta.status, "|", corpo[:240].replace("\n", " "))
+              except urllib.error.HTTPError as erro:
+                  print(rotulo, "-> HTTP", erro.code, erro.reason, "|", erro.read(200).decode("utf-8", "ignore")[:160])
+              except Exception as erro:
+                  print(rotulo, "->", type(erro).__name__, repr(getattr(erro, "reason", erro))[:160])
+
+          base = {"User-Agent": "TecnoPopular-Observatorio/1.0 (+https://tecnopopular.org/metodologia)"}
+          submeter("anônimo", base)
+          time.sleep(5)
+          if acesso and segredo:
+              autenticado = dict(base)
+              autenticado["Authorization"] = f"LOW {acesso}:{segredo}"
+              autenticado["Accept"] = "application/json"
+              submeter("autenticado", autenticado)
+          else:
+              print("sem chaves no ambiente: sonda autenticada não executada")
+          PY
