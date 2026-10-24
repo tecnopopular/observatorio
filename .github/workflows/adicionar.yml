@@ -12,9 +12,6 @@ on:
         required: true
         type: string
       categoria:
-        required: true
-        type: choice
-        options: ["Dados e Mapas", "Jogos"]
         description: "Eixo temático, texto livre (conhecidos: Dados e Mapas; Informação e Persuasão; Plataformas e Mobilização; Jogos; Materiais de Comunicação; Conversa e Diálogo; Abstenção e Virada). Não entra na nota."
         required: false
         type: string
