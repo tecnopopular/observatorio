@@ -1553,5 +1553,17 @@
     "fontes_primarias": [
       "https://api-publica.obrasgov.gestao.gov.br"
     ]
+  },
+  {
+    "nome": "Governos Brasileiros em Dados",
+    "tool_id": "governos-brasileiros-em-dados",
+    "url": "https://dados-30anos-govbrasileiro.netlify.app",
+    "dominio": "dados-30anos-govbrasileiro.netlify.app",
+    "adicionado_em": "2026-10-24",
+    "fontes_primarias": [
+      "https://www.bcb.gov.br/controleinflacao/historicotaxasjuros",
+      "https://www.dadosdemercado.com.br/indices/selic",
+      "https://www.dieese.org.br/analisecestabasica/salarioMinimo.html"
+    ]
   }
 ]
