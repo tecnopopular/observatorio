@@ -1533,5 +1533,15 @@
     "url": "https://janonometro.com.br",
     "dominio": "janonometro.com.br",
     "adicionado_em": "2026-10-24"
+  },
+  {
+    "nome": "Você cairia nessa?",
+    "tool_id": "voce-cairia-nessa",
+    "url": "https://cadeafonte.vercel.app",
+    "dominio": "cadeafonte.vercel.app",
+    "adicionado_em": "2026-10-24",
+    "fontes_primarias": [
+      "https://www.tesourotransparente.gov.br/temas/divida-publica-federal"
+    ]
   }
 ]
