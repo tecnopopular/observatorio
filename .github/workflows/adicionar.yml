@@ -12,31 +12,26 @@ on:
         required: true
         type: string
       categoria:
-        description: "Eixo temático"
         required: true
         type: choice
-        options:
-          - Dados e Mapas
-          - Informação e Persuasão
-          - Plataformas e Mobilização
-          - Jogos
-          - Materiais de Comunicação
-          - Conversa e Diálogo
-          - Abstenção e Virada
+        options: ["Dados e Mapas", "Jogos"]
+        description: "Eixo temático, texto livre (conhecidos: Dados e Mapas; Informação e Persuasão; Plataformas e Mobilização; Jogos; Materiais de Comunicação; Conversa e Diálogo; Abstenção e Virada). Não entra na nota."
+        required: false
+        type: string
       descricao:
-        description: "O que a ferramenta faz, em uma ou duas frases"
-        required: true
+        description: "O que a ferramenta faz, em uma ou duas frases. Texto editorial, não entra na nota."
+        required: false
         type: string
       repositorio:
-        description: "URL pública do repositório git (opcional)"
+        description: "URL pública do repositório git (opcional; o motor também infere, com guardas)"
         required: false
         type: string
       fontes_primarias:
-        description: "Órgãos públicos citados, separados por vírgula (opcional)"
+        description: "Fontes citadas, separadas por vírgula (opcional). Só pontua quando a própria página traz link de custódia pública que confirme a declaração; sem esse link, a declaração não soma."
         required: false
         type: string
       tool_id:
-        description: "Identificador explícito (opcional; padrão: slug do nome)"
+        description: "Identificador explícito (opcional; padrão: slug do nome). Fica congelado na inclusão."
         required: false
         type: string
       ignorar_robots:
@@ -102,9 +97,13 @@ jobs:
           argumentos=(
             --url "$ENTRADA_URL"
             --nome "$ENTRADA_NOME"
-            --categoria "$ENTRADA_CATEGORIA"
-            --descricao "$ENTRADA_DESCRICAO"
           )
+          if [ -n "$ENTRADA_CATEGORIA" ]; then
+            argumentos+=(--categoria "$ENTRADA_CATEGORIA")
+          fi
+          if [ -n "$ENTRADA_DESCRICAO" ]; then
+            argumentos+=(--descricao "$ENTRADA_DESCRICAO")
+          fi
           if [ -n "$ENTRADA_REPOSITORIO" ]; then
             argumentos+=(--repositorio "$ENTRADA_REPOSITORIO")
           fi
@@ -139,5 +138,5 @@ jobs:
           fi
           git commit \
             -m "feat(catalogo): adiciona ${ENTRADA_NOME}" \
-            -m "Inclusão pelo workflow de catálogo, eixo ${ENTRADA_CATEGORIA}. Endereço: ${ENTRADA_URL}. A iniciativa entra no próximo ciclo de auditoria."
+            -m "Inclusão pelo workflow de catálogo. Endereço: ${ENTRADA_URL}. Eixo: ${ENTRADA_CATEGORIA:-não informado}. A iniciativa entra no próximo ciclo de auditoria."
           git push origin HEAD:main
