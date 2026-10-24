@@ -7,6 +7,7 @@ Implementa a execução concorrente por iniciativa com invalidação de cache vi
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
 from pathlib import Path
 
 from .catalog import assign_tool_ids, slugify, validate_catalog
@@ -21,6 +22,7 @@ from .models import (
 from .preservation import (
     DEFAULT_ARCHIVE_BUDGET,
     ArchiveJob,
+    ArchiveOutcome,
     await_archives,
     calculate_sha256,
     check_content_changed,
@@ -343,6 +345,162 @@ def _archive_priority(report: CivicAuditReport, previous: dict[str, ManifestEntr
     return 1
 
 
+@dataclass
+class ArchiveBatch:
+    """Resultado de uma rodada de submissões ao Internet Archive.
+
+    Attributes:
+        resultados: Situação por `tool_id` das capturas submetidas e acompanhadas.
+        preteridos: `tool_id` não submetidos, por teto do ciclo ou por recusas consecutivas.
+        detalhes: Motivo legível de cada falha, recusa ou reaproveitamento.
+    """
+
+    resultados: dict[str, ArchiveOutcome]
+    preteridos: list[str]
+    detalhes: dict[str, str]
+
+
+def run_archive_queue(
+    items: list[tuple[str, str]],
+    limit: int,
+    budget: float,
+) -> ArchiveBatch:
+    """Submete endereços ao Internet Archive em série e acompanha as capturas em andamento.
+
+    O núcleo é compartilhado pelo ciclo de auditoria e pelo passo de preservação avulso: a
+    política de ritmo é a mesma nos dois, porque o limite é do serviço, não de quem chama.
+
+    Args:
+        items: Pares (`tool_id`, endereço) na ordem de prioridade.
+        limit: Número máximo de submissões nesta rodada.
+        budget: Tempo total de espera pelas capturas em andamento, em segundos.
+
+    Returns:
+        Resultado da rodada, com os preteridos separados dos submetidos.
+    """
+    selecionados = items[: max(limit, 0)]
+    preteridos = [tool_id for tool_id, _ in items[len(selecionados) :]]
+    resultados: dict[str, ArchiveOutcome] = {}
+    detalhes: dict[str, str] = {}
+    pendentes: dict[str, ArchiveJob] = {}
+    falhas_consecutivas = 0
+
+    for posicao, (tool_id, url) in enumerate(selecionados):
+        if posicao:
+            time.sleep(SUBMIT_INTERVAL)
+        submissao = submit_archive(url, timeout=SUBMIT_TIMEOUT)
+        if submissao.status == "failed":
+            time.sleep(SUBMIT_RETRY_PAUSE)
+            submissao = submit_archive(url, timeout=SUBMIT_TIMEOUT)
+        resultados[tool_id] = submissao
+        if submissao.job_id and not submissao.url:
+            pendentes[tool_id] = ArchiveJob(job_id=submissao.job_id, target_url=url)
+        if submissao.detail:
+            detalhes[tool_id] = submissao.detail
+        falhas_consecutivas = falhas_consecutivas + 1 if submissao.status in ("refused", "failed") else 0
+        if falhas_consecutivas >= SUBMIT_FAILURES_TO_STOP:
+            restantes = selecionados[posicao + 1 :]
+            preteridos.extend(tool_id for tool_id, _ in restantes)
+            if restantes:
+                detalhes[restantes[0][0]] = (
+                    "envios interrompidos após recusas consecutivas; adiado para o próximo ciclo"
+                )
+            break
+
+    if pendentes:
+        print(f"[*] Preservação: acompanhando {len(pendentes)} captura(s) (orçamento de {budget:.0f}s)...")
+        for tool_id, resultado in await_archives(pendentes, budget=budget).items():
+            resultados[tool_id] = resultado
+            if resultado.detail:
+                detalhes[tool_id] = resultado.detail
+
+    return ArchiveBatch(resultados=resultados, preteridos=preteridos, detalhes=detalhes)
+
+
+def run_preservation_pass(
+    input_file: Path,
+    manifest_file: Path,
+    limit: int = DEFAULT_ARCHIVE_LIMIT,
+    budget: float = DEFAULT_ARCHIVE_BUDGET,
+) -> ArchiveBatch:
+    """Executa um passo de preservação sobre o que o manifesto ainda não tem snapshot.
+
+    Não baixa página nenhuma e não emite laudo: lê o catálogo e o manifesto, submete o que está
+    sem `archive_url` e grava o resultado no próprio manifesto. É o passo barato que pode rodar
+    com frequência própria, porque o Internet Archive aceita poucas capturas por vez — e a
+    auditoria completa, que custa uma leitura por iniciativa, continua semanal.
+
+    Args:
+        input_file: Catálogo de iniciativas em JSON.
+        manifest_file: Manifesto compacto de estado, lido e reescrito.
+        limit: Número máximo de submissões nesta execução.
+        budget: Tempo total de espera pelas capturas em andamento, em segundos.
+
+    Returns:
+        Resultado da rodada, com contagem de capturados, pendentes, recusados e preteridos.
+
+    Raises:
+        FileNotFoundError: Quando o arquivo de catálogo não existe.
+    """
+    if not input_file.exists():
+        raise FileNotFoundError(f"Arquivo de catálogo não encontrado: {input_file}")
+
+    with open(input_file, encoding="utf-8") as arquivo:
+        targets = json.load(arquivo)
+
+    problemas = validate_catalog(targets)
+    if problemas:
+        detalhe = "\n".join(f"        {p}" for p in problemas)
+        raise ValueError(f"Catálogo inválido em {input_file}:\n{detalhe}")
+
+    assign_tool_ids(targets)
+    manifesto = load_manifest(manifest_file)
+    entradas = index_by_tool(manifesto)
+
+    fila = sorted(
+        (
+            (item.get("_tool_id") or slugify(item["nome"]), item["url"])
+            for item in targets
+            if (item.get("_tool_id") or slugify(item["nome"])) in entradas
+            and not entradas[item.get("_tool_id") or slugify(item["nome"])].archive_url
+            and str(item.get("url", "")).startswith("http")
+        ),
+        key=lambda par: par[0],
+    )
+
+    modo = "conta do Internet Archive" if has_credentials() else "anônima"
+    print(f"[*] Preservação: submissão com {modo}")
+    print(
+        f"[*] Preservação: {len(fila)} endereço(s) sem snapshot no manifesto | "
+        f"submetendo {min(len(fila), max(limit, 0))} (limite {limit} por execução)..."
+    )
+
+    lote = run_archive_queue(fila, limit=limit, budget=budget)
+
+    for tool_id, resultado in lote.resultados.items():
+        entrada = entradas.get(tool_id)
+        if entrada is None:
+            continue
+        entrada.archive_status = resultado.status
+        if resultado.url:
+            entrada.archive_url = resultado.url
+    for tool_id in lote.preteridos:
+        entrada = entradas.get(tool_id)
+        if entrada is not None and entrada.archive_status is None:
+            entrada.archive_status = "deferred"
+
+    tamanho = write_manifest(manifest_file, manifesto)
+    contagem: dict[str, int] = {}
+    for resultado in lote.resultados.values():
+        contagem[resultado.status] = contagem.get(resultado.status, 0) + 1
+    resumo = " | ".join(f"{quantidade} {situacao}" for situacao, quantidade in sorted(contagem.items()))
+    print(f"[*] Preservação: {resumo or 'nada submetido'} | {len(lote.preteridos)} preterido(s)")
+    for tool_id, detalhe in list(lote.detalhes.items())[:3]:
+        print(f"        {tool_id}: {detalhe}")
+    print(f"[+] Manifesto de estado salvo em: {manifest_file} ({tamanho} bytes)")
+    return lote
+
+
 def _preserve(
     reports: list[CivicAuditReport],
     previous: dict[str, ManifestEntry],
@@ -393,57 +551,26 @@ def _preserve(
 
     fila = [relatorio for relatorio in reports if _needs_capture(relatorio, previous)]
     fila.sort(key=lambda r: (_archive_priority(r, previous), r.tool_id))
-    selecionadas = fila[: max(limit, 0)]
-    preteridas = fila[len(selecionadas) :]
-
-    for relatorio in preteridas:
-        relatorio.archive_status = "deferred"
 
     print(
         f"[*] Preservação: {len(fila)} endereço(s) a preservar | "
-        f"submetendo {len(selecionadas)} (limite {limit} por ciclo)..."
+        f"submetendo {min(len(fila), max(limit, 0))} (limite {limit} por ciclo)..."
     )
 
-    detalhes: dict[str, str] = {}
-    pendentes: dict[str, ArchiveJob] = {}
-    falhas_consecutivas = 0
-    for posicao, relatorio in enumerate(selecionadas):
-        if posicao:
-            time.sleep(SUBMIT_INTERVAL)
-        submissao = submit_archive(relatorio.target_url, timeout=SUBMIT_TIMEOUT)
-        if submissao.status == "failed":
-            time.sleep(SUBMIT_RETRY_PAUSE)
-            submissao = submit_archive(relatorio.target_url, timeout=SUBMIT_TIMEOUT)
-        relatorio.archive_status = submissao.status
-        if submissao.url:
-            relatorio.archive_url = submissao.url
-        elif submissao.job_id:
-            pendentes[relatorio.tool_id] = ArchiveJob(
-                job_id=submissao.job_id, target_url=relatorio.target_url
-            )
-        if submissao.detail:
-            detalhes[relatorio.tool_id] = submissao.detail
-        falhas_consecutivas = falhas_consecutivas + 1 if submissao.status in ("refused", "failed") else 0
-        if falhas_consecutivas >= SUBMIT_FAILURES_TO_STOP:
-            restantes = selecionadas[posicao + 1 :]
-            for preterida in restantes:
-                preterida.archive_status = "deferred"
-            if restantes:
-                detalhes[restantes[0].tool_id] = (
-                    "envios interrompidos após recusas consecutivas; adiado para o próximo ciclo"
-                )
-            break
+    lote = run_archive_queue([(r.tool_id, r.target_url) for r in fila], limit=limit, budget=budget)
+    por_id = {relatorio.tool_id: relatorio for relatorio in reports}
 
-    if pendentes:
-        print(f"[*] Preservação: acompanhando {len(pendentes)} captura(s) (orçamento de {budget:.0f}s)...")
-        por_id = {relatorio.tool_id: relatorio for relatorio in reports}
-        for tool_id, resultado in await_archives(pendentes, budget=budget).items():
+    for tool_id in lote.preteridos:
+        por_id[tool_id].archive_status = "deferred"
+
+    if lote.resultados:
+        for tool_id, resultado in lote.resultados.items():
             relatorio = por_id[tool_id]
             relatorio.archive_status = resultado.status
             if resultado.url:
                 relatorio.archive_url = resultado.url
-            if resultado.detail:
-                detalhes[tool_id] = resultado.detail
+
+    detalhes = lote.detalhes
 
     contagem: dict[str, int] = {}
     for relatorio in reports:

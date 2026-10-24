@@ -23,7 +23,7 @@ from .catalog import (
     strip_fragment,
     validate_entry,
 )
-from .engine import run_batch_audit
+from .engine import run_batch_audit, run_preservation_pass
 from .fetch import probe_https
 from .privacy_guard import CivicPrivacyGuard, ViolationSeverity
 from .robots import RobotsPolicy
@@ -408,6 +408,32 @@ def cmd_add(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_preservar(args: argparse.Namespace) -> int:
+    """Executa um passo de preservação no Internet Archive sobre o que o manifesto não tem.
+
+    Não baixa página e não emite laudo: o único artefato que muda é o manifesto de estado. Existe
+    separado da auditoria porque o Internet Archive aceita poucas capturas por vez, e amarrar a
+    preservação ao ciclo semanal deixaria a fila andando devagar por meses.
+
+    Args:
+        args: Namespace do argparse com `input`, `manifest`, `limite` e `orcamento`.
+
+    Returns:
+        0 quando o passo conclui; 1 quando uma exceção interrompe a execução.
+    """
+    try:
+        run_preservation_pass(
+            input_file=Path(args.input),
+            manifest_file=Path(args.manifest),
+            limit=args.limite,
+            budget=args.orcamento,
+        )
+        return 0
+    except Exception as e:
+        print(f"[-] Erro fatal no passo de preservação: {e}", file=sys.stderr)
+        return 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Monta o parser de subcomandos da CLI.
 
@@ -547,6 +573,22 @@ def build_parser() -> argparse.ArgumentParser:
         "--registro", default="data/retiradas.json", help="Registro de eventos a atualizar"
     )
 
+    preserve_command_parser = subparsers.add_parser(
+        "preservar", help="Executa um passo de preservação no Internet Archive sobre o que falta"
+    )
+    preserve_command_parser.add_argument(
+        "--input", "-i", default="data/data_iniciativas.json", help="Caminho do catálogo base"
+    )
+    preserve_command_parser.add_argument(
+        "--manifest", "-m", default="data/estado_hashes.json", help="Caminho do manifesto compacto de estado"
+    )
+    preserve_command_parser.add_argument(
+        "--limite", type=int, default=10, help="Máximo de capturas submetidas nesta execução"
+    )
+    preserve_command_parser.add_argument(
+        "--orcamento", type=float, default=60.0, help="Segundos de espera pelas capturas em andamento"
+    )
+
     privacy_command_parser = subparsers.add_parser(
         "verify-privacy", help="Executa o portão de privacidade (LGPD)"
     )
@@ -594,6 +636,8 @@ def main() -> None:
         sys.exit(cmd_withdraw(args))
     elif args.command == "readmitir":
         sys.exit(cmd_readmit(args))
+    elif args.command == "preservar":
+        sys.exit(cmd_preservar(args))
 
 
 if __name__ == "__main__":

@@ -5,13 +5,17 @@ O que se verifica aqui não é o cliente do Internet Archive (coberto em
 se submete por ciclo e o que o laudo registra quando a captura não acontece.
 """
 
+import json
+import tempfile
 import unittest
+from datetime import UTC, datetime
+from pathlib import Path
 from unittest.mock import patch
 
-from observatorio.engine import _needs_capture, _preserve
+from observatorio.engine import _needs_capture, _preserve, run_preservation_pass
 from observatorio.models import AuditLevel, CivicAuditReport
 from observatorio.preservation import ArchiveOutcome
-from observatorio.state import ManifestEntry
+from observatorio.state import Manifest, ManifestEntry, load_manifest, write_manifest
 
 
 def laudo(tool_id: str, sha: str = "a" * 64) -> CivicAuditReport:
@@ -194,6 +198,106 @@ class TestFaseDePreservacao(unittest.TestCase):
             relatorios[0].archive_url,
             "https://web.archive.org/web/20261024213206/https://painel.org/",
         )
+
+
+class TestPassoDePreservacao(unittest.TestCase):
+    """O passo avulso usa o manifesto como fila e não baixa página nenhuma."""
+
+    def _cenario(self, limite: int) -> tuple[dict, dict]:
+        """Monta catálogo e manifesto temporários e executa o passo de preservação.
+
+        Args:
+            limite: Número máximo de submissões na execução.
+
+        Returns:
+            Manifesto gravado, indexado por `tool_id`, e a lista de endereços submetidos.
+        """
+        catalogo = [
+            {"nome": "Alfa", "url": "https://alfa.org/"},
+            {"nome": "Beta", "url": "https://beta.org/"},
+            {"nome": "Gama", "url": "https://gama.org/"},
+        ]
+        manifesto = Manifest(
+            generated_at=datetime.now(UTC),
+            total=2,
+            entries=[
+                ManifestEntry(
+                    tool_id="alfa",
+                    evaluated_at="2026-10-24T00:00:00+00:00",
+                    status=AuditLevel.CATALOGADO,
+                    html_sha256="a" * 64,
+                    archive_url="https://web.archive.org/web/1/https://alfa.org/",
+                    archive_status="captured",
+                ),
+                ManifestEntry(
+                    tool_id="beta",
+                    evaluated_at="2026-10-24T00:00:00+00:00",
+                    status=AuditLevel.CATALOGADO,
+                    html_sha256="b" * 64,
+                ),
+            ],
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            catalogo_path = Path(tmp) / "catalogo.json"
+            manifesto_path = Path(tmp) / "manifesto.json"
+            catalogo_path.write_text(json.dumps(catalogo), encoding="utf-8")
+            write_manifest(manifesto_path, manifesto)
+
+            submetidos: list[str] = []
+
+            def registro(url: str, timeout: int = 15) -> ArchiveOutcome:
+                """Registra o endereço submetido e devolve trabalho pendente.
+
+                Args:
+                    url: Endereço submetido ao Internet Archive.
+                    timeout: Tempo limite recebido, ignorado no dublê.
+
+                Returns:
+                    Resultado com trabalho pendente, para exercitar o acompanhamento.
+                """
+                submetidos.append(url)
+                return ArchiveOutcome(status="pending", job_id=f"spn2-{len(submetidos)}")
+
+            with (
+                patch("observatorio.engine.submit_archive", side_effect=registro),
+                patch("observatorio.engine.await_archives") as mock_await,
+            ):
+                mock_await.side_effect = lambda pendentes, budget: {
+                    tool_id: ArchiveOutcome(
+                        status="captured", url=f"https://web.archive.org/web/2/{job.target_url}"
+                    )
+                    for tool_id, job in pendentes.items()
+                }
+                run_preservation_pass(catalogo_path, manifesto_path, limit=limite, budget=10)
+
+            gravado = load_manifest(manifesto_path)
+        return {entrada.tool_id: entrada for entrada in gravado.entries}, submetidos
+
+    def test_pula_o_que_ja_tem_snapshot(self) -> None:
+        """Endereço com `archive_url` no manifesto não é submetido de novo."""
+        entradas, submetidos = self._cenario(limite=10)
+
+        self.assertNotIn("https://alfa.org/", submetidos)
+        self.assertEqual(entradas["alfa"].archive_url, "https://web.archive.org/web/1/https://alfa.org/")
+
+    def test_grava_endereco_no_manifesto(self) -> None:
+        """A captura concluída entra no manifesto, sem tocar em laudo."""
+        entradas, _ = self._cenario(limite=10)
+
+        self.assertEqual(entradas["beta"].archive_status, "captured")
+        self.assertEqual(entradas["beta"].archive_url, "https://web.archive.org/web/2/https://beta.org/")
+
+    def test_limite_pretere_o_resto(self) -> None:
+        """Acima do limite, o endereço fica registrado como `deferred`, sem submissão."""
+        _, submetidos = self._cenario(limite=1)
+
+        self.assertEqual(len(submetidos), 1)
+
+    def test_entrada_ausente_no_manifesto_nao_e_submetida(self) -> None:
+        """Iniciativa sem entrada no manifesto espera a avaliação do ciclo semanal."""
+        _, submetidos = self._cenario(limite=10)
+
+        self.assertNotIn("https://gama.org/", submetidos)
 
 
 if __name__ == "__main__":

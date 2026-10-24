@@ -32,6 +32,24 @@ Executa a varredura completa das iniciativas catalogadas.
   * `--timeout`, `-t` *(int, default: 8)*: Tempo limite por requisição, em segundos.
   * `--max-bytes` *(int, default: `1000000`)*: Limite de leitura por página. Documentos maiores são inspecionados parcialmente e o laudo registra `inspection_truncated=true`, com `coverage.complete=false` e ressalva nas dimensões afetadas.
 
+### `preservar`
+
+Executa um passo de preservação no Internet Archive sobre o que o manifesto ainda não tem.
+
+Não baixa página e não emite laudo: a única saída é o manifesto de estado atualizado. Existe porque
+o Internet Archive aceita poucas capturas por vez, e amarrar a preservação ao ciclo semanal deixaria
+a fila andando por meses.
+
+* **Argumentos e Opções:**
+  * `--input`, `-i` *(string, default: `data/data_iniciativas.json`)*: Catálogo de iniciativas.
+  * `--manifest`, `-m` *(string, default: `data/estado_hashes.json`)*: Manifesto lido e reescrito.
+  * `--limite` *(int, default: 10)*: Máximo de capturas submetidas nesta execução.
+  * `--orcamento` *(float, default: 60)*: Segundos de espera pelas capturas em andamento.
+* **Fila:** entradas do catálogo com entrada no manifesto e sem `archive_url`, em ordem de `tool_id`.
+  Iniciativa sem entrada no manifesto espera a avaliação do ciclo semanal.
+* **Deduplicação:** a submissão leva `if_not_archived_within=30d`; quando o serviço dispensa a
+  captura, o endereço do snapshot existente é resolvido no índice público e gravado.
+
 * **Registro de retiradas:** o `audit-all` lê `data/retiradas.json` (ajustável em `--retiradas`) e não audita endereço ali presente, mesmo que ainda conste do catálogo; nesse caso imprime `[RET ]` e avisa para remover a entrada.
 
 * **Consulta de `robots.txt`:** antes de ler a página, o comando consulta o `robots.txt` do host, uma vez por ciclo. Quando as regras proíbem a leitura para o User-Agent institucional, a iniciativa não recebe laudo: ela permanece no catálogo e o resumo do ciclo informa quantas foram puladas. Resposta 404, 410, 401, 403 ou falha de rede não são tratadas como proibição.

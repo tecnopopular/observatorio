@@ -1,0 +1,81 @@
+name: Preservação no Internet Archive
+
+# Passo separado do ciclo de auditoria porque o ritmo é outro: o Internet Archive aceita
+# poucas capturas por vez (medido: ~8 a 16 por execução), enquanto a auditoria completa
+# custa uma leitura por iniciativa. Aqui nenhuma página é baixada para avaliação — o passo
+# lê o catálogo e o manifesto, submete o que está sem snapshot e grava o resultado.
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+    inputs:
+      limite:
+        description: "Máximo de capturas submetidas nesta execução"
+        type: string
+        required: false
+        default: "10"
+      orcamento:
+        description: "Segundos de espera pelas capturas em andamento"
+        type: string
+        required: false
+        default: "60"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: preservacao
+  cancel-in-progress: false
+
+jobs:
+  preservar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Sincronizar Dependências Python
+        run: uv sync
+
+      - name: Executar Passo de Preservação
+        env:
+          ENTRADA_LIMITE: ${{ inputs.limite || '10' }}
+          ENTRADA_ORCAMENTO: ${{ inputs.orcamento || '60' }}
+          IA_S3_ACCESS_KEY: ${{ secrets.IA_S3_ACCESS_KEY }}
+          IA_S3_SECRET_KEY: ${{ secrets.IA_S3_SECRET_KEY }}
+        run: uv run python -m observatorio.cli preservar --limite "$ENTRADA_LIMITE" --orcamento "$ENTRADA_ORCAMENTO"
+
+      - name: Verificar Alterações no Manifesto de Estado
+        id: git-check
+        run: |
+          git status --porcelain
+          echo "has_changes=$(git status --porcelain | wc -l | tr -d ' ')" >> $GITHUB_OUTPUT
+
+      - name: Autocommit do Manifesto de Estado
+        id: autocommit
+        if: steps.git-check.outputs.has_changes != '0'
+        run: |
+          git config user.name "TecnoPopular Observatorio Bot"
+          git config user.email "bot@tecnopopular.org"
+          git add data/estado_hashes.json
+          git commit -m "chore(estado): registra preservação do dia [skip ci]"
+          if git push; then
+            echo "publicado=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publicado=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::manifesto não entrou em main: a regra do repositório recusou o push. O arquivo segue anexado à execução."
+          fi
+
+      - name: Preservar Manifesto Fora do Histórico
+        if: steps.autocommit.outputs.publicado == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: estado-manifesto-preservacao
+          path: data/estado_hashes.json
+          retention-days: 90

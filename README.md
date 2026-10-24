@@ -160,6 +160,24 @@ página pesada leva minutos. Medido em 2026-10-24, uma página com aplicação J
 nada em 90 s pelo modo síncrono, enquanto pelo modo de tarefas o snapshot de `tecnopopular.org`
 ficou pronto em 14,21 s.
 
+### Preservação tem ritmo próprio, e por isso roda separada
+
+O Internet Archive aceita poucas capturas por vez, e o número não depende do cliente: medido em
+2026-10-24, uma rajada de 6 submissões simultâneas foi recusada inteira, 4 envios com 8 s de
+intervalo terminaram em `HTTP 429`, e um ciclo com teto de 30 parou em 16 capturas. A auditoria
+completa, por outro lado, custa uma leitura por iniciativa e cabe em poucos minutos.
+
+Amarrados, os dois ritmos se estorvam. Por isso o repositório tem dois comandos:
+
+| Comando | Quando roda | O que faz |
+| :--- | :--- | :--- |
+| `audit-all` | semanal (domingo, 03:00 UTC) | lê as 183 páginas, avalia e grava o laudo e o manifesto; captura o que mudou |
+| `preservar` | diário (04:00 UTC) | **não baixa página nenhuma**: lê catálogo e manifesto, submete o que está sem snapshot e grava o manifesto |
+
+`preservar` mantém a fila andando no ritmo que o serviço aceita — 10 por execução, 12 s entre
+envios — e não toca no laudo, porque não avalia nada. Endereço sem snapshot que passa do limite
+fica registrado como `deferred` e volta na execução seguinte.
+
 ### Chaves do Internet Archive
 
 A submissão anônima funciona, mas o Save Page Now aplica a ela um limite baixo: depois de dezenas de
