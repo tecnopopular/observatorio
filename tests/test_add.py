@@ -8,7 +8,6 @@ com dado pessoal.
 import json
 import tempfile
 import unittest
-from argparse import Namespace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -22,7 +21,7 @@ from observatorio.catalog import (
     validate_catalog,
     validate_entry,
 )
-from observatorio.cli import cmd_add
+from observatorio.cli import build_parser, cmd_add
 from observatorio.robots import RobotsDecision
 from observatorio.withdrawals import url_key
 
@@ -33,6 +32,9 @@ DESCRICAO = "Painel público que reúne dados de votação por seção eleitoral
 
 def _executar(catalog, registry, url="https://novo-exemplo.org", nome="Iniciativa Nova", **extras):
     """Executa o subcomando de inclusão sobre arquivos de teste.
+
+    Os argumentos passam pelo parser real: construir `Namespace` à mão já deixou os testes
+    divergirem dos destinos que a CLI entrega, e a suíte ficou verde com a esteira quebrada.
 
     Args:
         catalog: Caminho do catálogo.
@@ -53,14 +55,32 @@ def _executar(catalog, registry, url="https://novo-exemplo.org", nome="Iniciativ
         "ignorar_robots": True,
     }
     padrao.update(extras)
-    args = Namespace(
-        url=url,
-        nome=nome,
-        catalog=str(catalog),
-        registry=str(registry),
-        **padrao,
-    )
-    return cmd_add(args)
+
+    argv = [
+        "adicionar",
+        "--url",
+        url,
+        "--nome",
+        nome,
+        "--categoria",
+        padrao["categoria"],
+        "--descricao",
+        padrao["descricao"],
+        "--catalogo",
+        str(catalog),
+        "--registro",
+        str(registry),
+    ]
+    if padrao.get("repositorio"):
+        argv += ["--repositorio", padrao["repositorio"]]
+    if padrao.get("fontes_primarias"):
+        argv += ["--fontes-primarias", padrao["fontes_primarias"]]
+    if padrao.get("tool_id"):
+        argv += ["--tool-id", padrao["tool_id"]]
+    if padrao.get("ignorar_robots"):
+        argv += ["--ignorar-robots"]
+
+    return cmd_add(build_parser().parse_args(argv))
 
 
 class TestValidacaoDoCatalogo(unittest.TestCase):

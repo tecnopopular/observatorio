@@ -67,18 +67,18 @@ Estado do último ciclo registrado no manifesto:
 
 | Medida | Valor |
 | :--- | :--- |
-| Ciclo | 2026-10-24T05:56:33Z |
+| Ciclo | 2026-10-24T15:51:23Z |
 | Iniciativas no catálogo | 174 |
 | Laudos emitidos | 171 |
 | Puladas por `robots.txt` | 3 |
-| Certificadas (selo) | 28 |
+| Certificadas (selo) | 27 |
 | Catalogadas no diretório aberto | 112 |
 | Rejeitadas | 25 |
-| Não inspecionadas | 6 |
-| Com hash de HTML registrado | 165 |
-| Inspeções completas / parciais | 143 / 28 |
+| Não inspecionadas | 7 |
+| Com hash de HTML registrado | 164 |
+| Inspeções completas / parciais | 142 / 29 |
 | Iniciativas com hash novo ou alterado no ciclo | 36 |
-| Tamanho do manifesto | 89.805 bytes |
+| Tamanho do manifesto | 89.748 bytes |
 
 Para conferir localmente depois de um ciclo:
 

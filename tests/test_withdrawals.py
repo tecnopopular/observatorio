@@ -7,14 +7,13 @@ do motor diante de uma iniciativa retirada e o retorno da iniciativa por readmis
 import json
 import tempfile
 import unittest
-from argparse import Namespace
 from datetime import date
 from pathlib import Path
 from unittest.mock import MagicMock
 
 from pydantic import ValidationError
 
-from observatorio.cli import cmd_readmit, cmd_withdraw
+from observatorio.cli import build_parser, cmd_readmit, cmd_withdraw
 from observatorio.engine import run_batch_audit
 from observatorio.fetch import FetchResult
 from observatorio.models import EventType, WithdrawalEvent, WithdrawalRegistry
@@ -81,8 +80,11 @@ def _executar(
 ):
     """Executa um subcomando de registro sobre arquivos de teste.
 
+    Os argumentos passam pelo parser real, e não por `Namespace` montado à mão: assim um destino
+    de argumento renomeado quebra o teste em vez de quebrar a esteira em produção.
+
     Args:
-        comando: Função do subcomando (`cmd_retirar` ou `cmd_readmitir`).
+        comando: Função do subcomando (`cmd_withdraw` ou `cmd_readmit`).
         catalog: Caminho do catálogo.
         registry: Caminho do registro.
         url: Endereço alvo.
@@ -92,15 +94,21 @@ def _executar(
     Returns:
         Código de saída do subcomando.
     """
-    args = Namespace(
-        url=url,
-        motivo=motivo,
-        solicitado_em=solicitado_em,
-        canal="email",
-        catalog=str(catalog),
-        registry=str(registry),
-    )
-    return comando(args)
+    subcomando = "retirar" if comando is cmd_withdraw else "readmitir"
+    argv = [
+        subcomando,
+        "--url",
+        url,
+        "--motivo",
+        motivo,
+        "--solicitado-em",
+        solicitado_em,
+        "--catalogo",
+        str(catalog),
+        "--registro",
+        str(registry),
+    ]
+    return comando(build_parser().parse_args(argv))
 
 
 class TestChaveDeEndereco(unittest.TestCase):
