@@ -41,7 +41,9 @@ INSTITUTIONAL_USER_AGENT = (
     "(+https://tecnopopular.org/metodologia; contato@tecnopopular.org) auditoria-civica"
 )
 MAX_PAYLOAD_BYTES = 1_000_000
-FIRECRAWL_ENDPOINT = "https://api.firecrawl.dev/v1/scrape"
+FIRECRAWL_ENDPOINT = "https://api.firecrawl.dev/v2/scrape"
+FIRECRAWL_MAX_ATTEMPTS = 3
+FIRECRAWL_MAX_WAIT_SECONDS = 60
 
 
 class FetchResult(BaseModel):
@@ -314,6 +316,58 @@ class FirecrawlFetcher:
         self.timeout = timeout
         self.max_bytes = max_bytes
 
+    def _post_com_retry(self, payload: dict) -> tuple[object | None, list[int]]:
+        """Envia a requisição de captura, repetindo quando o serviço pede espera.
+
+        O limite do Firecrawl é por minuto e responde 429 com `Retry-After` curto. Esperar o
+        tempo informado é melhor que um intervalo fixo: curto demais queima tentativas, longo
+        demais custa minutos por página. Esgotadas as tentativas, devolve `None` para que o
+        chamador registre limite de serviço, e não página ilegível.
+
+        Args:
+            payload: Corpo JSON da requisição de captura.
+
+        Returns:
+            Par com a resposta HTTP bem-sucedida, ou `None` quando o limite persiste, e a lista
+            de esperas aplicadas em segundos.
+        """
+        esperas: list[int] = []
+        for tentativa in range(1, FIRECRAWL_MAX_ATTEMPTS + 1):
+            with httpx.Client(timeout=self.timeout) as client:
+                resposta = client.post(
+                    self.endpoint,
+                    json=payload,
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json",
+                    },
+                )
+            if resposta.status_code != 429:
+                return resposta, esperas
+            if tentativa == FIRECRAWL_MAX_ATTEMPTS:
+                return None, esperas
+            espera = self._espera_pedida(resposta)
+            esperas.append(espera)
+            time.sleep(espera)
+        return None, esperas
+
+    @staticmethod
+    def _espera_pedida(resposta: object) -> int:
+        """Lê o `Retry-After` da resposta, limitado ao teto configurado.
+
+        Args:
+            resposta: Resposta HTTP do serviço.
+
+        Returns:
+            Segundos a esperar; zero quando o cabeçalho está ausente ou ilegível.
+        """
+        cabecalho = getattr(resposta, "headers", {}) or {}
+        bruto = cabecalho.get("retry-after") or cabecalho.get("Retry-After") or "0"
+        try:
+            return max(0, min(int(str(bruto).strip()), FIRECRAWL_MAX_WAIT_SECONDS))
+        except ValueError:
+            return 0
+
     def fetch(self, url: str) -> FetchResult:
         """Renderiza o endereço remotamente e devolve o HTML resultante.
 
@@ -344,17 +398,22 @@ class FirecrawlFetcher:
         }
         start = time.time()
         try:
-            with httpx.Client(timeout=self.timeout) as client:
-                response = client.post(
-                    self.endpoint,
-                    json=payload,
-                    headers={
-                        "Authorization": f"Bearer {self.api_key}",
-                        "Content-Type": "application/json",
-                    },
-                )
+            resposta, esperas = self._post_com_retry(payload)
             elapsed = int((time.time() - start) * 1000)
 
+            if resposta is None:
+                return FetchResult(
+                    url=url,
+                    provider=self.name,
+                    status_code=429,
+                    latency_ms=elapsed,
+                    error=(
+                        f"firecrawl HTTP 429: limite do serviço após {FIRECRAWL_MAX_ATTEMPTS} tentativas "
+                        f"(esperas: {', '.join(str(s) for s in esperas)}s)"
+                    ),
+                )
+
+            response = resposta
             if response.status_code >= 400:
                 return FetchResult(
                     url=url,

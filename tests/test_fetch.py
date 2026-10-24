@@ -240,6 +240,62 @@ class TestSelecaoDeProvedor(unittest.TestCase):
         self.assertEqual(resultado.error, "erro B")
 
 
+class TestLimiteDoFirecrawl(unittest.TestCase):
+    """Comportamento diante do 429 do provedor, que é limite de serviço e não página ilegível."""
+
+    def _resposta(self, status: int, retry: str | None = None, corpo: dict | None = None):
+        """Monta uma resposta mínima de httpx com status e cabeçalhos controlados.
+
+        Args:
+            status: Código HTTP devolvido pela resposta.
+            retry: Valor do cabeçalho `Retry-After`, quando houver.
+            corpo: Corpo JSON devolvido por `json()`.
+
+        Returns:
+            Dublê de resposta com `status_code`, `headers` e `json()`.
+        """
+        resposta = MagicMock()
+        resposta.status_code = status
+        resposta.headers = {"retry-after": retry} if retry else {}
+        resposta.json.return_value = corpo or {}
+        return resposta
+
+    def test_429_e_repetido_apos_a_espera_pedida(self):
+        """O primeiro 429 não encerra a captura: espera o informado e tenta de novo."""
+        ok = self._resposta(
+            200,
+            corpo={"success": True, "data": {"rawHtml": "<html>ok</html>", "metadata": {"statusCode": 200}}},
+        )
+        respostas = [self._resposta(429, retry="0"), ok]
+        with patch("httpx.Client.post", side_effect=respostas) as post, patch("time.sleep") as dormir:
+            resultado = FirecrawlFetcher(api_key="chave", max_bytes=10_000).fetch("https://exemplo.org")
+        self.assertTrue(resultado.ok)
+        self.assertEqual(resultado.html, "<html>ok</html>")
+        self.assertEqual(post.call_count, 2)
+        dormir.assert_called_once_with(0)
+
+    def test_429_persistente_vira_erro_de_limite(self):
+        """Esgotadas as tentativas, o erro nomeia o limite do serviço, com as esperas aplicadas."""
+        respostas = [self._resposta(429, retry="2") for _ in range(3)]
+        with patch("httpx.Client.post", side_effect=respostas), patch("time.sleep"):
+            resultado = FirecrawlFetcher(api_key="chave").fetch("https://exemplo.org")
+        self.assertFalse(resultado.ok)
+        self.assertEqual(resultado.status_code, 429)
+        self.assertIn("limite do serviço", resultado.error or "")
+        self.assertIn("429", resultado.error or "")
+
+    def test_espera_tem_teto(self):
+        """`Retry-After` absurdo não pode travar a esteira por minutos."""
+        fabrica = FirecrawlFetcher(api_key="chave")
+        resposta = self._resposta(429, retry="9999")
+        self.assertEqual(fabrica._espera_pedida(resposta), 60)
+
+    def test_espera_ilegivel_nao_quebra(self):
+        """Cabeçalho em formato inesperado resulta em espera zero, não em exceção."""
+        fabrica = FirecrawlFetcher(api_key="chave")
+        self.assertEqual(fabrica._espera_pedida(self._resposta(429, retry="em-breve")), 0)
+
+
 class TestCacheDoSnapshot(unittest.TestCase):
     """Leitura do cache local e atualização forçada."""
 

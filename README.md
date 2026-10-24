@@ -130,9 +130,10 @@ O laudo registra o provedor efetivo e o status HTTP em `performance.fetch_provid
 
 ### Provedor de aquisição: HTTP direto ou Firecrawl
 
-O ciclo padrão lê as páginas por HTTP direto, sem chave e sem serviço externo. O Firecrawl é
+O ciclo padrão lê as páginas por HTTP direto, sem chave e sem serviço externo: uma requisição por
+endereço por ciclo, com cache por `tool_id` cuidando de não repetir a leitura. O Firecrawl é
 opcional, escolhido com `--fetch-provider firecrawl` ou pelo campo `provider` no disparo manual do
-workflow.
+workflow; a API usada é a `v2`, e `429` é repetido respeitando o `Retry-After`, até três tentativas.
 
 Medição em 2026-10-24, amostra de 30 iniciativas do acervo, os dois provedores sobre os mesmos
 endereços:
@@ -146,8 +147,11 @@ endereços:
 | Nota final | — | mediana -1,5 ponto, entre -19,6 e +7,7; 14 de 15 notas comparáveis mudaram |
 
 O Firecrawl renderiza JavaScript e por isso enxerga conteúdo que o HTTP direto não vê. O limite, com
-a chave atual, é de cota: a partir de cerca de quinze requisições seguidas o serviço responde 429, o
-que torna a varredura do acervo inteiro inviável por essa via.
+a chave atual, é de vazão: medido em 2026-10-24, o serviço aceita **6 requisições por minuto** e passa
+a responder `429` com `Retry-After` de 14 a 19 segundos; doze requisições simultâneas recebem doze
+`429`. A 6 por minuto, o acervo inteiro levaria cerca de meia hora por ciclo, e paralelizar não ajuda
+— transforma lentidão em recusa total. Por isso o ciclo padrão usa HTTP direto, e o Firecrawl serve a
+diagnósticos pontuais.
 
 A consequência metodológica importa mais que a operacional: **as duas vias não medem a mesma coisa**.
 Trocar de provedor muda nota (14 de 15 casos comparáveis), então um laudo produzido com Firecrawl não
