@@ -150,6 +150,37 @@ class TestFaseDePreservacao(unittest.TestCase):
         mock_submit.assert_not_called()
         self.assertEqual(relatorios[0].archive_status, "skipped")
 
+    def test_falha_de_rede_ganha_segunda_tentativa(self) -> None:
+        """Uma instabilidade passageira não derruba o ciclo: a submissão é repetida uma vez."""
+        relatorios = [laudo("alfa")]
+        with patch("observatorio.engine.submit_archive") as mock_submit:
+            mock_submit.side_effect = [
+                ArchiveOutcome(status="failed", detail="falha de rede na submissão: ConnectionReset"),
+                ArchiveOutcome(status="pending", job_id="spn2-b"),
+            ]
+            with patch("observatorio.engine.await_archives") as mock_await:
+                mock_await.return_value = {
+                    "alfa": ArchiveOutcome(
+                        status="captured", url="https://web.archive.org/web/9/https://alfa.org/"
+                    )
+                }
+                with patch("observatorio.engine.time.sleep"):
+                    _preserve(relatorios, {}, skip_archive=False, limit=10, budget=60)
+
+        self.assertEqual(mock_submit.call_count, 2)
+        self.assertEqual(relatorios[0].archive_status, "captured")
+
+    def test_recusa_nao_ganha_segunda_tentativa(self) -> None:
+        """Recusa do serviço não melhora com insistência: não é repetida."""
+        relatorios = [laudo("alfa")]
+        with patch("observatorio.engine.submit_archive") as mock_submit:
+            mock_submit.return_value = ArchiveOutcome(status="refused", detail="HTTP 429")
+            with patch("observatorio.engine.time.sleep"):
+                _preserve(relatorios, {}, skip_archive=False, limit=10, budget=60)
+
+        self.assertEqual(mock_submit.call_count, 1)
+        self.assertEqual(relatorios[0].archive_status, "refused")
+
 
 if __name__ == "__main__":
     unittest.main()

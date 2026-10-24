@@ -43,6 +43,7 @@ from .withdrawals import load as carregar_retiradas
 SUBMIT_INTERVAL = 12.0
 SUBMIT_TIMEOUT = 20
 SUBMIT_FAILURES_TO_STOP = 2
+SUBMIT_RETRY_PAUSE = 20.0
 DEFAULT_ARCHIVE_LIMIT = 10
 
 DEFAULT_CACHE_DIR = Path("data/raw/html_cache")
@@ -362,6 +363,10 @@ def _preserve(
     ou `reused`. Endereço preterido pelo limite não se perde: sem snapshot gravado, ele volta à
     fila do ciclo seguinte.
 
+    Falha de rede ganha uma segunda tentativa depois de uma pausa: derrubar o ciclo inteiro na
+    primeira instabilidade é caro quando a causa costuma ser passageira, e recusa do serviço
+    (`refused`) é outra coisa — essa não melhora com insistência.
+
     Args:
         reports: Laudos do ciclo, atualizados no lugar.
         previous: Entradas do manifesto anterior, indexadas por `tool_id`.
@@ -399,6 +404,9 @@ def _preserve(
         if posicao:
             time.sleep(SUBMIT_INTERVAL)
         submissao = submit_archive(relatorio.target_url, timeout=SUBMIT_TIMEOUT)
+        if submissao.status == "failed":
+            time.sleep(SUBMIT_RETRY_PAUSE)
+            submissao = submit_archive(relatorio.target_url, timeout=SUBMIT_TIMEOUT)
         relatorio.archive_status = submissao.status
         if submissao.url:
             relatorio.archive_url = submissao.url
