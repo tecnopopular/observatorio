@@ -2,7 +2,7 @@
 
 Repositório de monitoramento contínuo, preservação arquivística e diagnóstico técnico do ecossistema de tecnologias e iniciativas cívicas no Brasil.
 
-Este repositório publica o motor e os dados que sustentam um resultado de pesquisa. Para executar o ciclo, conferir os portões e comparar com os números de referência, ver [`REPRODUZIR.md`](REPRODUZIR.md), que também declara o que o repositório **não** consegue reproduzir. O uso de inteligência artificial generativa na produção deste repositório está declarado em [`DECLARACAO_IA.md`](DECLARACAO_IA.md), conforme a Portaria CNPq nº 2.664/2026.
+Este repositório publica o motor e os dados que sustentam um resultado de pesquisa. Para executar o ciclo, conferir os portões e comparar com os números de referência, ver [`REPRODUZIR.md`](REPRODUZIR.md), que também declara o que o repositório **não** consegue reproduzir. O uso de inteligência artificial generativa na produção deste repositório está declarado em [`DECLARACAO_IA.md`](DECLARACAO_IA.md), conforme a Portaria CNPq nº 2.664/2026. As regras de idioma e de nomenclatura — código em inglês, texto em português, contrato de dados congelado — estão em [`CONVENCOES.md`](CONVENCOES.md).
 
 ---
 

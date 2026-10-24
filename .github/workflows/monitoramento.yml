@@ -16,6 +16,14 @@ on:
         required: false
         default: false
         type: boolean
+      provider:
+        description: 'Acquisition provider: http (direct fetch) or firecrawl (external rendering)'
+        required: false
+        default: http
+        type: choice
+        options:
+          - http
+          - firecrawl
   pull_request:
     paths:
       - 'data/data_iniciativas.json'
@@ -60,11 +68,23 @@ jobs:
       - name: Executar Bateria de Testes Unitários
         run: uv run python -m unittest discover tests
 
+      - name: Conferir provedor escolhido
+        env:
+          PROVIDER: ${{ github.event.inputs.provider }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: |
+          if [ "$PROVIDER" = "firecrawl" ] && [ -z "$FIRECRAWL_API_KEY" ]; then
+            echo "::error::provider=firecrawl requires the FIRECRAWL_API_KEY secret"
+            exit 1
+          fi
+          echo "provider: ${PROVIDER:-http}"
+
       - name: Executar Esteira de Monitoramento e Avaliação Cívica
         env:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          PROVIDER: ${{ github.event.inputs.provider }}
         run: |
-          ARGS=""
+          ARGS="--fetch-provider ${PROVIDER:-http}"
           if [ "${{ github.event.inputs.refresh }}" = "true" ]; then
             ARGS="$ARGS --refresh"
           fi
