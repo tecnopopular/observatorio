@@ -1526,5 +1526,12 @@
     "fontes_primarias": [
       "https://dadosabertos.camara.leg.br/swagger/api.html"
     ]
+  },
+  {
+    "nome": "Janonômetro",
+    "tool_id": "janonometro",
+    "url": "https://janonometro.com.br",
+    "dominio": "janonometro.com.br",
+    "adicionado_em": "2026-10-24"
   }
 ]
