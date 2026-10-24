@@ -176,18 +176,42 @@ Para isso, a via adequada é um diagnóstico pontual, fora do ciclo: o históric
 ### Consulta de `robots.txt`
 
 Antes de ler uma página, o observatório consulta o `robots.txt` do host, uma vez por ciclo, e
-aplica as regras ao seu próprio User-Agent. Se o site proíbe a leitura, **a iniciativa não recebe
+aplica as regras ao seu próprio crawler. Se o site proíbe a leitura, **a iniciativa não recebe
 laudo**: ela permanece no catálogo, sem diagnóstico, e o ciclo informa quantas foram puladas.
 
+### Como bloquear este crawler
+
+O crawler se identifica pelo token **`TecnoPopular-Observatorio`** e atende por esse nome no
+`robots.txt`. O casamento é **exato**: `user-agent` precisa ser esse token, com ou sem versão
+(`TecnoPopular-Observatorio/1.0`), sem diferenciar maiúsculas. Nome parecido não bloqueia —
+`User-agent: popular` está contido no nosso nome e mesmo assim não é uma regra sobre nós.
+
+```
+User-agent: TecnoPopular-Observatorio
+Disallow: /
+```
+
+Regra nomeada vence o curinga, como manda a RFC 9309: um grupo com o nosso token é mais específico
+do que `User-agent: *`. O cabeçalho completo da requisição carrega o endereço da metodologia e um
+contato, para quem quiser perguntar antes de bloquear:
+
+```
+TecnoPopular-Observatorio/1.0 (+https://tecnopopular.org/metodologia; contato@tecnopopular.org)
+```
+
+Uma leitura que não é do crawler: nada aqui simula navegador, executa script da página ou se declara
+como agente de IA. O que o motor faz é buscar o HTML servido e avaliá-lo com regras determinísticas.
+
 A decisão de consultar foi tomada depois de medir o efeito sobre o acervo
-(`tools/measure_robots.py`, 170 hosts, 175 iniciativas no momento da medição):
+(`uv run python tools/measure_robots.py`, 179 hosts, 183 iniciativas na última medição):
 
 | Situação | Iniciativas |
 | :--- | ---: |
-| Leitura permitida pelas regras | 86 |
-| Sem `robots.txt` utilizável | 83 |
+| Leitura permitida pelas regras | 63 |
+| `robots.txt` sem regra para o observatório nem para todos | 31 |
+| Sem `robots.txt` utilizável (404, 410, 401, 403) | 84 |
+| Consulta falhou (rede ou 5xx), leitura mantida | 2 |
 | Proibida por regra explícita | 3 |
-| Inacessível na consulta | 3 |
 
 Apenas 3 sites publicam bloqueio total — `Disallow: /` para todos os agentes. As três saíram do
 laudo no primeiro ciclo com a regra ativa; uma delas era certificada e perdeu o selo.

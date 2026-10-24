@@ -13,8 +13,9 @@ Regras de segurança e honestidade embutidas aqui:
 - TLS é verificado por padrão. Requisição sem validação é possível, mas explícita e
   registrada em `FetchResult.tls_verified=False` — o laudo nunca deve fingir que
   inspecionou uma cadeia de certificados que não foi verificada.
-- O User-Agent identifica o observatório como agente automatizado. Não há personificação
-  de navegador: um bot de auditoria cívica se apresenta como tal.
+- O User-Agent identifica o crawler do observatório pelo nome. Não há personificação de
+  navegador: o crawler de uma auditoria cívica se apresenta como tal, e é por esse nome
+  (`CRAWLER_TOKEN`) que quem quiser ser excluído nos bloqueia no robots.txt.
 - Falha de rede devolve `FetchResult` com `error` preenchido, não exceção: uma iniciativa
   fora do ar não pode abortar a esteira das outras.
 - Nenhuma mensagem de erro inclui chave de API.
@@ -31,9 +32,10 @@ from pydantic import BaseModel, Field
 
 AUTH_HINTS = ("/auth", "/login", "/signin", "/sso", "share.streamlit.io/-/auth", "accounts.google.com")
 
+CRAWLER_TOKEN = "TecnoPopular-Observatorio"
+
 INSTITUTIONAL_USER_AGENT = (
-    "TecnoPopular-Observatorio/1.0 "
-    "(+https://tecnopopular.org/metodologia; contato@tecnopopular.org) auditoria-civica"
+    f"{CRAWLER_TOKEN}/1.0 (+https://tecnopopular.org/metodologia; contato@tecnopopular.org) auditoria-civica"
 )
 MAX_PAYLOAD_BYTES = 1_000_000
 
