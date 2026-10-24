@@ -36,7 +36,7 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
 
     Args:
         args: Namespace do argparse com `input`, `output`, `manifest`, `workers`, `refresh`,
-            `skip_archive`, `timeout`, `fetch_provider`, `semantic` e `max_bytes`.
+            `skip_archive`, `timeout`, `semantic` e `max_bytes`.
 
     Returns:
         0 quando a esteira conclui; 1 quando uma exceção interrompe a execução.
@@ -53,7 +53,6 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
             skip_archive=args.skip_archive,
             timeout=args.timeout,
             manifest_file=Path(args.manifest),
-            fetch_provider=args.fetch_provider,
             semantic=args.semantic,
             max_bytes=args.max_bytes,
             withdrawals_file=Path(args.withdrawals),
@@ -380,13 +379,14 @@ def cmd_add(args: argparse.Namespace) -> int:
     return 0
 
 
-def main() -> None:
-    """Monta o parser de argumentos e despacha o subcomando escolhido.
+def build_parser() -> argparse.ArgumentParser:
+    """Monta o parser de subcomandos da CLI.
 
-    Sem subcomando explícito, assume `audit-all` com os mesmos valores padrão das flags.
+    Existe separado de `main` para que a superfície de argumentos possa ser testada sem executar
+    a esteira: um `add_argument` malformado derruba a CLI inteira na primeira chamada.
 
-    Raises:
-        SystemExit: com o código de saída devolvido pelo subcomando executado.
+    Returns:
+        Parser pronto, com todos os subcomandos registrados.
     """
     parser = argparse.ArgumentParser(
         prog="observatorio",
@@ -420,12 +420,6 @@ def main() -> None:
     )
     audit_command_parser.add_argument(
         "--timeout", "-t", type=int, default=8, help="Timeout de conexão em segundos"
-    )
-    audit_command_parser.add_argument(
-        "--fetch-provider",
-        choices=["http", "firecrawl"],
-        default="http",
-        help="Provedor de aquisição do HTML: http (direto, TLS verificado) ou firecrawl (renderização remota para SPA)",
     )
     audit_command_parser.add_argument(
         "--max-bytes",
@@ -514,6 +508,18 @@ def main() -> None:
         "--all-files", action="store_true", help="Inspeciona todos os arquivos rastreados"
     )
 
+    return parser
+
+
+def main() -> None:
+    """Despacha o subcomando escolhido sobre o parser construído.
+
+    Sem subcomando explícito, assume `audit-all` com os mesmos valores padrão das flags.
+
+    Raises:
+        SystemExit: com o código de saída devolvido pelo subcomando executado.
+    """
+    parser = build_parser()
     args = parser.parse_args()
 
     if not args.command:
@@ -525,7 +531,6 @@ def main() -> None:
         args.refresh = False
         args.skip_archive = False
         args.timeout = 8
-        args.fetch_provider = "http"
         args.semantic = "off"
         args.max_bytes = 4_000_000
         args.withdrawals = "data/retiradas.json"

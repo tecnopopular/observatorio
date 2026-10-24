@@ -26,7 +26,6 @@ Executa a varredura completa das iniciativas catalogadas.
   * `--refresh`, `-r` *(flag, default: false)*: Força re-inspeção completa, ignorando o cache local de hashes.
   * `--workers`, `-w` *(int, default: 10)*: Número de threads simultâneas para download e inspeção.
   * `--skip-archive` *(flag, default: false)*: Pula as chamadas assíncronas ao Internet Archive (útil em testes locais ou CI offline).
-  * `--fetch-provider` *(escolha, default: `http`)*: Provedor de aquisição do HTML. `http` faz requisição direta com TLS verificado e User-Agent institucional; `firecrawl` usa renderização remota (necessário para SPA, consome cota da API).
   * `--semantic` *(escolha, default: `off`)*: Camada semântica calibrada da Dimensão 4. `off` mantém a avaliação 100% determinística; `jev` consulta a API TypeSafe (`noul` por rótulo + `score` de intensidade) e consome tokens por iniciativa.
   * `--timeout`, `-t` *(int, default: 8)*: Tempo limite por requisição, em segundos.
   * `--max-bytes` *(int, default: `1000000`)*: Limite de leitura por página. Documentos maiores são inspecionados parcialmente e o laudo registra `inspection_truncated=true`, com `coverage.complete=false` e ressalva nas dimensões afetadas.

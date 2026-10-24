@@ -1,6 +1,6 @@
 """
 tests/test_fetch.py
-Testes da camada de aquisição (provedores HTTP e Firecrawl).
+Testes da camada de aquisição por HTTP direto.
 
 Nenhum teste toca a rede: o provedor remoto é simulado. O que se verifica aqui são as
 invariantes que sustentam a auditoria: TLS verificado por padrão, falha de rede devolve
@@ -9,7 +9,6 @@ o primeiro provedor que funciona.
 """
 
 import json
-import os
 import ssl
 import unittest
 from pathlib import Path
@@ -17,12 +16,7 @@ from unittest.mock import MagicMock, patch
 from urllib.error import URLError
 
 from observatorio.engine import fetch_snapshot
-from observatorio.fetch import (
-    FirecrawlFetcher,
-    HttpFetcher,
-    build_fetcher,
-    fetch_with_fallback,
-)
+from observatorio.fetch import HttpFetcher
 
 
 class _FakeResponse:
@@ -70,18 +64,6 @@ class _FakeResponse:
         return False
 
 
-def _credencial_ficticia() -> str:
-    """Monta uma credencial de teste em tempo de execução.
-
-    O valor não pode ser um literal: o portão de privacidade bloqueia, corretamente,
-    qualquer atribuição de segredo embutido no código, inclusive em arquivo de teste.
-
-    Returns:
-        Credencial fictícia composta em tempo de execução.
-    """
-    return "-".join(["credencial", "ficticia", "de", "teste"])
-
-
 class TestHttpFetcher(unittest.TestCase):
     """Invariantes do provedor HTTP direto."""
 
@@ -121,179 +103,6 @@ class TestHttpFetcher(unittest.TestCase):
         self.assertFalse(resultado.ok)
         self.assertIn("falha de rede", resultado.error or "")
         self.assertEqual(resultado.content_bytes, 0)
-
-
-class TestFirecrawlFetcher(unittest.TestCase):
-    """Invariantes do provedor de renderização remota."""
-
-    def _client_mock(self, status_code: int, payload: dict):
-        """Cria um cliente HTTP simulado que devolve código e JSON fixos.
-
-        Args:
-            status_code: Código HTTP devolvido pela resposta simulada.
-            payload: Corpo JSON desserializado pela resposta simulada.
-
-        Returns:
-            Gerenciador de contexto que substitui `httpx.Client`.
-        """
-        response = MagicMock()
-        response.status_code = status_code
-        response.json.return_value = payload
-        cliente = MagicMock()
-        cliente.post.return_value = response
-        contexto = MagicMock()
-        contexto.__enter__.return_value = cliente
-        contexto.__exit__.return_value = False
-        return contexto
-
-    def test_sem_chave_devolve_erro_e_nao_chama_api(self):
-        """Ausência de chave impede a chamada remota e produz erro explícito."""
-        with patch("observatorio.fetch.get_api_key", return_value=None):
-            fetcher = FirecrawlFetcher()
-        self.assertFalse(fetcher.api_key)
-        resultado = fetcher.fetch("https://exemplo.org")
-        self.assertFalse(resultado.ok)
-        self.assertIn("FIRECRAWL_API_KEY ausente", resultado.error or "")
-
-    def test_parseia_rawhtml_e_status(self):
-        """O HTML renderizado e o código de origem vêm do payload da API."""
-        payload = {
-            "success": True,
-            "data": {"rawHtml": "<html>renderizado</html>", "metadata": {"statusCode": 200}},
-        }
-        with patch("observatorio.fetch.httpx.Client", return_value=self._client_mock(200, payload)):
-            resultado = FirecrawlFetcher(api_key=_credencial_ficticia()).fetch("https://exemplo.org")
-        self.assertTrue(resultado.ok)
-        self.assertEqual(resultado.html, "<html>renderizado</html>")
-        self.assertEqual(resultado.status_code, 200)
-        self.assertEqual(resultado.provider, "firecrawl")
-
-    def test_success_false_vira_erro(self):
-        """`success` falso no payload é reportado como erro com a mensagem da API."""
-        payload = {"success": False, "error": "limite de requisições atingido"}
-        with patch("observatorio.fetch.httpx.Client", return_value=self._client_mock(200, payload)):
-            resultado = FirecrawlFetcher(api_key=_credencial_ficticia()).fetch("https://exemplo.org")
-        self.assertFalse(resultado.ok)
-        self.assertIn("limite de requisições", resultado.error or "")
-
-    def test_http_de_erro_vira_erro_com_codigo(self):
-        """Código HTTP de erro é preservado na mensagem do resultado."""
-        with patch("observatorio.fetch.httpx.Client", return_value=self._client_mock(429, {})):
-            resultado = FirecrawlFetcher(api_key=_credencial_ficticia()).fetch("https://exemplo.org")
-        self.assertFalse(resultado.ok)
-        self.assertIn("429", resultado.error or "")
-
-    def test_chave_nunca_aparece_na_mensagem_de_erro(self):
-        """Exceção do cliente não pode transportar a chave para o laudo."""
-        segredo = _credencial_ficticia()
-        with patch("observatorio.fetch.httpx.Client", side_effect=RuntimeError("conexão recusada")):
-            resultado = FirecrawlFetcher(api_key=segredo).fetch("https://exemplo.org")
-        self.assertFalse(resultado.ok)
-        self.assertNotIn(segredo, resultado.error or "")
-
-
-class TestSelecaoDeProvedor(unittest.TestCase):
-    """Contrato de construção e de encadeamento dos provedores."""
-
-    def test_provedor_desconhecido_e_erro_de_contrato(self):
-        """Nome fora do contrato é rejeitado em vez de silenciosamente aceito."""
-        with self.assertRaises(ValueError):
-            build_fetcher("bing-search")
-
-    def test_build_fetcher_por_nome(self):
-        """Cada nome conhecido constrói o provedor correspondente."""
-        self.assertEqual(build_fetcher("http").name, "http")
-        with patch.dict(os.environ, {"FIRECRAWL_API_KEY": "chave-de-teste"}):
-            self.assertEqual(build_fetcher("firecrawl", timeout=5).name, "firecrawl")
-
-    def test_chave_ausente_nao_quebra_a_construcao(self):
-        """Sem chave em lugar nenhum, o provedor é construído e falha na aquisição, não na montagem.
-
-        Em contêiner Linux não existe binário `security`: a busca no Keychain precisa devolver
-        ausência de segredo, e não estourar erro de plataforma.
-        """
-        with patch.dict(os.environ, {}, clear=False):
-            os.environ.pop("FIRECRAWL_API_KEY", None)
-            with patch("observatorio.credentials.get_keychain_secret", return_value=None):
-                provedor = build_fetcher("firecrawl", timeout=5)
-        self.assertIsNone(provedor.api_key)
-        resultado = provedor.fetch("https://exemplo.org")
-        self.assertFalse(resultado.ok)
-        self.assertIn("FIRECRAWL_API_KEY", resultado.error or "")
-
-    def test_fallback_usa_o_segundo_quando_o_primeiro_falha(self):
-        """O encadeamento devolve o primeiro provedor que responde com sucesso."""
-        falho = MagicMock(name="falho")
-        falho.fetch.return_value = MagicMock(ok=False, provider="firecrawl", error="sem chave")
-        bom = MagicMock(name="bom")
-        bom.fetch.return_value = MagicMock(ok=True, provider="http")
-        resultado = fetch_with_fallback("https://exemplo.org", [falho, bom])
-        self.assertEqual(resultado.provider, "http")
-
-    def test_fallback_devolve_ultimo_erro_quando_todos_falham(self):
-        """Esgotados os provedores, prevalece o erro do último tentado."""
-        primeiro = MagicMock()
-        primeiro.fetch.return_value = MagicMock(ok=False, provider="firecrawl", error="erro A")
-        segundo = MagicMock()
-        segundo.fetch.return_value = MagicMock(ok=False, provider="http", error="erro B")
-        resultado = fetch_with_fallback("https://exemplo.org", [primeiro, segundo])
-        self.assertEqual(resultado.error, "erro B")
-
-
-class TestLimiteDoFirecrawl(unittest.TestCase):
-    """Comportamento diante do 429 do provedor, que é limite de serviço e não página ilegível."""
-
-    def _resposta(self, status: int, retry: str | None = None, corpo: dict | None = None):
-        """Monta uma resposta mínima de httpx com status e cabeçalhos controlados.
-
-        Args:
-            status: Código HTTP devolvido pela resposta.
-            retry: Valor do cabeçalho `Retry-After`, quando houver.
-            corpo: Corpo JSON devolvido por `json()`.
-
-        Returns:
-            Dublê de resposta com `status_code`, `headers` e `json()`.
-        """
-        resposta = MagicMock()
-        resposta.status_code = status
-        resposta.headers = {"retry-after": retry} if retry else {}
-        resposta.json.return_value = corpo or {}
-        return resposta
-
-    def test_429_e_repetido_apos_a_espera_pedida(self):
-        """O primeiro 429 não encerra a captura: espera o informado e tenta de novo."""
-        ok = self._resposta(
-            200,
-            corpo={"success": True, "data": {"rawHtml": "<html>ok</html>", "metadata": {"statusCode": 200}}},
-        )
-        respostas = [self._resposta(429, retry="0"), ok]
-        with patch("httpx.Client.post", side_effect=respostas) as post, patch("time.sleep") as dormir:
-            resultado = FirecrawlFetcher(api_key="chave", max_bytes=10_000).fetch("https://exemplo.org")
-        self.assertTrue(resultado.ok)
-        self.assertEqual(resultado.html, "<html>ok</html>")
-        self.assertEqual(post.call_count, 2)
-        dormir.assert_called_once_with(0)
-
-    def test_429_persistente_vira_erro_de_limite(self):
-        """Esgotadas as tentativas, o erro nomeia o limite do serviço, com as esperas aplicadas."""
-        respostas = [self._resposta(429, retry="2") for _ in range(3)]
-        with patch("httpx.Client.post", side_effect=respostas), patch("time.sleep"):
-            resultado = FirecrawlFetcher(api_key="chave").fetch("https://exemplo.org")
-        self.assertFalse(resultado.ok)
-        self.assertEqual(resultado.status_code, 429)
-        self.assertIn("limite do serviço", resultado.error or "")
-        self.assertIn("429", resultado.error or "")
-
-    def test_espera_tem_teto(self):
-        """`Retry-After` absurdo não pode travar a esteira por minutos."""
-        fabrica = FirecrawlFetcher(api_key="chave")
-        resposta = self._resposta(429, retry="9999")
-        self.assertEqual(fabrica._espera_pedida(resposta), 60)
-
-    def test_espera_ilegivel_nao_quebra(self):
-        """Cabeçalho em formato inesperado resulta em espera zero, não em exceção."""
-        fabrica = FirecrawlFetcher(api_key="chave")
-        self.assertEqual(fabrica._espera_pedida(self._resposta(429, retry="em-breve")), 0)
 
 
 class TestCacheDoSnapshot(unittest.TestCase):

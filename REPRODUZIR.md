@@ -19,10 +19,10 @@ estrutura dos artefatos. O restante está declarado na seção 6.
 uv sync
 ```
 
-Não é preciso chave de API para o ciclo padrão. `--fetch-provider firecrawl` (aquisição por provedor
-externo) e `--semantic jev` (camada semântica calibrada) exigem credencial própria, lida do Keychain
-do macOS no ambiente local ou de variável de ambiente em CI; sem ela, esses modos não rodam e o
-ciclo básico segue funcionando.
+Não é preciso chave de API para o ciclo: a aquisição é HTTP direto. `--semantic jev` (camada
+semântica calibrada) é o único modo que exige credencial própria, lida do Keychain do macOS no
+ambiente local ou de variável de ambiente em CI; sem ela, esse modo não roda e o ciclo básico segue
+funcionando.
 
 ## 2. Portões de qualidade
 

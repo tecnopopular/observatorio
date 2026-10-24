@@ -162,7 +162,7 @@ class PerformanceDetail(BaseModel):
     has_commercial_paywall: bool = False
     has_ad_banners: bool = False
     fetch_provider: str | None = Field(
-        None, description="Provedor que obteve o HTML: http, firecrawl ou cache"
+        None, description="Origem do HTML: http (requisição direta) ou cache (reaproveitado)"
     )
     http_status: int | None = Field(None, description="Código de status HTTP observado na aquisição")
     bytes_scanned: int = Field(0, description="Bytes efetivamente inspecionados (após corte de leitura)")

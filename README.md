@@ -36,7 +36,7 @@ no laudo o que não conseguiu observar — ausência de leitura vira `nao_inspec
 └───────────────────────────────────┬──────────────────────────────────────────┘
                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ 3. AQUISIÇÃO  fetch.HttpFetcher | Firecrawl                                  │
+│ 3. AQUISIÇÃO  fetch.HttpFetcher — HTTP direto, sem serviço externo           │
 │               TLS verificado, User-Agent institucional, cap 4.000.000 B      │
 │               gate de login -> nao_inspecionado                              │
 │               cache data/raw/html_cache por tool_id; SHA igual = reaproveita │
@@ -107,57 +107,47 @@ Detalhes de atribuição dos dados em [data/README.md](data/README.md).
 
 ## 5. Aquisição de conteúdo e integrações de API
 
-O motor separa a **aquisição** do conteúdo da **avaliação** dele. A avaliação é 100% determinística (heurísticas sobre o HTML); a aquisição é delegada a um provedor.
-
-| Provedor | Uso | Custo | Requisito |
-| :--- | :--- | :--- | :--- |
-| `http` (padrão) | Páginas renderizadas no servidor | nenhum | — |
-| `firecrawl` | Aplicações de página única (SPA), conteúdo dinâmico | cota da API | `FIRECRAWL_API_KEY` (ambiente ou Keychain) |
-
-```bash
-uv run python -m observatorio.cli audit-all --fetch-provider firecrawl
-```
+O motor separa a **aquisição** do conteúdo da **avaliação** dele. A avaliação é 100% determinística
+(heurísticas sobre o HTML); a aquisição é uma requisição HTTP direta, sem serviço intermediário e sem
+credencial.
 
 Garantias da camada de aquisição:
 
 - **TLS verificado por padrão.** Requisição sem validação é possível, mas explícita e registrada em `FetchResult.tls_verified=False` — o laudo nunca declara ter inspecionado uma cadeia de certificados que não foi verificada.
 - **User-Agent institucional.** Cada requisição se apresenta como robô de auditoria cívica, não como navegador: `TecnoPopular-Observatorio/1.0 (+https://tecnopopular.org/metodologia; contato@tecnopopular.org)`. O endereço de contato existe para que o operador do site saiba quem está lendo a página e possa pedir correção ou bloqueio. A mesma identificação é usada na leitura da iniciativa e na solicitação de captura ao Internet Archive.
-- **Identificação no provedor remoto.** Com `--fetch-provider firecrawl`, a página é buscada pelo servidor do provedor: nossa requisição vai autenticada à API dele e o site auditado vê o agente do Firecrawl. Nesse caminho a identificação existe, mas é a da conta na API, não este User-Agent.
 - **Falha isolada.** Iniciativa fora do ar devolve resultado com erro e não interrompe a esteira das demais.
-- **Chave nunca vaza.** Mensagens de erro não incluem credencial.
+- **Nenhuma credencial em jogo.** A leitura do acervo não usa chave; a única chave do projeto é
+da camada semântica opcional, e ela nunca aparece em mensagem de erro.
 
 O laudo registra o provedor efetivo e o status HTTP em `performance.fetch_provider` e `performance.http_status`.
 
-### Provedor de aquisição: HTTP direto ou Firecrawl
+### Aquisição por HTTP direto
 
-O ciclo padrão lê as páginas por HTTP direto, sem chave e sem serviço externo: uma requisição por
-endereço por ciclo, com cache por `tool_id` cuidando de não repetir a leitura. O Firecrawl é
-opcional, escolhido com `--fetch-provider firecrawl` ou pelo campo `provider` no disparo manual do
-workflow; a API usada é a `v2`, e `429` é repetido respeitando o `Retry-After`, até três tentativas.
+A aquisição é uma requisição HTTP direta por endereço, com TLS verificado e User-Agent
+institucional, uma vez por ciclo — o cache por `tool_id` só relê a página quando o `html_sha256` muda.
+Não há provedor alternativo, nem por parâmetro: é o único caminho de leitura do acervo.
 
-Medição em 2026-10-24, amostra de 30 iniciativas do acervo, os dois provedores sobre os mesmos
-endereços:
+A renderização remota por Firecrawl foi avaliada e retirada. O motivo é medido, em 2026-10-24, sobre
+o mesmo acervo:
 
 | Medida | HTTP direto | Firecrawl |
 | :--- | :--- | :--- |
-| Endereços com texto extraível | 29 de 30 | 16 de 30 |
+| Endereços com texto extraível (amostra de 30) | 29 | 16 |
 | Falhas de aquisição | 1 | 14, todas HTTP 429 |
-| Texto extraído (mediana) | 4.441 caracteres | 320 caracteres |
-| Leitura 20% maior que a do outro provedor | — | 11 endereços, até 9.156 para 58.589 caracteres |
-| Nota final | — | mediana -1,5 ponto, entre -19,6 e +7,7; 14 de 15 notas comparáveis mudaram |
+| Vazão aceita pelo serviço | sem limite do provedor | 6 requisições por minuto, `Retry-After` de 14 a 19 s |
+| Nota final | — | mediana -1,5 ponto, entre -19,6 e +7,7 |
 
-O Firecrawl renderiza JavaScript e por isso enxerga conteúdo que o HTTP direto não vê. O limite, com
-a chave atual, é de vazão: medido em 2026-10-24, o serviço aceita **6 requisições por minuto** e passa
-a responder `429` com `Retry-After` de 14 a 19 segundos; doze requisições simultâneas recebem doze
-`429`. A 6 por minuto, o acervo inteiro levaria cerca de meia hora por ciclo, e paralelizar não ajuda
-— transforma lentidão em recusa total. Por isso o ciclo padrão usa HTTP direto, e o Firecrawl serve a
-diagnósticos pontuais.
+Três razões sustentam a retirada. A primeira é operacional: a 6 requisições por minuto, o acervo
+levaria cerca de meia hora por ciclo, e paralelizar não ajuda — doze requisições simultâneas recebem
+doze recusas. A segunda é metodológica: as duas vias não medem a mesma coisa, já que a nota mudou em
+14 de 15 casos comparáveis, de modo que misturar as duas no mesmo acervo quebraria a série temporal.
+A terceira é de escopo: o que o Firecrawl acrescentaria — enxergar conteúdo injetado por JavaScript —
+não é o que o observatório mede hoje, e o preço seria tornar cada laudo dependente de serviço
+externo pago.
 
-A consequência metodológica importa mais que a operacional: **as duas vias não medem a mesma coisa**.
-Trocar de provedor muda nota (14 de 15 casos comparáveis), então um laudo produzido com Firecrawl não
-é comparável a um laudo produzido com HTTP direto, e misturar os dois no mesmo acervo criaria uma
-série temporal incoerente. Por isso o padrão é HTTP direto, e o provedor externo é escolha explícita,
-registrada no log do ciclo e no disparo do workflow.
+O caso de uso que restaria é a leitura de páginas que só existem depois da execução de JavaScript.
+Para isso, a via adequada é um diagnóstico pontual, fora do ciclo: o histórico de laudos fica com uma
+única origem de dados, e a comparação entre ciclos continua válida.
 
 ### Consulta de `robots.txt`
 

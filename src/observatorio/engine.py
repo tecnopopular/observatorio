@@ -10,7 +10,7 @@ from pathlib import Path
 
 from .catalog import assign_tool_ids, slugify, validate_catalog
 from .evaluator import CivicEvaluator
-from .fetch import MAX_PAYLOAD_BYTES, ContentFetcher, FetchResult, build_fetcher
+from .fetch import MAX_PAYLOAD_BYTES, ContentFetcher, FetchResult, HttpFetcher
 from .models import (
     AuditLevel,
     CivicAuditReport,
@@ -37,7 +37,7 @@ def fetch_snapshot(
     """
     Obtém o conteúdo público de uma iniciativa, com cache local por identificador.
 
-    A aquisição real é delegada ao provedor (`fetch.HttpFetcher` ou `FirecrawlFetcher`).
+    A aquisição real é delegada a `fetch.HttpFetcher`.
     Falha de rede não levanta exceção: devolve `FetchResult` com `error` preenchido, para
     que uma iniciativa indisponível não interrompa a esteira das demais.
 
@@ -84,7 +84,7 @@ def fetch_snapshot(
         except Exception:
             pass
 
-    provedor = fetcher or build_fetcher("http", timeout=timeout, max_bytes=max_bytes)
+    provedor = fetcher or HttpFetcher(timeout=timeout, max_bytes=max_bytes)
     resultado = provedor.fetch(target_url)
     if resultado.ok:
         try:
@@ -275,7 +275,6 @@ def run_batch_audit(
     skip_archive: bool = False,
     timeout: int = 8,
     manifest_file: Path = Path("data/estado_hashes.json"),
-    fetch_provider: str = "http",
     semantic: str = "off",
     max_bytes: int = MAX_PAYLOAD_BYTES,
     fetcher: ContentFetcher | None = None,
@@ -306,11 +305,9 @@ def run_batch_audit(
         skip_archive: Quando verdadeiro, não solicita preservação no Internet Archive.
         timeout: Tempo limite, em segundos, de cada requisição de rede.
         manifest_file: Caminho do manifesto compacto de estado.
-        fetch_provider: Provedor de aquisição do conteúdo (`http` ou `firecrawl`).
         semantic: Camada semântica aplicada ao texto (`off` ou `jev`).
         max_bytes: Limite de bytes lidos por página.
         fetcher: Provedor de aquisição já construído; quando nulo, é construído a partir
-            de `fetch_provider`.
         robots_policy: Política de `robots.txt` já construída; quando nula e
             `respect_robots` é verdadeiro, uma política nova é criada com o `timeout` do ciclo.
         respect_robots: Quando verdadeiro, sites que proíbem a leitura em `robots.txt` não
@@ -370,13 +367,13 @@ def run_batch_audit(
 
     print(f"[*] Iniciando esteira de monitoramento cívico sobre {len(targets)} iniciativas...")
     print(f"[*] Workers: {max_workers} | Refresh: {refresh_cache} | Skip Archive: {skip_archive}")
-    print(f"[*] Provedor de aquisição: {fetch_provider}")
+    print("[*] Aquisição: HTTP direto, TLS verificado")
     print(f"[*] Classificador semântico: {semantic}")
     print(f"[*] Limite de leitura por página: {max_bytes:,} bytes")
     print("-" * 80)
 
     evaluator = CivicEvaluator()
-    fetcher = fetcher or build_fetcher(fetch_provider, timeout=timeout, max_bytes=max_bytes)
+    fetcher = fetcher or HttpFetcher(timeout=timeout, max_bytes=max_bytes)
     classifier = build_classifier(semantic)
     if robots_policy is None and respect_robots:
         robots_policy = RobotsPolicy(timeout=timeout)

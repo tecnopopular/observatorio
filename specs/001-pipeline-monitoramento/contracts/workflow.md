@@ -30,7 +30,6 @@ on:
 
 | Nome | Obrigatório | Descrição |
 | :--- | :---: | :--- |
-| `FIRECRAWL_API_KEY` | Não | Chave do provedor de renderização remota. Só é usada quando a execução pede `--fetch-provider firecrawl`; o padrão (`http`) não a consome. |
 | `TYPESAFE_API_KEY` | Não | Chave da camada semântica calibrada (TypeSafe). Só é usada com `--semantic jev`; o workflow padrão roda em `off` e não a injeta. |
 
 Nenhum outro segredo é necessário. As chaves nunca são impressas em log, relatório ou arquivo de saída.

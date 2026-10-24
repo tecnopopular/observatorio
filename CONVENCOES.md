@@ -30,7 +30,7 @@ def register_withdrawal(registry, url, reason, requested_on):
 
 Subcomandos e flags são texto para quem opera, não código: `adicionar`, `retirar`, `readmitir`,
 `verify-privacy`, `--motivo`, `--catalogo`. Valores que são vocabulário de máquina ficam em inglês,
-como `--fetch-provider http|firecrawl` e `--semantic off|jev`.
+como `--semantic off|jev`.
 
 Comandos em inglês quando são ação técnica de auditoria (`audit-all`), em português quando são ato
 editorial sobre o acervo (`adicionar`, `retirar`, `readmitir`).
