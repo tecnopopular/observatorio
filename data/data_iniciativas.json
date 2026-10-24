@@ -1579,5 +1579,12 @@
     "url": "https://alquimidia.org",
     "dominio": "alquimidia.org",
     "adicionado_em": "2026-10-24"
+  },
+  {
+    "nome": "Voz Social BR",
+    "tool_id": "voz-social-br",
+    "url": "https://voz.social.br",
+    "dominio": "voz.social.br",
+    "adicionado_em": "2026-10-24"
   }
 ]
