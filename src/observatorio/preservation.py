@@ -1,14 +1,74 @@
 """Preservação histórica e integridade criptográfica do Observatório TecnoPopular.
 
 Cobre o cálculo determinístico de SHA-256 sobre snapshots em memória, a invalidação de cache
-por conteúdo (content-addressable) e o disparo assíncrono ao Internet Archive (Save Page Now).
+por conteúdo (content-addressable) e a preservação perene no Internet Archive.
+
+A preservação usa a interface de tarefas do Save Page Now: a captura é submetida e responde com
+um identificador de trabalho, que é consultado até concluir. A interface síncrona
+(`GET /save/<url>`) não serve a este ciclo porque só responde depois de a captura terminar, e
+uma página pesada leva minutos. Medido em 2026-10-24: `https://acervodavitoria.pages.dev/` não
+devolveu nada em 90 s pelo modo síncrono, enquanto pelo modo de tarefas
+`https://tecnopopular.org/` foi preservado em 14,21 s.
+
+O endereço perene não vem em cabeçalho: a consulta de estado devolve `timestamp` e
+`original_url`, e o endereço é montado a partir deles. O cliente anterior lia
+`Content-Location` da resposta final, mas o `urllib` segue o redirecionamento do modo
+síncrono, de modo que a resposta final nunca trazia o cabeçalho procurado.
 """
 
 import hashlib
+import json
+import re
+import time
 import urllib.error
+import urllib.parse
 import urllib.request
+from dataclasses import dataclass
 
 from .fetch import INSTITUTIONAL_USER_AGENT
+from .models import ArchiveStatus
+
+SAVE_ENDPOINT = "https://web.archive.org/save"
+STATUS_ENDPOINT = "https://web.archive.org/save/status/{job_id}"
+SNAPSHOT_ENDPOINT = "https://web.archive.org/web/{timestamp}/{target}"
+JOB_PATTERN = re.compile(r"spn2-[a-z0-9]+")
+EXISTING_SNAPSHOT_PATTERN = re.compile(r"web\.archive\.org/web/(\d{14})/")
+
+DEFAULT_ARCHIVE_BUDGET = 60.0
+POLL_INTERVAL = 5.0
+
+
+@dataclass(frozen=True)
+class ArchiveOutcome:
+    """Resultado de uma tentativa de preservação no Internet Archive.
+
+    Attributes:
+        status: Situação da captura: `captured` (concluída), `pending` (não terminou dentro do
+            orçamento), `refused` (o serviço recusou o pedido) ou `failed` (erro de rede ou
+            resposta ilegível).
+        url: Endereço perene do snapshot, quando a captura concluiu.
+        job_id: Identificador do trabalho no Internet Archive, quando houve submissão.
+        detail: Motivo legível da situação, gravado para que a ausência de snapshot não fique
+            indistinguível entre "não tentado", "recusado" e "falhou".
+    """
+
+    status: ArchiveStatus
+    url: str | None = None
+    job_id: str | None = None
+    detail: str | None = None
+
+
+@dataclass(frozen=True)
+class ArchiveJob:
+    """Trabalho de captura submetido e ainda não concluído.
+
+    Attributes:
+        job_id: Identificador do trabalho no Internet Archive.
+        target_url: Endereço original preservado, necessário para montar o endereço perene.
+    """
+
+    job_id: str
+    target_url: str
 
 
 def calculate_sha256(content: str | bytes) -> str:
@@ -40,38 +100,194 @@ def check_content_changed(current_sha256: str, previous_sha256: str | None) -> b
     return current_sha256.strip().lower() != previous_sha256.strip().lower()
 
 
-def archive_target(target_url: str, timeout: int = 10) -> str | None:
-    """Despacha solicitação de captura assíncrona ao Internet Archive (Wayback Machine).
+def snapshot_url(timestamp: str, target_url: str) -> str:
+    """Monta o endereço perene de um snapshot do Wayback.
 
-    A URL é lida do cabeçalho `Content-Location`; quando ele não vem, aceita-se `Location`, que
-    é o que o serviço devolve em redirecionamentos 302. Falha de rede ou limite de taxa do
-    Internet Archive não deve bloquear a esteira, por isso o erro é convertido em None.
+    Args:
+        timestamp: Carimbo da captura no formato `AAAAMMDDhhmmss`.
+        target_url: Endereço original preservado.
+
+    Returns:
+        Endereço permanente do snapshot no Internet Archive.
+    """
+    return SNAPSHOT_ENDPOINT.format(timestamp=timestamp, target=target_url)
+
+
+def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
+    """Submete uma captura ao Save Page Now e devolve o identificador do trabalho.
+
+    A resposta é uma página HTML que carrega o identificador `spn2-...` nos próprios links, por
+    isso ele é extraído do corpo e não de cabeçalho.
 
     Args:
         target_url: URL pública a preservar.
-        timeout: Tempo limite da requisição, em segundos.
+        timeout: Tempo limite da submissão, em segundos.
 
     Returns:
-        URL do snapshot permanente, ou None quando a captura falha ou não informa localização.
+        Resultado `pending` com o identificador do trabalho quando a submissão é aceita, ou
+        `refused`/`failed` com o motivo quando não é.
     """
-    save_endpoint = f"https://web.archive.org/save/{target_url}"
-    req = urllib.request.Request(
-        save_endpoint,
+    dados = urllib.parse.urlencode({"url": target_url, "capture_all": "on"}).encode()
+    pedido = urllib.request.Request(
+        SAVE_ENDPOINT,
+        data=dados,
+        headers={
+            "User-Agent": INSTITUTIONAL_USER_AGENT,
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    )
+    try:
+        with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
+            corpo = resposta.read(400_000).decode("utf-8", "ignore")
+    except urllib.error.HTTPError as erro:
+        return _outcome_from_http_error(erro)
+    except Exception as erro:
+        return ArchiveOutcome(status="failed", detail=f"falha de rede na submissão: {type(erro).__name__}")
+
+    achado = JOB_PATTERN.search(corpo)
+    if achado:
+        return ArchiveOutcome(status="pending", job_id=achado.group(0))
+
+    existente = EXISTING_SNAPSHOT_PATTERN.search(corpo)
+    if existente:
+        return ArchiveOutcome(
+            status="captured",
+            url=snapshot_url(existente.group(1), target_url),
+            detail="captura já existente, reaproveitada em vez de nova submissão",
+        )
+    return ArchiveOutcome(status="refused", detail="o Internet Archive não abriu tarefa para este endereço")
+
+
+def poll_archive(job: ArchiveJob, timeout: int = 15) -> ArchiveOutcome:
+    """Consulta o estado de uma captura submetida.
+
+    Args:
+        job: Trabalho submetido, com o identificador e o endereço original.
+        timeout: Tempo limite da consulta, em segundos.
+
+    Returns:
+        Resultado `captured` com o endereço perene quando a captura concluiu, `pending` enquanto
+        não concluiu, ou `failed` com o motivo quando o trabalho termina sem êxito.
+    """
+    pedido = urllib.request.Request(
+        STATUS_ENDPOINT.format(job_id=job.job_id),
         headers={"User-Agent": INSTITUTIONAL_USER_AGENT},
     )
+    try:
+        with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
+            corpo = resposta.read(400_000).decode("utf-8", "ignore")
+    except urllib.error.HTTPError as erro:
+        return _outcome_from_http_error(erro, job_id=job.job_id)
+    except Exception as erro:
+        return ArchiveOutcome(
+            status="failed",
+            job_id=job.job_id,
+            detail=f"falha de rede na consulta: {_reason_text(erro)}",
+        )
 
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            content_loc = resp.headers.get("Content-Location")
-            if content_loc:
-                if not content_loc.startswith("http"):
-                    return f"https://web.archive.org{content_loc}"
-                return content_loc
-            loc = resp.headers.get("Location")
-            if loc:
-                if not loc.startswith("http"):
-                    return f"https://web.archive.org{loc}"
-                return loc
-            return None
-    except Exception:
-        return None
+        estado = json.loads(corpo)
+    except json.JSONDecodeError:
+        return ArchiveOutcome(status="failed", job_id=job.job_id, detail="resposta de estado ilegível")
+
+    situacao = str(estado.get("status") or "").lower()
+    if situacao == "success":
+        carimbo = estado.get("timestamp")
+        if not carimbo:
+            return ArchiveOutcome(
+                status="failed", job_id=job.job_id, detail="captura concluída sem carimbo de data"
+            )
+        original = str(estado.get("original_url") or job.target_url)
+        return ArchiveOutcome(status="captured", url=snapshot_url(str(carimbo), original), job_id=job.job_id)
+    if situacao == "pending":
+        return ArchiveOutcome(status="pending", job_id=job.job_id, detail="captura em andamento")
+    motivo = estado.get("message") or estado.get("status_ext") or situacao or "sem motivo informado"
+    return ArchiveOutcome(status="failed", job_id=job.job_id, detail=f"captura sem êxito: {motivo}")
+
+
+def await_archives(
+    jobs: dict[str, ArchiveJob],
+    budget: float = DEFAULT_ARCHIVE_BUDGET,
+    interval: float = POLL_INTERVAL,
+) -> dict[str, ArchiveOutcome]:
+    """Acompanha as capturas em andamento até concluírem ou até o orçamento do ciclo esgotar.
+
+    O orçamento vale para o ciclo inteiro, não por iniciativa: as tarefas são submetidas em
+    paralelo e consultadas em rodadas, para que a esteira semanal tenha duração previsível.
+    Quem não concluir fica registrado como `pending`, com o motivo escrito no laudo, em vez de
+    desaparecer como ausência de captura.
+
+    Args:
+        jobs: Trabalhos submetidos, indexados por `tool_id`.
+        budget: Tempo total de espera do ciclo, em segundos.
+        interval: Intervalo entre rodadas de consulta, em segundos.
+
+    Returns:
+        Resultado por `tool_id`; trabalhos não concluídos aparecem como `pending`.
+    """
+    pendentes = dict(jobs)
+    resultados: dict[str, ArchiveOutcome] = {}
+    limite = time.monotonic() + max(budget, 0.0)
+
+    while pendentes:
+        for tool_id, job in list(pendentes.items()):
+            resultado = poll_archive(job)
+            resultados[tool_id] = resultado
+            if resultado.status != "pending":
+                del pendentes[tool_id]
+        if not pendentes:
+            break
+        if time.monotonic() + interval > limite:
+            break
+        time.sleep(interval)
+
+    for tool_id, job in pendentes.items():
+        resultados[tool_id] = ArchiveOutcome(
+            status="pending",
+            job_id=job.job_id,
+            detail=f"captura não concluída no orçamento de {budget:.0f}s do ciclo",
+        )
+    return resultados
+
+
+def _reason_text(erro: Exception) -> str:
+    """Resume a causa de uma falha de rede sem derramar a resposta inteira no laudo.
+
+    Args:
+        erro: Exceção levantada pelo cliente HTTP.
+
+    Returns:
+        Texto curto com a causa, quando identificável, ou o nome do tipo do erro.
+    """
+    motivo = getattr(erro, "reason", None)
+    if motivo is not None:
+        return str(motivo)[:80]
+    texto = str(erro).strip()
+    return texto[:80] if texto else type(erro).__name__
+
+
+def _outcome_from_http_error(erro: urllib.error.HTTPError, job_id: str | None = None) -> ArchiveOutcome:
+    """Converte um erro HTTP do Internet Archive em resultado registrável.
+
+    Args:
+        erro: Erro HTTP levantado pelo cliente.
+        job_id: Identificador do trabalho, quando o erro ocorre na consulta de estado.
+
+    Returns:
+        Resultado `refused` para limite de uso e pedido inválido, `failed` para falha do serviço.
+    """
+    if erro.code == 429:
+        return ArchiveOutcome(
+            status="refused",
+            job_id=job_id,
+            detail="o Internet Archive recusou por limite de requisições (HTTP 429)",
+        )
+    if 400 <= erro.code < 500:
+        return ArchiveOutcome(
+            status="refused",
+            job_id=job_id,
+            detail=f"o Internet Archive recusou o pedido (HTTP {erro.code})",
+        )
+    return ArchiveOutcome(
+        status="failed", job_id=job_id, detail=f"o Internet Archive respondeu HTTP {erro.code}"
+    )

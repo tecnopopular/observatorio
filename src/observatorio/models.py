@@ -7,7 +7,7 @@ lista os campos derivados que a projeção compacta de estado deixa de fora.
 
 from datetime import UTC, date, datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -18,6 +18,8 @@ STATE_EXCLUDE = {
 
 
 EVALUATOR_VERSION = "Protocolo TecnoPopular CTP-1.1"
+
+ArchiveStatus = Literal["captured", "pending", "refused", "failed", "skipped", "reused", "deferred"]
 
 
 class AuditLevel(str, Enum):
@@ -295,6 +297,14 @@ class CivicAuditReport(BaseModel):
 
     html_sha256: str | None = Field(None, description="Hash SHA-256 do corpo HTTP bruto inspecionado")
     archive_url: str | None = Field(None, description="URL perene no Internet Archive (Wayback Machine)")
+    archive_status: ArchiveStatus | None = Field(
+        None,
+        description=(
+            "Situação da preservação no ciclo: capturada, pendente, recusada pelo Internet Archive, "
+            "falha de rede, dispensada ou reaproveitada do ciclo anterior. Nula em laudo anterior "
+            "ao registro"
+        ),
+    )
 
     has_critical_blocker: bool = False
     critical_blockers: list[str] = Field(default_factory=list)

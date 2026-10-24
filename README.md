@@ -40,7 +40,7 @@ no laudo o que não conseguiu observar — ausência de leitura vira `nao_inspec
 │               TLS verificado, User-Agent institucional, cap 4.000.000 B      │
 │               gate de login -> nao_inspecionado                              │
 │               cache data/raw/html_cache por tool_id; SHA igual = reaproveita │
-│               preservação: Wayback archive_url (falha externa não aborta)    │
+│               preservação: Wayback por tarefa; archive_status no laudo       │
 └───────────────────────────────────┬──────────────────────────────────────────┘
                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -120,6 +120,37 @@ Garantias da camada de aquisição:
 da camada semântica opcional, e ela nunca aparece em mensagem de erro.
 
 O laudo registra o provedor efetivo e o status HTTP em `performance.fetch_provider` e `performance.http_status`.
+
+### Preservação: captura por tarefa, com o resultado registrado
+
+A preservação perene é delegada ao Internet Archive, e o laudo carrega o endereço do snapshot em
+`archive_url`. A captura usa a interface de **tarefas** do Save Page Now: a esteira submete o
+endereço, recebe um identificador de trabalho e consulta o estado até concluir. O endereço perene é
+montado a partir do carimbo devolvido (`/web/AAAAMMDDhhmmss/<url>`), não de cabeçalho de resposta.
+
+- **Envio serial, com intervalo.** As capturas são submetidas uma de cada vez, com 2 s entre
+  envios. Medido em 2026-10-24: em rajada de 6 envios simultâneos, todos falharam com `Connection
+  refused`; um envio isolado voltou a ser aceito depois de 90 s. Paralelismo aqui não acelera nada —
+  só faz o serviço recusar o ciclo inteiro.
+- **Teto por ciclo.** No máximo 10 capturas por ciclo (`--archive-limit`). O excedente fica com
+  `archive_status=deferred` e volta no ciclo seguinte, porque sem snapshot gravado ele continua na
+  fila. Conteúdo que mudou desde o último snapshot tem prioridade sobre endereço nunca preservado.
+- **Orçamento único de espera.** As capturas em andamento compartilham uma janela de 60 s
+  (`--archive-budget`), e não uma espera por iniciativa. Duas recusas seguidas interrompem os envios
+  do ciclo em vez de insistir contra o serviço.
+- **A situação fica registrada.** `archive_status` diz o que aconteceu: `captured` (endereço
+  gravado), `pending` (não concluiu dentro do orçamento), `refused` (o Internet Archive recusou),
+  `failed` (falha de rede), `deferred` (preterido pelo teto do ciclo), `skipped` (`--skip-archive`) ou
+  `reused` (mantido o snapshot anterior). Um `archive_url` nulo deixa de ser ambíguo: sem o campo,
+  não havia como distinguir "não tentei" de "tentei e o serviço recusou".
+- **Estado preservado entre ciclos.** O manifesto versionado guarda `archive_url` e
+  `archive_status` por iniciativa, então o ciclo sabe o que já tem snapshot e não recaptura conteúdo
+  idêntico.
+
+O modo síncrono (`GET /save/<url>`) não é usado: ele só responde depois de a captura terminar, e uma
+página pesada leva minutos. Medido em 2026-10-24, uma página com aplicação JavaScript não devolveu
+nada em 90 s pelo modo síncrono, enquanto pelo modo de tarefas o snapshot de `tecnopopular.org`
+ficou pronto em 14,21 s.
 
 ### Proveniência: declaração só pontua com link que a confirme
 

@@ -18,9 +18,9 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from .models import AuditLevel, CivicAuditReport
+from .models import ArchiveStatus, AuditLevel, CivicAuditReport
 
-MANIFEST_VERSION = "2"
+MANIFEST_VERSION = "3"
 
 
 class ManifestEntry(BaseModel):
@@ -36,6 +36,12 @@ class ManifestEntry(BaseModel):
     )
     coverage_complete: bool | None = Field(
         None, description="Cobertura da inspeção que produziu o laudo (None = laudo anterior ao metadado)"
+    )
+    archive_url: str | None = Field(
+        None, description="Endereço perene do último snapshot conhecido no Internet Archive"
+    )
+    archive_status: ArchiveStatus | None = Field(
+        None, description="Situação da preservação no último ciclo que tentou capturar o endereço"
     )
 
 
@@ -70,6 +76,8 @@ def build_manifest(reports: Iterable[CivicAuditReport], generated_at: datetime |
             total_score=round(r.total_score, 1) if r.total_score is not None else None,
             dimension_scores={d.value: round(ds.raw_score, 1) for d, ds in r.dimension_scores.items()},
             coverage_complete=r.coverage.complete if r.coverage else None,
+            archive_url=r.archive_url,
+            archive_status=r.archive_status,
         )
         for r in reports
     ]

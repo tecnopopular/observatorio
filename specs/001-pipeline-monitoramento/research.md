@@ -29,15 +29,36 @@ Utilizar o hash criptográfico **SHA-256 do corpo HTTP bruto (HTML limpo)** deco
 ## 2. Decisão: Arquivamento e Preservação Histórica
 
 ### Decisão
-Integrar a API **Save Page Now (SPN)** do **Internet Archive (Wayback Machine)** via chamadas assíncronas com timeout controlado:
-* Endpoint canônico: `https://web.archive.org/save/{target_url}`
-* Disparo restrito: Apenas quando `html_sha256` for diferente do anterior ou para ferramentas sem captura prévia.
-* Formato do identificador temporal: O Internet Archive responde com redirecionamento contendo o timestamp ISO de 14 dígitos (`https://web.archive.org/web/YYYYMMDDhhmmss/{target_url}`).
-* Resiliência: Se o Internet Archive responder com HTTP 429 (rate limit) ou timeout, o pipeline **não falha**; o laudo é emitido com o `html_sha256` local e a tentativa de preservação é reagendada para a rodada seguinte.
+Integrar a API **Save Page Now (SPN)** do **Internet Archive (Wayback Machine)** pela interface de
+tarefas, com orçamento de espera por ciclo:
+* Submissão: `POST https://web.archive.org/save` com `url=<endereço>&capture_all=on`; a resposta é uma
+  página que carrega o identificador de tarefa `spn2-...`.
+* Acompanhamento: `GET https://web.archive.org/save/status/<job_id>` devolve JSON com `status`
+  (`pending`, `success`, `error`), `timestamp` e `original_url`.
+* Endereço perene: montado como `https://web.archive.org/web/<timestamp>/<original_url>` a partir da
+  consulta de estado.
+* Orçamento: 60 s de espera para o ciclo inteiro (`--archive-budget`), e não por iniciativa; as
+  capturas que não concluírem ficam com `archive_status=pending`.
+* Envio serial com intervalo de 2 s e teto de 10 capturas por ciclo (`--archive-limit`): medido em
+  2026-10-24, uma rajada de 6 envios simultâneos teve todos os pedidos recusados com
+  `Connection refused`, e um envio isolado voltou a ser aceito depois de 90 s.
+* Estado entre ciclos: o manifesto versionado guarda `archive_url` e `archive_status` por
+  iniciativa, para não recapturar conteúdo idêntico e para a fila não reiniciar sempre pelos mesmos
+  endereços.
+* Resiliência: HTTP 429, erro de rede ou resposta ilegível não derrubam o pipeline; a situação fica
+  gravada em `archive_status` (`refused`, `failed`, `pending`, `deferred`) com o motivo no resumo do
+  ciclo.
 
 ### Rationale
-* Atende ao Princípio IV da Constituição: preservação perene sem violar direitos autorais nem inchar o Git com HTMLs proprietários de terceiros.
-* Permite que cidadãos e pesquisadores naveguem visualmente na aplicação original mesmo se o domínio for extinto pós-eleição.
+* A interface síncrona (`GET /save/<url>`) foi descartada por medição em 2026-10-24: ela só responde
+  quando a captura termina, e uma página com aplicação JavaScript não devolveu nada em 90 s, enquanto
+  a interface de tarefas concluiu `https://tecnopopular.org/` em 14,21 s.
+* O `urllib` segue o redirecionamento do modo síncrono, de modo que o endereço do snapshot nunca
+  aparecia nos cabeçalhos da resposta final: ler `Content-Location` ali é um contrato que não existe.
+* Atende ao Princípio IV da Constituição: preservação perene sem violar direitos autorais nem inchar o
+  Git com HTMLs proprietários de terceiros.
+* Permite que cidadãos e pesquisadores naveguem visualmente na aplicação original mesmo se o domínio
+  for extinto pós-eleição.
 
 ### Alternativas Consideradas
 * **Armazenar HTML bruto em Git LFS:** Rejeitado por inchaço de repositório e alto risco de persistência irreversível de dados pessoais privados (PII) no versionamento.

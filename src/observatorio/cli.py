@@ -45,7 +45,7 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
 
     Args:
         args: Namespace do argparse com `input`, `output`, `manifest`, `workers`, `refresh`,
-            `skip_archive`, `timeout`, `semantic` e `max_bytes`.
+            `skip_archive`, `archive_budget`, `archive_limit`, `timeout`, `semantic` e `max_bytes`.
 
     Returns:
         0 quando a esteira conclui; 1 quando uma exceção interrompe a execução.
@@ -65,6 +65,8 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
             semantic=args.semantic,
             max_bytes=args.max_bytes,
             withdrawals_file=Path(args.retiradas),
+            archive_budget=args.archive_budget,
+            archive_limit=args.archive_limit,
         )
         return 0
     except Exception as e:
@@ -444,6 +446,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     audit_command_parser.add_argument(
         "--skip-archive", action="store_true", help="Pula disparos ao Internet Archive"
+    )
+    audit_command_parser.add_argument(
+        "--archive-budget",
+        type=float,
+        default=60.0,
+        help="Segundos que o ciclo espera pelas capturas do Internet Archive antes de marcá-las como pendentes",
+    )
+    audit_command_parser.add_argument(
+        "--archive-limit",
+        type=int,
+        default=10,
+        help="Máximo de capturas submetidas por ciclo; o excedente fica como deferred e volta no ciclo seguinte",
     )
     audit_command_parser.add_argument(
         "--timeout", "-t", type=int, default=8, help="Timeout de conexão em segundos"

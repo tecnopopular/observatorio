@@ -25,7 +25,9 @@ Executa a varredura completa das iniciativas catalogadas.
   * `--manifest`, `-m` *(string, default: `data/estado_hashes.json`)*: Caminho do manifesto compacto de estado (versionado no git).
   * `--refresh`, `-r` *(flag, default: false)*: Força re-inspeção completa, ignorando o cache local de hashes.
   * `--workers`, `-w` *(int, default: 10)*: Número de threads simultâneas para download e inspeção.
-  * `--skip-archive` *(flag, default: false)*: Pula as chamadas assíncronas ao Internet Archive (útil em testes locais ou CI offline).
+  * `--skip-archive` *(flag, default: false)*: Pula as chamadas ao Internet Archive (útil em testes locais ou CI offline); o laudo registra `archive_status=skipped`.
+  * `--archive-budget` *(float, default: 60)*: Segundos que o ciclo espera, no total, pelas capturas submetidas ao Internet Archive. As que não concluírem ficam com `archive_status=pending`.
+  * `--archive-limit` *(int, default: 10)*: Máximo de capturas submetidas por ciclo, enviadas uma de cada vez com 2 s de intervalo. O excedente fica com `archive_status=deferred` e volta no ciclo seguinte.
   * `--semantic` *(escolha, default: `off`)*: Camada semântica calibrada da Dimensão 4. `off` mantém a avaliação 100% determinística; `jev` consulta a API TypeSafe (`noul` por rótulo + `score` de intensidade) e consome tokens por iniciativa.
   * `--timeout`, `-t` *(int, default: 8)*: Tempo limite por requisição, em segundos.
   * `--max-bytes` *(int, default: `1000000`)*: Limite de leitura por página. Documentos maiores são inspecionados parcialmente e o laudo registra `inspection_truncated=true`, com `coverage.complete=false` e ressalva nas dimensões afetadas.

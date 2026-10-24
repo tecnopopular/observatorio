@@ -249,6 +249,7 @@ class CivicAuditReport(BaseModel):
 
     html_sha256: Optional[str] = None
     archive_url: Optional[str] = None
+    archive_status: Optional[Literal["captured", "pending", "refused", "failed", "skipped", "reused"]] = None
 
     has_critical_blocker: bool = False
     critical_blockers: List[str] = []
@@ -374,7 +375,9 @@ recusadas, de modo que o histórico nunca fica ambíguo.
    anterior, o laudo é reaproveitado e não há nova avaliação.
 4. **Integridade.** `html_sha256` é o SHA-256 do corpo HTTP efetivamente inspecionado e nunca é
    recalculado sobre um snapshot diferente do auditado.
-5. **Preservação.** `archive_url` registra a captura perene no Internet Archive; falha externa não
-   aborta a esteira e deixa o campo nulo.
+5. **Preservação.** `archive_url` registra a captura perene no Internet Archive, obtida pela
+   interface de tarefas do Save Page Now, e `archive_status` registra a situação do ciclo
+   (`captured`, `pending`, `refused`, `failed`, `skipped` ou `reused`); falha externa não aborta a
+   esteira e o campo de endereço fica nulo com o motivo declarado.
 6. **Retirada.** Endereço presente em `retiradas.json` não recebe laudo, ainda que conste do
    catálogo; a esteira o descarta antes da aquisição e avisa que a entrada deve ser removida.

@@ -5,6 +5,7 @@ Implementa a execução concorrente por iniciativa com invalidação de cache vi
 """
 
 import json
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -13,15 +14,35 @@ from .evaluator import CivicEvaluator
 from .fetch import MAX_PAYLOAD_BYTES, ContentFetcher, FetchResult, HttpFetcher
 from .models import (
     EVALUATOR_VERSION,
+    ArchiveStatus,
     AuditLevel,
     CivicAuditReport,
 )
-from .preservation import archive_target, calculate_sha256, check_content_changed
+from .preservation import (
+    DEFAULT_ARCHIVE_BUDGET,
+    ArchiveJob,
+    await_archives,
+    calculate_sha256,
+    check_content_changed,
+    submit_archive,
+)
 from .robots import RobotsPolicy
 from .semantic import SemanticClassifier, build_classifier
-from .state import build_manifest, changed_since, load_manifest, write_manifest
+from .state import (
+    ManifestEntry,
+    build_manifest,
+    changed_since,
+    index_by_tool,
+    load_manifest,
+    write_manifest,
+)
 from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
 from .withdrawals import load as carregar_retiradas
+
+SUBMIT_INTERVAL = 2.0
+SUBMIT_TIMEOUT = 20
+SUBMIT_FAILURES_TO_STOP = 2
+DEFAULT_ARCHIVE_LIMIT = 10
 
 DEFAULT_CACHE_DIR = Path("data/raw/html_cache")
 
@@ -237,10 +258,7 @@ def audit_single_initiative(
             pass
 
     archive_url = prev_archive
-    if not skip_archive and url.startswith("http"):
-        new_archive = archive_target(url)
-        if new_archive:
-            archive_url = new_archive
+    archive_status: ArchiveStatus | None = "reused" if prev_archive else None
 
     report = evaluator.evaluate_content(
         tool_id=slug,
@@ -253,6 +271,7 @@ def audit_single_initiative(
         html_bytes=html_bytes,
         html_sha256=current_sha256 if current_sha256 else None,
         archive_url=archive_url,
+        archive_status=archive_status,
         fetch_provider=snapshot.provider,
         http_status=snapshot.status_code,
         bytes_scanned=snapshot.content_bytes,
@@ -284,6 +303,149 @@ def audit_single_initiative(
     return report
 
 
+def _needs_capture(report: CivicAuditReport, previous: dict[str, ManifestEntry]) -> bool:
+    """Indica se o endereço precisa de uma captura nova no Internet Archive.
+
+    Preservar de novo conteúdo idêntico gasta o limite do serviço sem acrescentar registro: o
+    snapshot anterior representa exatamente os mesmos bytes. Por isso a captura só é pedida quando
+    há conteúdo novo ou quando ainda não há snapshot conhecido.
+
+    Args:
+        report: Laudo do ciclo atual.
+        previous: Entradas do manifesto anterior, indexadas por `tool_id`.
+
+    Returns:
+        True quando o endereço deve ser submetido ao Internet Archive.
+    """
+    if not report.target_url.startswith("http"):
+        return False
+    entrada = previous.get(report.tool_id)
+    if entrada is None or not entrada.archive_url:
+        return True
+    return entrada.html_sha256 != report.html_sha256
+
+
+def _archive_priority(report: CivicAuditReport, previous: dict[str, ManifestEntry]) -> int:
+    """Ordena a fila de preservação por urgência de custódia.
+
+    Args:
+        report: Laudo do ciclo atual.
+        previous: Entradas do manifesto anterior, indexadas por `tool_id`.
+
+    Returns:
+        Zero para conteúdo que mudou desde o último snapshot, um para endereço sem snapshot.
+    """
+    entrada = previous.get(report.tool_id)
+    if entrada is not None and entrada.archive_url and entrada.html_sha256 != report.html_sha256:
+        return 0
+    return 1
+
+
+def _preserve(
+    reports: list[CivicAuditReport],
+    previous: dict[str, ManifestEntry],
+    skip_archive: bool,
+    limit: int,
+    budget: float,
+) -> None:
+    """Preserva no Internet Archive o que o ciclo inspecionou, dentro do que o serviço aceita.
+
+    A fase roda depois da avaliação, em série e com intervalo entre envios, por duas razões
+    medidas em 2026-10-24: o Save Page Now não responde a captura síncrona em página pesada, e
+    recusa conexões quando recebe dezenas de submissões simultâneas. Em rajada de 6 envios, todos
+    os pedidos falharam com `Connection refused`; um envio isolado voltou a ser aceito depois de
+    90 s.
+
+    Por isso o ciclo submete poucas capturas por vez, prioriza o conteúdo que mudou e registra em
+    cada laudo o que aconteceu: `captured`, `pending`, `refused`, `failed`, `deferred`, `skipped`
+    ou `reused`. Endereço preterido pelo limite não se perde: sem snapshot gravado, ele volta à
+    fila do ciclo seguinte.
+
+    Args:
+        reports: Laudos do ciclo, atualizados no lugar.
+        previous: Entradas do manifesto anterior, indexadas por `tool_id`.
+        skip_archive: Quando verdadeiro, nenhuma captura é pedida e o laudo registra `skipped`.
+        limit: Número máximo de submissões por ciclo.
+        budget: Tempo total de espera pelas capturas em andamento, em segundos.
+    """
+    if skip_archive:
+        for relatorio in reports:
+            if relatorio.archive_status is None:
+                relatorio.archive_status = "skipped"
+        print("[*] Preservação: dispensada por --skip-archive")
+        return
+
+    fila = [relatorio for relatorio in reports if _needs_capture(relatorio, previous)]
+    fila.sort(key=lambda r: (_archive_priority(r, previous), r.tool_id))
+    selecionadas = fila[: max(limit, 0)]
+    preteridas = fila[len(selecionadas) :]
+
+    for relatorio in preteridas:
+        relatorio.archive_status = "deferred"
+
+    print(
+        f"[*] Preservação: {len(fila)} endereço(s) a preservar | "
+        f"submetendo {len(selecionadas)} (limite {limit} por ciclo)..."
+    )
+
+    detalhes: dict[str, str] = {}
+    pendentes: dict[str, ArchiveJob] = {}
+    falhas_consecutivas = 0
+    for posicao, relatorio in enumerate(selecionadas):
+        if posicao:
+            time.sleep(SUBMIT_INTERVAL)
+        submissao = submit_archive(relatorio.target_url, timeout=SUBMIT_TIMEOUT)
+        relatorio.archive_status = submissao.status
+        if submissao.url:
+            relatorio.archive_url = submissao.url
+        elif submissao.job_id:
+            pendentes[relatorio.tool_id] = ArchiveJob(
+                job_id=submissao.job_id, target_url=relatorio.target_url
+            )
+        if submissao.detail:
+            detalhes[relatorio.tool_id] = submissao.detail
+        falhas_consecutivas = falhas_consecutivas + 1 if submissao.status in ("refused", "failed") else 0
+        if falhas_consecutivas >= SUBMIT_FAILURES_TO_STOP:
+            restantes = selecionadas[posicao + 1 :]
+            for preterida in restantes:
+                preterida.archive_status = "deferred"
+            if restantes:
+                detalhes[restantes[0].tool_id] = (
+                    "envios interrompidos após recusas consecutivas; adiado para o próximo ciclo"
+                )
+            break
+
+    if pendentes:
+        print(f"[*] Preservação: acompanhando {len(pendentes)} captura(s) (orçamento de {budget:.0f}s)...")
+        por_id = {relatorio.tool_id: relatorio for relatorio in reports}
+        for tool_id, resultado in await_archives(pendentes, budget=budget).items():
+            relatorio = por_id[tool_id]
+            relatorio.archive_status = resultado.status
+            if resultado.url:
+                relatorio.archive_url = resultado.url
+            if resultado.detail:
+                detalhes[tool_id] = resultado.detail
+
+    contagem: dict[str, int] = {}
+    for relatorio in reports:
+        situacao = relatorio.archive_status or "nao_tentado"
+        contagem[situacao] = contagem.get(situacao, 0) + 1
+    resumo = " | ".join(f"{quantidade} {situacao}" for situacao, quantidade in sorted(contagem.items()))
+    print(f"[*] Preservação: {resumo}")
+
+    exemplos: dict[str, list[str]] = {}
+    for relatorio in reports:
+        detalhe = detalhes.get(relatorio.tool_id)
+        if not detalhe:
+            continue
+        grupo = exemplos.setdefault(relatorio.archive_status or "nao_tentado", [])
+        if detalhe not in grupo and len(grupo) < 3:
+            grupo.append(detalhe)
+    for situacao, itens in sorted(exemplos.items()):
+        for item in itens:
+            print(f"        {situacao}: {item}")
+
+
 def target_key(item: dict) -> str:
     """Devolve a chave comparável do endereço de um registro do catálogo.
 
@@ -311,6 +473,8 @@ def run_batch_audit(
     respect_robots: bool = True,
     withdrawals_file: Path = DEFAULT_REGISTRY,
     cache_dir: Path = DEFAULT_CACHE_DIR,
+    archive_budget: float = DEFAULT_ARCHIVE_BUDGET,
+    archive_limit: int = DEFAULT_ARCHIVE_LIMIT,
 ) -> list[CivicAuditReport]:
     """
     Executa a bateria completa do observatório sobre as iniciativas catalogadas.
@@ -348,6 +512,10 @@ def run_batch_audit(
             no cache do repositório.
         withdrawals_file: Registro de retiradas acatadas. Um endereço retirado a pedido não é
             auditado, mesmo que ainda conste do catálogo.
+        archive_budget: Tempo total, em segundos, que o ciclo espera pelas capturas do Internet
+            Archive antes de registrar as pendentes como pendentes.
+        archive_limit: Número máximo de capturas submetidas por ciclo, para não esgotar o limite
+            do serviço; o restante fica registrado como `deferred` e volta no ciclo seguinte.
 
     Returns:
         Laudos do ciclo, ordenados por pontuação total decrescente; iniciativas sem nota
@@ -422,7 +590,6 @@ def run_batch_audit(
     print(f"[*] robots.txt: {'consultado' if robots_policy is not None else 'ignorado'}")
     reports: list[CivicAuditReport] = []
     skipped: list[tuple] = []
-
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
             executor.submit(
@@ -451,6 +618,14 @@ def run_batch_audit(
             except Exception as e:
                 t = futures[fut]
                 print(f" [-] Erro ao processar {t.get('nome')}: {e}")
+
+    _preserve(
+        reports,
+        index_by_tool(previous_manifest),
+        skip_archive,
+        archive_limit,
+        archive_budget,
+    )
 
     reports.sort(key=lambda r: r.total_score if r.total_score is not None else -1.0, reverse=True)
 

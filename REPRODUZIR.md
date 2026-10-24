@@ -153,7 +153,7 @@ A aquisição em rede é a fonte de variância que resta, e ela está declarada 
 | Dimensão de acessibilidade e desempenho | não | mede a latência daquela requisição, com limiares em 1.500 ms e 3.000 ms |
 | Disponibilidade de uma iniciativa | não | um site pode sair do ar entre ciclos e a nota cai sem que o código tenha mudado |
 | Consulta de `robots.txt` | não | um host pode publicar ou revogar a diretiva a qualquer momento |
-| Preservação no Internet Archive | não | a API recusa requisições não autenticadas, e o link pode não existir |
+| Preservação no Internet Archive | parcial | a captura é anônima e funciona pelo modo de tarefas; o que não se reproduz é o resultado — o serviço pode ficar pendente, recusar ou o ciclo esgotar o orçamento de 60 s, e o laudo registra qual foi o caso em `archive_status` |
 | Camada semântica (JEV) | não | depende de API externa e de chave; ajusta a nota só acima de confiança 0,90 |
 | Números de um ciclo anterior | não | cada release carrega o ciclo em que foi gerada, com data própria no `PROCEDENCIA.txt` |
 

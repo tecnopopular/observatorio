@@ -22,6 +22,7 @@ from urllib.parse import urlsplit
 from .extract import PageEvidence, host_of, is_official_host, parse_page, repo_candidates
 from .guidance import get_guidance
 from .models import (
+    ArchiveStatus,
     AuditLevel,
     AuditRubric,
     CivicAuditReport,
@@ -234,6 +235,7 @@ class CivicEvaluator:
         html_bytes: int = 0,
         html_sha256: str | None = None,
         archive_url: str | None = None,
+        archive_status: ArchiveStatus | None = None,
         fetch_provider: str | None = None,
         http_status: int | None = None,
         bytes_scanned: int = 0,
@@ -261,6 +263,7 @@ class CivicEvaluator:
             html_bytes: Tamanho declarado da resposta, em bytes.
             html_sha256: Impressão digital SHA-256 do snapshot avaliado.
             archive_url: Endereço do snapshot preservado no Internet Archive.
+            archive_status: Situação da preservação no ciclo, registrada junto ao endereço.
             fetch_provider: Provedor usado na aquisição do HTML.
             http_status: Código de status HTTP observado na aquisição.
             bytes_scanned: Bytes efetivamente lidos; zero significa usar o tamanho do HTML.
@@ -358,6 +361,7 @@ class CivicEvaluator:
             total_score=publishable_score,
             html_sha256=html_sha256,
             archive_url=archive_url,
+            archive_status=archive_status,
             has_critical_blocker=has_critical,
             critical_blockers=crit_blockers,
             dimension_scores=dim_scores,
