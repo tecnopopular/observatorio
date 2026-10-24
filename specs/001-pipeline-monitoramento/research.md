@@ -39,9 +39,10 @@ tarefas, com orçamento de espera por ciclo:
   consulta de estado.
 * Orçamento: 60 s de espera para o ciclo inteiro (`--archive-budget`), e não por iniciativa; as
   capturas que não concluírem ficam com `archive_status=pending`.
-* Envio serial com intervalo de 2 s e teto de 10 capturas por ciclo (`--archive-limit`): medido em
-  2026-10-24, uma rajada de 6 envios simultâneos teve todos os pedidos recusados com
-  `Connection refused`, e um envio isolado voltou a ser aceito depois de 90 s.
+* Envio serial com intervalo de 12 s e teto de 10 capturas por ciclo (`--archive-limit`), inclusive
+  com autenticação: medido em 2026-10-24, uma rajada de 6 envios simultâneos teve todos os pedidos
+  recusados com `Connection refused`, 4 envios com 8 s de intervalo terminaram em `HTTP 429` e 6
+  envios com 12 s de intervalo foram aceitos.
 * Estado entre ciclos: o manifesto versionado guarda `archive_url` e `archive_status` por
   iniciativa, para não recapturar conteúdo idêntico e para a fila não reiniciar sempre pelos mesmos
   endereços.

@@ -39,7 +39,7 @@ from .state import (
 from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
 from .withdrawals import load as carregar_retiradas
 
-SUBMIT_INTERVAL = 2.0
+SUBMIT_INTERVAL = 12.0
 SUBMIT_TIMEOUT = 20
 SUBMIT_FAILURES_TO_STOP = 2
 DEFAULT_ARCHIVE_LIMIT = 10
@@ -350,11 +350,11 @@ def _preserve(
 ) -> None:
     """Preserva no Internet Archive o que o ciclo inspecionou, dentro do que o serviço aceita.
 
-    A fase roda depois da avaliação, em série e com intervalo entre envios, por duas razões
-    medidas em 2026-10-24: o Save Page Now não responde a captura síncrona em página pesada, e
-    recusa conexões quando recebe dezenas de submissões simultâneas. Em rajada de 6 envios, todos
-    os pedidos falharam com `Connection refused`; um envio isolado voltou a ser aceito depois de
-    90 s.
+    A fase roda depois da avaliação, em série e com intervalo entre envios, por medições de
+    2026-10-24: o Save Page Now não responde a captura síncrona em página pesada, recusa conexões
+    quando recebe dezenas de submissões simultâneas (rajada de 6: todas recusadas) e aplica limite
+    de requisições mesmo a quem está autenticado — 4 envios com 8 s de intervalo terminaram em
+    HTTP 429, enquanto 6 envios com 12 s de intervalo foram aceitos.
 
     Por isso o ciclo submete poucas capturas por vez, prioriza o conteúdo que mudou e registra em
     cada laudo o que aconteceu: `captured`, `pending`, `refused`, `failed`, `deferred`, `skipped`

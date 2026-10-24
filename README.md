@@ -128,10 +128,10 @@ A preservação perene é delegada ao Internet Archive, e o laudo carrega o ende
 endereço, recebe um identificador de trabalho e consulta o estado até concluir. O endereço perene é
 montado a partir do carimbo devolvido (`/web/AAAAMMDDhhmmss/<url>`), não de cabeçalho de resposta.
 
-- **Envio serial, com intervalo.** As capturas são submetidas uma de cada vez, com 2 s entre
+- **Envio serial, com intervalo.** As capturas são submetidas uma de cada vez, com 12 s entre
   envios. Medido em 2026-10-24: em rajada de 6 envios simultâneos, todos falharam com `Connection
-  refused`; um envio isolado voltou a ser aceito depois de 90 s. Paralelismo aqui não acelera nada —
-  só faz o serviço recusar o ciclo inteiro.
+  refused`; 4 envios com 8 s de intervalo terminaram em `HTTP 429`, enquanto 6 envios com 12 s
+  foram aceitos. Paralelismo aqui não acelera nada — só faz o serviço recusar o ciclo inteiro.
 - **Teto por ciclo.** No máximo 10 capturas por ciclo (`--archive-limit`). O excedente fica com
   `archive_status=deferred` e volta no ciclo seguinte, porque sem snapshot gravado ele continua na
   fila. Conteúdo que mudou desde o último snapshot tem prioridade sobre endereço nunca preservado.
