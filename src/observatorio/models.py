@@ -17,6 +17,9 @@ STATE_EXCLUDE = {
 }
 
 
+EVALUATOR_VERSION = "Protocolo TecnoPopular CTP-1.1"
+
+
 class AuditLevel(str, Enum):
     """Níveis de governança e reconhecimento do ecossistema TecnoPopular.
 
@@ -86,7 +89,11 @@ class ProvenanceDetail(BaseModel):
     """Detalhamento técnico da proveniência documental de dados (Aos Fatos / LAI)."""
 
     declared_sources: list[str] = Field(
-        default_factory=list, description="Fontes declaradas (ex: TSE, IBGE, CGU)"
+        default_factory=list, description="Fontes declaradas no catálogo (ex: TSE, IBGE, CGU)"
+    )
+    corroborated_sources: list[str] = Field(
+        default_factory=list,
+        description="Declarações confirmadas por link de custódia pública na própria página",
     )
     official_links_detected: list[str] = Field(
         default_factory=list, description="Hiperlinks para domínios *.gov.br / *.jus.br"
@@ -276,7 +283,7 @@ class CivicAuditReport(BaseModel):
     tool_name: str
     target_url: str
     evaluated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
-    evaluator_version: str = "Protocolo TecnoPopular CTP-1.0"
+    evaluator_version: str = EVALUATOR_VERSION
 
     status: AuditLevel
     total_score: float | None = Field(

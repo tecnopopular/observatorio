@@ -121,6 +121,30 @@ da camada semântica opcional, e ela nunca aparece em mensagem de erro.
 
 O laudo registra o provedor efetivo e o status HTTP em `performance.fetch_provider` e `performance.http_status`.
 
+### Proveniência: declaração só pontua com link que a confirme
+
+A dimensão de proveniência (peso 25, piso 60) tem duas evidências independentes:
+
+| Evidência | Pontos | Verificação |
+| :--- | :--- | :--- |
+| Link para domínio de custódia pública na página (`.gov.br`, `.jus.br`, `.leg.br`, `.mp.br`, `.def.br`) | 25 | mecânica, sobre o HTML lido |
+| Fonte declarada em `fontes_primarias` **e** confirmada por um desses links | 25 | mecânica, sobre a declaração e o HTML |
+
+Declaração sem link correspondente é registrada em `declared_sources` e **não pontua**. A regra que
+decide a confirmação aceita duas formas: item com ponto é tratado como domínio; item sem ponto é
+tratado como nome de instituição e casa quando algum termo com ao menos quatro letras aparece no host
+oficial — "senado federal" casa com `legis.senado.leg.br`, "TSE" casa com
+`dadosabertos.tse.jus.br`.
+
+A decisão veio de medição: das 23 iniciativas que declaram fonte, apenas **3** têm na página um link
+que confirme a declaração. As outras 20 recebiam 25 pontos por afirmação, sem nada que as sustentasse
+— o tipo de ponto que não se pode reconferir a partir do documento publicado. O laudo agora registra
+`declared_sources`, `corroborated_sources` e `official_links_detected` separadamente, de modo que a
+confirmação é auditável caso a caso.
+
+A mudança de critério quebra a comparabilidade da série: o manifesto passa a `protocol_version` 2 e os
+laudos a `CTP-1.1`.
+
 ### Aquisição por HTTP direto
 
 A aquisição é uma requisição HTTP direta por endereço, com TLS verificado e User-Agent

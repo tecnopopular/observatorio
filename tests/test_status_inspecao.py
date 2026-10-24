@@ -5,7 +5,9 @@ como falha de teste e não como avaliação errada publicada.
 """
 
 import email.message
+import tempfile
 import unittest
+from pathlib import Path
 from typing import ClassVar
 from unittest.mock import MagicMock, patch
 from urllib.error import HTTPError
@@ -201,11 +203,12 @@ class TestRedirectEAcessoRestrito(unittest.TestCase):
 class TestFonteNaoFabricada(unittest.TestCase):
     """Garante que fonte declarada vem apenas do campo explícito do catálogo."""
 
-    def _rodar(self, item):
+    def _rodar(self, item, html="<html><body><p>Dados.</p></body></html>"):
         """Executa a avaliação de uma iniciativa com provedor de conteúdo simulado.
 
         Args:
             item: Registro do catálogo a avaliar.
+            html: Corpo devolvido pelo provedor simulado.
 
         Returns:
             Laudo produzido para o registro.
@@ -214,13 +217,21 @@ class TestFonteNaoFabricada(unittest.TestCase):
         provedor.fetch.return_value = FetchResult(
             url=item["url"],
             provider="http",
-            html="<html><body><p>Dados.</p></body></html>",
+            html=html,
             status_code=200,
             latency_ms=200,
             content_bytes=40,
             declared_bytes=40,
         )
-        return audit_single_initiative(item, CivicEvaluator(), {}, skip_archive=True, fetcher=provedor)
+        with tempfile.TemporaryDirectory() as tmp:
+            return audit_single_initiative(
+                item,
+                CivicEvaluator(),
+                {},
+                skip_archive=True,
+                fetcher=provedor,
+                cache_dir=Path(tmp),
+            )
 
     def test_descricao_com_tse_nao_declara_fonte(self):
         """Menção ao TSE na descrição não pode virar fonte declarada."""
@@ -233,11 +244,36 @@ class TestFonteNaoFabricada(unittest.TestCase):
         self.assertEqual(_prov(r).declared_sources, [])
         self.assertEqual(r.dimension_scores[DimensionType.PROVENIENCIA_DADOS].raw_score, 50.0)
 
-    def test_fonte_explicita_no_catalogo_conta(self):
-        """Fonte presente em fontes_primarias deve contar na proveniência."""
+    def test_fonte_declarada_sem_link_nao_pontua(self):
+        """Declaração sem link correspondente fica registrada, mas não soma ponto."""
         item = {"nome": "Painel", "url": "https://exemplo.org", "fontes_primarias": ["TSE"]}
         r = self._rodar(item)
         self.assertEqual(_prov(r).declared_sources, ["TSE"])
+        self.assertEqual(_prov(r).corroborated_sources, [])
+        self.assertEqual(r.dimension_scores[DimensionType.PROVENIENCIA_DADOS].raw_score, 50.0)
+
+    def test_fonte_declarada_e_linkada_pontua(self):
+        """Declaração confirmada por link de custódia pública soma com a detecção."""
+        item = {"nome": "Painel", "url": "https://exemplo.org", "fontes_primarias": ["TSE"]}
+        html = (
+            "<html><body><p>Painel com dados eleitorais.</p>"
+            '<footer><a href="https://dadosabertos.tse.jus.br">Dados Abertos do TSE</a></footer>'
+            "</body></html>"
+        )
+        r = self._rodar(item, html=html)
+        self.assertEqual(_prov(r).corroborated_sources, ["TSE"])
+        self.assertEqual(r.dimension_scores[DimensionType.PROVENIENCIA_DADOS].raw_score, 100.0)
+
+    def test_link_oficial_sem_declaracao_pontua_so_a_deteccao(self):
+        """A página linkando base oficial vale os 25 da detecção, não os da declaração."""
+        item = {"nome": "Painel", "url": "https://exemplo.org"}
+        html = (
+            "<html><body><p>Painel com dados eleitorais.</p>"
+            '<footer><a href="https://dadosabertos.tse.jus.br">Dados Abertos do TSE</a></footer>'
+            "</body></html>"
+        )
+        r = self._rodar(item, html=html)
+        self.assertEqual(_prov(r).corroborated_sources, [])
         self.assertEqual(r.dimension_scores[DimensionType.PROVENIENCIA_DADOS].raw_score, 75.0)
 
 
@@ -325,6 +361,7 @@ class TestNomeDuplicado(unittest.TestCase):
                 refresh_cache=True,
                 max_workers=1,
                 fetcher=provedor,
+                cache_dir=tmp / "cache",
             )
         ids = [r.tool_id for r in relatorios]
         self.assertEqual(ids, ["mapa-do-orcamento", "mapa-do-orcamento-2"])

@@ -11,8 +11,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from observatorio.engine import _versao_dos_laudos
 from observatorio.evaluator import CivicEvaluator
-from observatorio.models import AuditLevel
+from observatorio.models import EVALUATOR_VERSION, AuditLevel
 from observatorio.state import (
     MANIFEST_VERSION,
     build_manifest,
@@ -156,6 +157,24 @@ class TestPersistencia(unittest.TestCase):
         """Sem alteração de hash, nenhuma iniciativa precisa ser reavaliada."""
         manifest = build_manifest(self.reports)
         self.assertEqual(changed_since(manifest, self.reports), [])
+
+
+class TestVersaoDoProtocolo(unittest.TestCase):
+    """Verifica que laudo de versão anterior não é reaproveitado."""
+
+    def test_versao_lida_do_laudo(self):
+        """A versão vem do laudo anterior, não do manifesto."""
+        anterior = {"a": {"tool_id": "a", "evaluator_version": "Protocolo TecnoPopular CTP-1.0"}}
+        self.assertEqual(_versao_dos_laudos(anterior), "Protocolo TecnoPopular CTP-1.0")
+
+    def test_sem_laudo_anterior_nao_ha_versao(self):
+        """Primeiro ciclo não tem versão a comparar."""
+        self.assertIsNone(_versao_dos_laudos({}))
+
+    def test_versao_diferente_da_atual(self):
+        """Versão gravada difere da versão corrente quando o critério mudou."""
+        anterior = {"a": {"tool_id": "a", "evaluator_version": "Protocolo TecnoPopular CTP-1.0"}}
+        self.assertNotEqual(_versao_dos_laudos(anterior), EVALUATOR_VERSION)
 
 
 if __name__ == "__main__":

@@ -283,6 +283,7 @@ class TestMotorRespeitaRetirada(unittest.TestCase):
                 fetcher=provedor,
                 respect_robots=False,
                 withdrawals_file=registry_path,
+                cache_dir=tmp / "cache",
             )
 
         self.assertEqual([r.tool_id for r in relatorios], ["ativa"])
@@ -310,6 +311,7 @@ class TestMotorRespeitaRetirada(unittest.TestCase):
                 fetcher=_provedor(),
                 respect_robots=False,
                 withdrawals_file=registry_path,
+                cache_dir=tmp / "cache",
             )
 
         self.assertEqual([r.tool_id for r in relatorios], ["volta"])

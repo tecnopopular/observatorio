@@ -69,3 +69,37 @@ Adotar o modelo de **Iteração por Iniciativa** com *worker pool* concorrente (
   * Ausência de chaves de API / tokens.
   * Ausência de dados pessoais identificáveis (CPFs, telefones, números de WhatsApp, e-mails de pessoas físicas e chaves PIX).
   * URLs públicas de ferramentas e nomes institucionais são explicitamente permitidos.
+
+## 5. Decisão: declaração de fonte só pontua com corroboração
+
+### Decisão
+
+O campo `fontes_primarias` do catálogo deixa de somar 25 pontos por si. A declaração passa a pontuar
+apenas quando a própria página traz um link de custódia pública que a confirme. A confirmação é
+registrada em `corroborated_sources`, ao lado de `declared_sources` e `official_links_detected`.
+
+### Rationale
+
+Medição sobre o acervo: das 23 iniciativas com fonte declarada, apenas 3 têm link que confirme a
+declaração. As outras 20 somavam 25 pontos por afirmação, sem qualquer elemento reconferível no
+documento publicado — o oposto do que o laudo promete, que é toda nota rastreável à evidência.
+
+A alternativa de remover a declaração da nota por completo puniria a iniciativa que cita fonte em
+texto ou PDF, sem link. A corroboração preserva esse caso quando o link existe e reduz o ponto a zero
+quando não existe, mantendo o registro da declaração para leitura humana.
+
+### Alternativas Consideradas
+
+- **Manter como estava:** ponto por afirmação, inflação não auditável.
+- **Remover a declaração da nota:** elimina a inflação, mas apaga o único caminho para registrar fonte
+  que a página não linka.
+- **Exigir URL estruturada no catálogo sem verificar a página:** transfere o problema para o formato do
+  dado, sem criar evidência.
+
+### Consequências
+
+- `protocol_version` sobe para 2 e os laudos para `CTP-1.1`: a série anterior não é comparável.
+- 20 iniciativas perdem 25 pontos na proveniência e caem abaixo do piso de 60 — o que reflete a
+  ausência de fonte linkada na página, não um erro do motor.
+- A regra de confirmação é heurística e pode errar nas duas direções; por isso as três listas ficam no
+  laudo, permitindo conferir cada confirmação.

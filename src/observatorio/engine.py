@@ -12,6 +12,7 @@ from .catalog import assign_tool_ids, slugify, validate_catalog
 from .evaluator import CivicEvaluator
 from .fetch import MAX_PAYLOAD_BYTES, ContentFetcher, FetchResult, HttpFetcher
 from .models import (
+    EVALUATOR_VERSION,
     AuditLevel,
     CivicAuditReport,
 )
@@ -107,6 +108,25 @@ def fetch_snapshot(
     return resultado
 
 
+def _versao_dos_laudos(previous_audits: dict[str, dict]) -> str | None:
+    """Lê a versão do protocolo gravada nos laudos reaproveitáveis.
+
+    Reaproveitar laudo de outra versão misturaria critérios no mesmo laudo publicado: a nota viria
+    da regra antiga com o carimbo da nova. Quando a versão diverge, a esteira reavalia.
+
+    Args:
+        previous_audits: Laudos do ciclo anterior, indexados por `tool_id`.
+
+    Returns:
+        Versão do protocolo encontrada nos laudos, ou None quando não há laudo anterior.
+    """
+    for registro in previous_audits.values():
+        versao = registro.get("evaluator_version")
+        if versao:
+            return str(versao)
+    return None
+
+
 def audit_single_initiative(
     item: dict,
     evaluator: CivicEvaluator,
@@ -118,6 +138,7 @@ def audit_single_initiative(
     classifier: SemanticClassifier | None = None,
     max_bytes: int = MAX_PAYLOAD_BYTES,
     robots_policy: RobotsPolicy | None = None,
+    cache_dir: Path = DEFAULT_CACHE_DIR,
 ) -> CivicAuditReport | None:
     """Inspeciona e avalia uma única iniciativa cívica.
 
@@ -152,6 +173,8 @@ def audit_single_initiative(
         max_bytes: Limite de bytes lidos por página.
         robots_policy: Política de `robots.txt` a consultar antes da leitura; quando nula,
             a leitura não é verificada.
+        cache_dir: Diretório do cache de corpos; testes passam um temporário para não escrever
+            no cache do repositório.
 
     Returns:
         Laudo da iniciativa, reaproveitado do ciclo anterior ou recém-emitido. Nulo quando o
@@ -177,7 +200,13 @@ def audit_single_initiative(
     declared_sources = item.get("fontes_primarias", [])
 
     snapshot = fetch_snapshot(
-        url, slug, timeout=timeout, refresh_cache=refresh_cache, fetcher=fetcher, max_bytes=max_bytes
+        url,
+        slug,
+        timeout=timeout,
+        refresh_cache=refresh_cache,
+        fetcher=fetcher,
+        cache_dir=cache_dir,
+        max_bytes=max_bytes,
     )
     raw_html = snapshot.html
     latency_ms = snapshot.latency_ms
@@ -281,6 +310,7 @@ def run_batch_audit(
     robots_policy: RobotsPolicy | None = None,
     respect_robots: bool = True,
     withdrawals_file: Path = DEFAULT_REGISTRY,
+    cache_dir: Path = DEFAULT_CACHE_DIR,
 ) -> list[CivicAuditReport]:
     """
     Executa a bateria completa do observatório sobre as iniciativas catalogadas.
@@ -312,6 +342,10 @@ def run_batch_audit(
             `respect_robots` é verdadeiro, uma política nova é criada com o `timeout` do ciclo.
         respect_robots: Quando verdadeiro, sites que proíbem a leitura em `robots.txt` não
             recebem laudo e permanecem apenas no catálogo.
+        cache_dir: Diretório do cache de corpos; testes passam um temporário para não escrever
+            no cache do repositório.
+        cache_dir: Diretório do cache de corpos; testes passam um temporário para não escrever
+            no cache do repositório.
         withdrawals_file: Registro de retiradas acatadas. Um endereço retirado a pedido não é
             auditado, mesmo que ainda conste do catálogo.
 
@@ -365,6 +399,14 @@ def run_batch_audit(
     if previous_manifest.entries:
         print(f"[*] Manifesto anterior carregado: {previous_manifest.total} entradas ({manifest_file})")
 
+    versao_anterior = _versao_dos_laudos(previous_audits)
+    if previous_audits and versao_anterior != EVALUATOR_VERSION:
+        print(
+            f"[AVISO] Laudos anteriores em versão diferente ({versao_anterior}); "
+            "reavaliando em vez de reaproveitar, porque critério mudou."
+        )
+        previous_audits = {}
+
     print(f"[*] Iniciando esteira de monitoramento cívico sobre {len(targets)} iniciativas...")
     print(f"[*] Workers: {max_workers} | Refresh: {refresh_cache} | Skip Archive: {skip_archive}")
     print("[*] Aquisição: HTTP direto, TLS verificado")
@@ -395,6 +437,7 @@ def run_batch_audit(
                 classifier,
                 max_bytes,
                 robots_policy,
+                cache_dir,
             ): t
             for t in targets
         }

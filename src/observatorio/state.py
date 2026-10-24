@@ -20,7 +20,7 @@ from pydantic import BaseModel, Field
 
 from .models import AuditLevel, CivicAuditReport
 
-MANIFEST_VERSION = "1"
+MANIFEST_VERSION = "2"
 
 
 class ManifestEntry(BaseModel):

@@ -14,8 +14,10 @@ Decisões de escopo registradas neste módulo:
 """
 
 import re
+import unicodedata
 from datetime import UTC, datetime
 from typing import ClassVar
+from urllib.parse import urlsplit
 
 from .extract import PageEvidence, host_of, is_official_host, parse_page, repo_candidates
 from .guidance import get_guidance
@@ -160,6 +162,53 @@ LICENSE_PATTERNS = {
 }
 
 OSI_SOFTWARE_LICENSES = {"MIT", "GPL-3.0", "Apache-2.0", "BSD-3-Clause", "MPL-2.0", "AGPL-3.0-or-later"}
+
+
+def fontes_corroboradas(declared: list[str], hosts: set[str]) -> list[str]:
+    """Seleciona as fontes declaradas que a própria página confirma por link.
+
+    Declaração sem link correspondente não pontua: o valor de uma fonte está em ser verificável no
+    documento avaliado, e não na afirmação de quem a declarou. A comparação aceita duas formas:
+
+    - item com ponto, tratado como domínio ou URL, casa por igualdade ou por sufixo de host;
+    - item sem ponto, tratado como nome de instituição, casa quando algum de seus termos, com ao
+      menos quatro letras, aparece dentro de um host oficial ("senado federal" casa com
+      `legis.senado.leg.br`); sem termos longos, vale o slug inteiro, com no mínimo três letras
+      ("TSE" casa com `dadosabertos.tse.jus.br`).
+
+    A regra é heurística e pode errar nas duas direções: por isso o laudo registra separadamente as
+    fontes declaradas e as confirmadas, e a decisão de pontuar fica auditável.
+
+    Args:
+        declared: Fontes declaradas no catálogo, em texto livre.
+        hosts: Hosts de custódia pública linkados pela página.
+
+    Returns:
+        Subconjunto das declarações que a página confirma, na ordem em que foram declaradas.
+    """
+    confirmadas: list[str] = []
+    for item in declared:
+        bruto = str(item).strip().lower()
+        if not bruto:
+            continue
+        if "://" in bruto:
+            bruto = urlsplit(bruto).netloc
+        if "." in bruto:
+            alvo = bruto.rstrip("/")
+            achou = any(
+                host == alvo or host.endswith("." + alvo) or alvo.endswith("." + host) for host in hosts
+            )
+        else:
+            limpo = unicodedata.normalize("NFKD", bruto).encode("ascii", "ignore").decode().lower()
+            termos = [termo for termo in re.split(r"[^a-z0-9]+", limpo) if len(termo) >= 4]
+            if termos:
+                achou = any(termo in host for termo in termos for host in hosts)
+            else:
+                slug = re.sub(r"[^a-z0-9]+", "-", limpo).strip("-")
+                achou = len(slug) >= 3 and any(slug in host for host in hosts)
+        if achou:
+            confirmadas.append(item)
+    return confirmadas
 
 
 class CivicEvaluator:
@@ -458,10 +507,17 @@ class CivicEvaluator:
         score = 50.0
 
         detected_links = sorted({href for href in ev.links if is_official_host(host_of(href))})
+        hosts_oficiais = {host_of(href) for href in detected_links}
+        confirmadas = fontes_corroboradas(declared, hosts_oficiais)
 
-        if declared:
+        if confirmadas:
             score += 25.0
-            findings.append(f"Fontes declaradas expressamente: {', '.join(declared)}")
+            findings.append(f"Fontes declaradas e confirmadas por link na página: {', '.join(confirmadas)}")
+        if declared and not confirmadas:
+            findings.append(f"Fontes declaradas sem link correspondente na página: {', '.join(declared)}")
+            recommendations.append(
+                "Linkar no texto a base oficial citada: a declaração só pontua com link de custódia pública."
+            )
 
         if detected_links:
             score += 25.0
@@ -478,6 +534,7 @@ class CivicEvaluator:
         score = min(100.0, score)
         detail = ProvenanceDetail(
             declared_sources=declared,
+            corroborated_sources=confirmadas,
             official_links_detected=detected_links,
             has_speculative_claims=False,
             reproducibility_documented=True,

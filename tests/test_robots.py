@@ -220,6 +220,7 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
                 max_workers=1,
                 fetcher=provedor,
                 robots_policy=politica,
+                cache_dir=tmp / "cache",
             )
             gravados = json.loads(laudo.read_text(encoding="utf-8"))
             current_state = json.loads(manifesto.read_text(encoding="utf-8"))
@@ -261,6 +262,7 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
                 max_workers=1,
                 fetcher=provedor,
                 respect_robots=False,
+                cache_dir=tmp / "cache",
             )
         self.assertEqual(len(relatorios), 1)
 
