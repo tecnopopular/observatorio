@@ -49,11 +49,11 @@ def _resposta_mock(status_code: int, payload: dict):
     Returns:
         Gerenciador de contexto que substitui `httpx.Client`.
     """
-    resposta = MagicMock()
-    resposta.status_code = status_code
-    resposta.json.return_value = payload
+    response = MagicMock()
+    response.status_code = status_code
+    response.json.return_value = payload
     cliente = MagicMock()
-    cliente.post.return_value = resposta
+    cliente.post.return_value = response
     contexto = MagicMock()
     contexto.__enter__.return_value = cliente
     contexto.__exit__.return_value = False
@@ -65,16 +65,16 @@ class TestExtracaoDeTexto(unittest.TestCase):
 
     def test_remove_script_e_style(self):
         """Script e estilo não entram no texto enviado à camada semântica."""
-        texto = extract_visible_text(HTML_NEUTRO)
-        self.assertIn("Dados abertos", texto)
-        self.assertIn("Controle social", texto)
-        self.assertNotIn("var x=1", texto)
-        self.assertNotIn("color:red", texto)
+        text = extract_visible_text(HTML_NEUTRO)
+        self.assertIn("Dados abertos", text)
+        self.assertIn("Controle social", text)
+        self.assertNotIn("var x=1", text)
+        self.assertNotIn("color:red", text)
 
     def test_trunca_entrada(self):
         """O texto extraído respeita o limite de caracteres informado."""
-        texto = extract_visible_text("<p>" + "a" * 10_000 + "</p>", limit=100)
-        self.assertEqual(len(texto), 100)
+        text = extract_visible_text("<p>" + "a" * 10_000 + "</p>", limit=100)
+        self.assertEqual(len(text), 100)
 
     def test_html_vazio(self):
         """Entrada vazia produz texto vazio, sem levantar exceção."""

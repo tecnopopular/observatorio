@@ -93,7 +93,7 @@ class TestNaoInspecionado(unittest.TestCase):
             html_bytes=0,
             classifier=NullClassifier(),
         )
-        self.assertEqual(r.status, AuditLevel.NAO_INSPECIONADO)
+        self.assertEqual(r.status, AuditLevel.NOT_INSPECTED)
         self.assertIn("Não Inspecionado", r.badge_label)
         self.assertIsNone(r.total_score)
         self.assertIn("não atribuída", r.summary_markdown or "")
@@ -112,7 +112,7 @@ class TestNaoInspecionado(unittest.TestCase):
             inspection_reason="acesso restrito: redirecionado para autenticação",
             classifier=NullClassifier(),
         )
-        self.assertEqual(r.status, AuditLevel.NAO_INSPECIONADO)
+        self.assertEqual(r.status, AuditLevel.NOT_INSPECTED)
         self.assertEqual(_cov(r).reason, "acesso restrito: redirecionado para autenticação")
 
     def test_pagina_lida_continua_com_avaliacao(self):
@@ -127,7 +127,7 @@ class TestNaoInspecionado(unittest.TestCase):
             html_bytes=len(html),
             classifier=NullClassifier(),
         )
-        self.assertNotEqual(r.status, AuditLevel.NAO_INSPECIONADO)
+        self.assertNotEqual(r.status, AuditLevel.NOT_INSPECTED)
         self.assertTrue(_cov(r).inspected)
 
 
@@ -299,7 +299,7 @@ class TestNomeDuplicado(unittest.TestCase):
 
         from observatorio.engine import run_batch_audit
 
-        catalogo = [
+        catalog = [
             {"nome": "Mapa do Orçamento", "url": "https://a.org"},
             {"nome": "Mapa do Orçamento", "url": "https://b.org"},
         ]
@@ -315,10 +315,10 @@ class TestNomeDuplicado(unittest.TestCase):
         )
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            entrada = tmp / "catalogo.json"
-            entrada.write_text(json.dumps(catalogo), encoding="utf-8")
+            entry = tmp / "catalogo.json"
+            entry.write_text(json.dumps(catalog), encoding="utf-8")
             relatorios = run_batch_audit(
-                input_file=entrada,
+                input_file=entry,
                 output_file=tmp / "laudo.json",
                 manifest_file=tmp / "estado.json",
                 skip_archive=True,

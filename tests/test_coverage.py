@@ -38,17 +38,17 @@ def avaliar(html: str, **kwargs):
     )
 
 
-def findings(relatorio, dimensao):
+def findings(relatorio, dimension):
     """Lista os achados registrados em uma dimensão do laudo.
 
     Args:
         relatorio: Laudo devolvido pelo avaliador.
-        dimensao: Dimensão cujos achados serão lidos.
+        dimension: Dimensão cujos achados serão lidos.
 
     Returns:
         Lista de achados textuais da dimensão.
     """
-    return relatorio.dimension_scores[dimensao].findings
+    return relatorio.dimension_scores[dimension].findings
 
 
 def _cov(relatorio):
@@ -80,9 +80,9 @@ class TestCoberturaCompleta(unittest.TestCase):
     def test_sem_ressalva_em_nenhuma_dimensao(self):
         """Nenhuma dimensão recebe ressalva de cobertura quando nada foi cortado."""
         r = avaliar(HTML_CURTO)
-        for dimensao in DimensionType:
-            marcas = [f for f in findings(r, dimensao) if "cobertura incompleta" in f]
-            self.assertEqual(marcas, [], dimensao.value)
+        for dimension in DimensionType:
+            marcas = [f for f in findings(r, dimension) if "cobertura incompleta" in f]
+            self.assertEqual(marcas, [], dimension.value)
 
 
 class TestCorteDeBytes(unittest.TestCase):
@@ -99,14 +99,14 @@ class TestCorteDeBytes(unittest.TestCase):
     def test_ressalva_atinge_dimensoes_que_leem_bytes(self):
         """Dimensões que dependem de bytes recebem a ressalva com os números lidos."""
         r = avaliar(HTML_CURTO, html_bytes=1000, bytes_scanned=250, inspection_truncated=True)
-        for dimensao in (
+        for dimension in (
             DimensionType.PROVENIENCIA_DADOS,
             DimensionType.PRIVACIDADE_SOBERANIA,
             DimensionType.CODIGO_ABERTO_FLOSS,
             DimensionType.ACESSIBILIDADE_DESEMPENHO,
         ):
-            marcas = [f for f in findings(r, dimensao) if "cobertura incompleta" in f]
-            self.assertTrue(marcas, f"{dimensao.value} deveria registrar ressalva")
+            marcas = [f for f in findings(r, dimension) if "cobertura incompleta" in f]
+            self.assertTrue(marcas, f"{dimension.value} deveria registrar ressalva")
             self.assertIn("250", marcas[0])
             self.assertIn("1,000", marcas[0])
 
@@ -142,9 +142,9 @@ class TestCorteDeTexto(unittest.TestCase):
         """Enquadramento e licença registram a ressalva de texto visível cortado."""
         html = "<html><body><p>" + ("palavra " * 50_000) + "</p></body></html>"
         r = avaliar(html)
-        for dimensao in (DimensionType.ENQUADRAMENTO_REPUBLICANO, DimensionType.CODIGO_ABERTO_FLOSS):
-            marcas = [f for f in findings(r, dimensao) if "cobertura incompleta" in f]
-            self.assertTrue(marcas, dimensao.value)
+        for dimension in (DimensionType.ENQUADRAMENTO_REPUBLICANO, DimensionType.CODIGO_ABERTO_FLOSS):
+            marcas = [f for f in findings(r, dimension) if "cobertura incompleta" in f]
+            self.assertTrue(marcas, dimension.value)
             self.assertIn("texto visível", marcas[0])
 
     def test_corte_de_texto_nao_marca_dimensao_de_bytes_puros(self):

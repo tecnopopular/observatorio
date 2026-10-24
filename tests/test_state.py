@@ -84,7 +84,7 @@ class TestManifesto(unittest.TestCase):
         """Cada entrada traz o que decide a próxima execução: status, nota e data."""
         for entry in self.manifest.entries:
             self.assertEqual(entry.status.value in {nivel.value for nivel in AuditLevel}, True)
-            if entry.status == AuditLevel.NAO_INSPECIONADO:
+            if entry.status == AuditLevel.NOT_INSPECTED:
                 self.assertIsNone(entry.total_score)
             else:
                 self.assertGreaterEqual(entry.total_score, 0.0)

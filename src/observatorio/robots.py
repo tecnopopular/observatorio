@@ -18,7 +18,7 @@ from urllib.parse import urlparse
 
 from .fetch import INSTITUTIONAL_USER_AGENT
 
-LIMITE_DO_ARQUIVO = 200_000
+FILE_LIMIT = 200_000
 
 
 @dataclass(frozen=True)
@@ -74,12 +74,12 @@ class RobotsPolicy:
         interpretador: urllib.robotparser.RobotFileParser | None = None
         erro: str | None = None
         try:
-            with urllib.request.urlopen(requisicao, timeout=self.timeout) as resposta:
-                codigo = getattr(resposta, "status", 200)
-                corpo = resposta.read(LIMITE_DO_ARQUIVO).decode("utf-8", errors="ignore")
-                if codigo == 200 and corpo.strip():
+            with urllib.request.urlopen(requisicao, timeout=self.timeout) as response:
+                codigo = getattr(response, "status", 200)
+                body = response.read(FILE_LIMIT).decode("utf-8", errors="ignore")
+                if codigo == 200 and body.strip():
                     interpretador = urllib.robotparser.RobotFileParser()
-                    interpretador.parse(corpo.splitlines())
+                    interpretador.parse(body.splitlines())
         except urllib.error.HTTPError as falha:
             codigo = falha.code
         except Exception as falha:
@@ -88,7 +88,7 @@ class RobotsPolicy:
         self._cache[host] = (codigo, interpretador, erro)
         return self._cache[host]
 
-    def decidir(self, url: str) -> RobotsDecision:
+    def decide(self, url: str) -> RobotsDecision:
         """Decide se a leitura de um endereço é permitida pelas regras do host.
 
         Args:

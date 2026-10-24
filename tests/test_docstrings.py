@@ -1,6 +1,6 @@
 """Garante o padrão Google de docstrings e a ausência de comentários explicativos.
 
-O verificador vive em `tools/verificar_docstrings.py` e é carregado aqui por caminho, para que
+O verificador vive em `tools/verify_docstrings.py` e é carregado aqui por caminho, para que
 a regra seja a mesma usada na linha de comando. Sem este teste, a convenção volta a degradar
 na primeira função nova que ninguém documentar.
 """
@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-VERIFICADOR = RAIZ / "tools" / "verificar_docstrings.py"
+VERIFICADOR = RAIZ / "tools" / "verify_docstrings.py"
 ALVOS = (RAIZ / "src", RAIZ / "tools", RAIZ / "tests")
 
 
@@ -20,7 +20,7 @@ def _carregar_verificador():
     Returns:
         Módulo `verificar_docstrings` pronto para uso.
     """
-    especificacao = importlib.util.spec_from_file_location("verificar_docstrings", VERIFICADOR)
+    especificacao = importlib.util.spec_from_file_location("verify_docstrings", VERIFICADOR)
     if especificacao is None or especificacao.loader is None:
         raise AssertionError(f"não foi possível carregar {VERIFICADOR}")
     modulo = importlib.util.module_from_spec(especificacao)
@@ -36,8 +36,8 @@ class TestPadraoDeDocumentacao(unittest.TestCase):
         verificador = _carregar_verificador()
         violacoes: list[str] = []
         for alvo in ALVOS:
-            for arquivo in verificador.arquivos([str(alvo)]):
-                violacoes.extend(verificador.verificar_arquivo(arquivo))
+            for cache_file in verificador.collect_files([str(alvo)]):
+                violacoes.extend(verificador.verify_file(cache_file))
         self.assertEqual(violacoes, [], "\n" + "\n".join(violacoes[:20]))
 
 

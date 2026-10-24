@@ -19,12 +19,12 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from .models import EventoDeRetirada, RegistroDeRetiradas, TipoDeEvento
+from .models import EventType, WithdrawalEvent, WithdrawalRegistry
 
-REGISTRO_PADRAO = Path("data/retiradas.json")
+DEFAULT_REGISTRY = Path("data/retiradas.json")
 
 
-def chave(url: str) -> str:
+def url_key(url: str) -> str:
     """Reduz um endereço à forma usada na comparação.
 
     Args:
@@ -37,15 +37,15 @@ def chave(url: str) -> str:
     host = partes.netloc.lower()
     if host.startswith("www."):
         host = host[4:]
-    caminho = partes.path.rstrip("/").lower()
-    return f"{host}{caminho}"
+    path = partes.path.rstrip("/").lower()
+    return f"{host}{path}"
 
 
-def carregar(caminho: Path = REGISTRO_PADRAO) -> RegistroDeRetiradas:
+def load(path: Path = DEFAULT_REGISTRY) -> WithdrawalRegistry:
     """Lê o registro de eventos do disco.
 
     Args:
-        caminho: Arquivo JSON do registro. Ausente significa nenhum evento registrado.
+        path: Arquivo JSON do registro. Ausente significa nenhum evento registrado.
 
     Returns:
         Registro carregado, vazio quando o arquivo ainda não existe.
@@ -53,118 +53,118 @@ def carregar(caminho: Path = REGISTRO_PADRAO) -> RegistroDeRetiradas:
     Raises:
         ValueError: Quando o arquivo existe e não corresponde ao esquema esperado.
     """
-    if not caminho.is_file():
-        return RegistroDeRetiradas()
-    return RegistroDeRetiradas.model_validate_json(caminho.read_text(encoding="utf-8"))
+    if not path.is_file():
+        return WithdrawalRegistry()
+    return WithdrawalRegistry.model_validate_json(path.read_text(encoding="utf-8"))
 
 
-def salvar(registro: RegistroDeRetiradas, caminho: Path = REGISTRO_PADRAO) -> None:
+def save(registry: WithdrawalRegistry, path: Path = DEFAULT_REGISTRY) -> None:
     """Grava o registro em disco como JSON estável e legível em revisão.
 
     Args:
-        registro: Registro a gravar.
-        caminho: Arquivo de destino; diretórios intermediários são criados.
+        registry: Registro a gravar.
+        path: Arquivo de destino; diretórios intermediários são criados.
     """
-    caminho.parent.mkdir(parents=True, exist_ok=True)
-    conteudo = json.dumps(registro.model_dump(mode="json"), ensure_ascii=False, indent=2)
-    caminho.write_text(conteudo + "\n", encoding="utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    conteudo = json.dumps(registry.model_dump(mode="json"), ensure_ascii=False, indent=2)
+    path.write_text(conteudo + "\n", encoding="utf-8")
 
 
-def ultimo_evento(registro: RegistroDeRetiradas, url: str) -> EventoDeRetirada | None:
+def latest_event(registry: WithdrawalRegistry, url: str) -> WithdrawalEvent | None:
     """Devolve o evento mais recente registrado para um endereço.
 
     Args:
-        registro: Registro de eventos carregado.
+        registry: Registro de eventos carregado.
         url: Endereço a consultar.
 
     Returns:
         Evento mais recente, ou None quando o endereço nunca foi registrado.
     """
-    alvo = chave(url)
-    for evento in reversed(registro.eventos):
-        if chave(evento.url) == alvo:
+    alvo = url_key(url)
+    for evento in reversed(registry.eventos):
+        if url_key(evento.url) == alvo:
             return evento
     return None
 
 
-def estado(registro: RegistroDeRetiradas, url: str) -> TipoDeEvento | None:
+def current_state(registry: WithdrawalRegistry, url: str) -> EventType | None:
     """Informa a situação vigente de um endereço.
 
     Args:
-        registro: Registro de eventos carregado.
+        registry: Registro de eventos carregado.
         url: Endereço a consultar.
 
     Returns:
         Tipo do último evento do endereço, ou None quando nunca houve evento.
     """
-    evento = ultimo_evento(registro, url)
+    evento = latest_event(registry, url)
     return evento.tipo if evento else None
 
 
-def esta_retirada(url: str, registro: RegistroDeRetiradas) -> bool:
+def is_withdrawn(url: str, registry: WithdrawalRegistry) -> bool:
     """Informa se o endereço está retirado no momento.
 
     Args:
         url: Endereço a consultar.
-        registro: Registro de eventos carregado.
+        registry: Registro de eventos carregado.
 
     Returns:
         Verdadeiro quando o último evento do endereço é uma retirada.
     """
-    return estado(registro, url) is TipoDeEvento.RETIRADA
+    return current_state(registry, url) is EventType.WITHDRAWAL
 
 
-def chaves_retiradas(registro: RegistroDeRetiradas) -> set[str]:
+def withdrawn_keys(registry: WithdrawalRegistry) -> set[str]:
     """Devolve as chaves dos endereços atualmente retirados.
 
     Args:
-        registro: Registro de eventos carregado.
+        registry: Registro de eventos carregado.
 
     Returns:
         Conjunto de chaves cujo último evento é uma retirada.
     """
-    vigente: dict[str, TipoDeEvento] = {}
-    for evento in registro.eventos:
-        vigente[chave(evento.url)] = evento.tipo
-    return {alvo for alvo, tipo in vigente.items() if tipo is TipoDeEvento.RETIRADA}
+    vigente: dict[str, EventType] = {}
+    for evento in registry.eventos:
+        vigente[url_key(evento.url)] = evento.tipo
+    return {alvo for alvo, tipo in vigente.items() if tipo is EventType.WITHDRAWAL}
 
 
-def entrada_original(registro: RegistroDeRetiradas, url: str) -> dict | None:
+def original_entry(registry: WithdrawalRegistry, url: str) -> dict | None:
     """Recupera o registro do catálogo guardado no momento da retirada.
 
     Args:
-        registro: Registro de eventos carregado.
+        registry: Registro de eventos carregado.
         url: Endereço retirado.
 
     Returns:
         Cópia do registro do catálogo, ou None quando nenhum evento o guardou.
     """
-    alvo = chave(url)
-    for evento in registro.eventos:
-        if chave(evento.url) == alvo and evento.entrada_original:
-            return dict(evento.entrada_original)
+    alvo = url_key(url)
+    for evento in registry.eventos:
+        if url_key(evento.url) == alvo and evento.original_entry:
+            return dict(evento.original_entry)
     return None
 
 
-def registrar_retirada(
-    registro: RegistroDeRetiradas,
+def register_withdrawal(
+    registry: WithdrawalRegistry,
     nome: str,
     url: str,
     motivo: str,
     solicitado_em: date,
     canal: str = "email",
-    entrada: dict | None = None,
-) -> EventoDeRetirada:
+    entry: dict | None = None,
+) -> WithdrawalEvent:
     """Acrescenta um evento de retirada ao registro.
 
     Args:
-        registro: Registro a acrescentar; é modificado no lugar.
+        registry: Registro a acrescentar; é modificado no lugar.
         nome: Nome da iniciativa no momento da retirada.
         url: Endereço retirado.
         motivo: Motivo informado pelo solicitante.
         solicitado_em: Data em que o pedido foi feito.
         canal: Origem do pedido.
-        entrada: Registro do catálogo antes da retirada, guardado para permitir a readmissão.
+        entry: Registro do catálogo antes da retirada, guardado para permitir a readmissão.
 
     Returns:
         Evento acrescentado ao registro.
@@ -172,32 +172,32 @@ def registrar_retirada(
     Raises:
         ValueError: Quando o endereço já está retirado.
     """
-    if esta_retirada(url, registro):
+    if is_withdrawn(url, registry):
         raise ValueError(f"Endereço já registrado como retirado: {url}")
-    evento = EventoDeRetirada(
-        tipo=TipoDeEvento.RETIRADA,
+    evento = WithdrawalEvent(
+        tipo=EventType.WITHDRAWAL,
         nome=nome,
         url=url,
         motivo=motivo,
         canal=canal,
         solicitado_em=solicitado_em,
-        entrada_original=entrada,
+        original_entry=entry,
     )
-    registro.eventos.append(evento)
+    registry.eventos.append(evento)
     return evento
 
 
-def registrar_readmissao(
-    registro: RegistroDeRetiradas,
+def register_readmission(
+    registry: WithdrawalRegistry,
     url: str,
     motivo: str,
     solicitado_em: date,
     canal: str = "email",
-) -> EventoDeRetirada:
+) -> WithdrawalEvent:
     """Acrescenta um evento de readmissão, devolvendo a iniciativa ao catálogo.
 
     Args:
-        registro: Registro a acrescentar; é modificado no lugar.
+        registry: Registro a acrescentar; é modificado no lugar.
         url: Endereço readmitido.
         motivo: Motivo informado pelo solicitante.
         solicitado_em: Data em que o pedido de volta foi feito.
@@ -209,43 +209,43 @@ def registrar_readmissao(
     Raises:
         ValueError: Quando o endereço não está retirado no momento.
     """
-    anterior = ultimo_evento(registro, url)
-    if anterior is None or anterior.tipo is not TipoDeEvento.RETIRADA:
+    anterior = latest_event(registry, url)
+    if anterior is None or anterior.tipo is not EventType.WITHDRAWAL:
         raise ValueError(f"Endereço não está retirado: {url}")
-    evento = EventoDeRetirada(
-        tipo=TipoDeEvento.READMISSAO,
+    evento = WithdrawalEvent(
+        tipo=EventType.READMISSION,
         nome=anterior.nome,
         url=url,
         motivo=motivo,
         canal=canal,
         solicitado_em=solicitado_em,
     )
-    registro.eventos.append(evento)
+    registry.eventos.append(evento)
     return evento
 
 
-def remover_do_catalogo(catalogo: list[dict], url: str) -> list[dict]:
+def remove_from_catalog(catalog: list[dict], url: str) -> list[dict]:
     """Devolve o catálogo sem as entradas que correspondem ao endereço retirado.
 
     Args:
-        catalogo: Registros do catálogo de iniciativas.
+        catalog: Registros do catálogo de iniciativas.
         url: Endereço retirado.
 
     Returns:
         Nova lista de registros, sem o endereço retirado.
     """
-    alvo = chave(url)
-    return [item for item in catalogo if chave(item.get("url", "")) != alvo]
+    alvo = url_key(url)
+    return [item for item in catalog if url_key(item.get("url", "")) != alvo]
 
 
-def devolver_ao_catalogo(catalogo: list[dict], entrada: dict) -> list[dict]:
+def restore_to_catalog(catalog: list[dict], entry: dict) -> list[dict]:
     """Devolve o catálogo com a entrada readmitida acrescentada ao final.
 
     Args:
-        catalogo: Registros do catálogo de iniciativas.
-        entrada: Registro guardado no momento da retirada.
+        catalog: Registros do catálogo de iniciativas.
+        entry: Registro guardado no momento da retirada.
 
     Returns:
         Nova lista de registros, com a entrada readmitida ao final.
     """
-    return [*catalogo, dict(entrada)]
+    return [*catalog, dict(entry)]

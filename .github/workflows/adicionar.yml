@@ -77,10 +77,10 @@ jobs:
         run: uv run ruff check .
 
       - name: Portão de docstrings
-        run: uv run python tools/verificar_docstrings.py
+        run: uv run python tools/verify_docstrings.py
 
       - name: Portão de código morto
-        run: uv run python tools/verificar_codigo_morto.py
+        run: uv run python tools/verify_dead_code.py
 
       - name: Suíte de testes
         run: uv run python -m unittest discover tests

@@ -41,7 +41,7 @@ Nenhum outro segredo é necessário. As chaves nunca são impressas em log, rela
 
 1. **Checkout e uv:** configuração de cache de pacotes com `astral-sh/setup-uv@v3`.
 2. **Portão de Privacidade (Quality Gate 1):** `verify-privacy --all-files` antes de qualquer geração de dado. Violação bloqueia o job com código de saída 2.
-3. **Portão Estático (Quality Gate 2):** `uv run ruff check .`, `uv run ruff format --check .`, `uv run python tools/verificar_codigo_morto.py` e `uv run python tools/verificar_docstrings.py`. Qualquer achado bloqueia o job.
+3. **Portão Estático (Quality Gate 2):** `uv run ruff check .`, `uv run ruff format --check .`, `uv run python tools/verify_dead_code.py` e `uv run python tools/verify_docstrings.py`. Qualquer achado bloqueia o job.
 4. **Portão de Testes (Quality Gate 3):** `uv run python -m unittest discover tests`, incluindo consistência de pontuação entre laudo e manifesto e a execução dos verificadores estáticos dentro da suíte.
 5. **Execução do Pipeline:** invocação da CLI com os argumentos do disparo.
 6. **Publicação do laudo:** o laudo completo (`dist/auditoria_iniciativas.json`) é anexado como artefato `auditoria-iniciativas`, com retenção de 90 dias. Ele não é versionado.

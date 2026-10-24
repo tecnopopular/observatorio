@@ -16,13 +16,13 @@ from observatorio.models import AuditLevel
 from observatorio.state import (
     Manifest,
     ManifestEntry,
-    conferir_cache,
-    digest_do_arquivo,
-    digest_do_corpo,
+    body_digest,
+    file_digest,
+    verify_cache,
 )
 
 RAIZ = Path(__file__).resolve().parent.parent
-FERRAMENTA = RAIZ / "tools" / "verificar_cache.py"
+FERRAMENTA = RAIZ / "tools" / "verify_cache.py"
 
 
 def _manifesto(pares: list[tuple[str, str | None]]) -> Manifest:
@@ -58,11 +58,11 @@ class TestConferenciaDoCache(unittest.TestCase):
             cache = Path(tmp)
             html = "<html><body>conteudo</body></html>"
             (cache / "a.html").write_text(html, encoding="utf-8")
-            manifesto = _manifesto([("a", digest_do_corpo(html))])
+            manifesto = _manifesto([("a", body_digest(html))])
 
-            resultado = conferir_cache(manifesto, cache)
+            resultado = verify_cache(manifesto, cache)
 
-        self.assertTrue(resultado.integro)
+        self.assertTrue(resultado.intact)
         self.assertEqual(resultado.conferidos, 1)
         self.assertEqual(resultado.divergentes, [])
 
@@ -71,29 +71,29 @@ class TestConferenciaDoCache(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp)
             (cache / "a.html").write_text("<html>mudou</html>", encoding="utf-8")
-            manifesto = _manifesto([("a", digest_do_corpo("<html>original</html>"))])
+            manifesto = _manifesto([("a", body_digest("<html>original</html>"))])
 
-            resultado = conferir_cache(manifesto, cache)
+            resultado = verify_cache(manifesto, cache)
 
-        self.assertFalse(resultado.integro)
+        self.assertFalse(resultado.intact)
         self.assertEqual(resultado.divergentes, ["a"])
 
     def test_corpo_ausente_e_apontado(self):
         """Entrada com hash e sem corpo não é conferível."""
         with tempfile.TemporaryDirectory() as tmp:
-            manifesto = _manifesto([("a", digest_do_corpo("<html>x</html>"))])
-            resultado = conferir_cache(manifesto, Path(tmp))
+            manifesto = _manifesto([("a", body_digest("<html>x</html>"))])
+            resultado = verify_cache(manifesto, Path(tmp))
 
-        self.assertFalse(resultado.integro)
+        self.assertFalse(resultado.intact)
         self.assertEqual(resultado.ausentes, ["a"])
 
     def test_entrada_sem_hash_fica_fora(self):
         """Iniciativa não inspecionada não tem o que conferir."""
         manifesto = _manifesto([("a", None)])
         with tempfile.TemporaryDirectory() as tmp:
-            resultado = conferir_cache(manifesto, Path(tmp))
+            resultado = verify_cache(manifesto, Path(tmp))
 
-        self.assertTrue(resultado.integro)
+        self.assertTrue(resultado.intact)
         self.assertEqual(resultado.sem_hash, ["a"])
         self.assertEqual(resultado.conferidos, 0)
 
@@ -107,28 +107,26 @@ class TestConferenciaDoCache(unittest.TestCase):
             cache = Path(tmp)
             bruto = "<html>\r\n<body>linha</body>\r\n</html>"
             (cache / "a.html").write_bytes(bruto.encode("utf-8"))
-            manifesto = _manifesto([("a", digest_do_corpo(bruto))])
+            manifesto = _manifesto([("a", body_digest(bruto))])
 
-            resultado = conferir_cache(manifesto, cache)
+            resultado = verify_cache(manifesto, cache)
 
-        self.assertTrue(resultado.integro)
+        self.assertTrue(resultado.intact)
         self.assertEqual(resultado.conferidos, 1)
 
     def test_digest_do_arquivo_nao_traduz_fim_de_linha(self):
         """O digest do arquivo é o digest dos bytes gravados, não do texto relido."""
         with tempfile.TemporaryDirectory() as tmp:
-            arquivo = Path(tmp) / "a.html"
+            cache_file = Path(tmp) / "a.html"
             bruto = "<p>a</p>\r\n<p>b</p>"
-            arquivo.write_bytes(bruto.encode("utf-8"))
-            self.assertEqual(digest_do_arquivo(arquivo), digest_do_corpo(bruto))
-            self.assertNotEqual(
-                digest_do_arquivo(arquivo), digest_do_corpo(arquivo.read_text(encoding="utf-8"))
-            )
+            cache_file.write_bytes(bruto.encode("utf-8"))
+            self.assertEqual(file_digest(cache_file), body_digest(bruto))
+            self.assertNotEqual(file_digest(cache_file), body_digest(cache_file.read_text(encoding="utf-8")))
 
     def test_hash_usa_a_mesma_via_do_motor(self):
         """O digest é calculado sobre o texto em UTF-8, como o motor registra."""
         self.assertEqual(
-            digest_do_corpo("Ação"),
+            body_digest("Ação"),
             "1dfbdde6410ab51a811ae7e551c89cff5e8cb7153b7a28a9e178584430f844d4",
         )
 
@@ -143,9 +141,9 @@ class TestFerramentaDeConferencia(unittest.TestCase):
             html = "<html><body>ok</body></html>"
             (tmp / "cache").mkdir()
             (tmp / "cache" / "a.html").write_text(html, encoding="utf-8")
-            manifesto = _manifesto([("a", digest_do_corpo(html))])
-            caminho = tmp / "estado.json"
-            caminho.write_text(json.dumps(manifesto.model_dump(mode="json")), encoding="utf-8")
+            manifesto = _manifesto([("a", body_digest(html))])
+            path = tmp / "estado.json"
+            path.write_text(json.dumps(manifesto.model_dump(mode="json")), encoding="utf-8")
 
             codigo = subprocess.run(
                 [
@@ -171,9 +169,9 @@ class TestFerramentaDeConferencia(unittest.TestCase):
             tmp = Path(tmp)
             (tmp / "cache").mkdir()
             (tmp / "cache" / "a.html").write_text("<html>outro</html>", encoding="utf-8")
-            manifesto = _manifesto([("a", digest_do_corpo("<html>original</html>"))])
-            caminho = tmp / "estado.json"
-            caminho.write_text(json.dumps(manifesto.model_dump(mode="json")), encoding="utf-8")
+            manifesto = _manifesto([("a", body_digest("<html>original</html>"))])
+            path = tmp / "estado.json"
+            path.write_text(json.dumps(manifesto.model_dump(mode="json")), encoding="utf-8")
 
             codigo = subprocess.run(
                 [

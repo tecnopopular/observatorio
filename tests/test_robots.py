@@ -11,12 +11,12 @@ from observatorio.fetch import FetchResult
 from observatorio.robots import RobotsPolicy
 
 
-def _politica_com(status, corpo="", erro=None):
+def _politica_com(status, body="", erro=None):
     """Monta uma política cujo host responde sempre o mesmo `robots.txt`.
 
     Args:
         status: Código HTTP devolvido pela consulta.
-        corpo: Conteúdo do arquivo, quando houver.
+        body: Conteúdo do arquivo, quando houver.
         erro: Exceção a levantar no lugar da resposta.
 
     Returns:
@@ -28,7 +28,7 @@ def _politica_com(status, corpo="", erro=None):
         def __init__(self):
             """Configura a resposta simulada com código e corpo."""
             self.status = status
-            self._corpo = corpo
+            self._corpo = body
 
         def read(self, n=-1):
             """Devolve o corpo configurado em bytes.
@@ -63,26 +63,26 @@ def _politica_com(status, corpo="", erro=None):
     if erro is not None:
         politica._consultar = MagicMock(return_value=(None, None, erro))
     else:
-        politica._consultar = MagicMock(return_value=(status, _montar_parser(corpo, status), None))
+        politica._consultar = MagicMock(return_value=(status, _montar_parser(body, status), None))
     return politica
 
 
-def _montar_parser(corpo, status):
+def _montar_parser(body, status):
     """Interpreta o corpo quando a resposta é 200 com conteúdo.
 
     Args:
-        corpo: Conteúdo do `robots.txt`.
+        body: Conteúdo do `robots.txt`.
         status: Código HTTP da resposta.
 
     Returns:
         Interpretador pronto, ou None quando não há arquivo válido.
     """
-    if status != 200 or not corpo.strip():
+    if status != 200 or not body.strip():
         return None
     import urllib.robotparser
 
     parser = urllib.robotparser.RobotFileParser()
-    parser.parse(corpo.splitlines())
+    parser.parse(body.splitlines())
     return parser
 
 
@@ -92,41 +92,41 @@ class TestDecisaoDeRobots(unittest.TestCase):
     def test_disallow_total_proibe(self):
         """`Disallow: /` deve impedir a leitura."""
         politica = _politica_com(200, "User-agent: *\nDisallow: /\n")
-        decisao = politica.decidir("https://exemplo.org/pagina")
+        decisao = politica.decide("https://exemplo.org/pagina")
         self.assertFalse(decisao.allowed)
         self.assertEqual(decisao.reason, "proibido")
 
     def test_disallow_parcial_permite(self):
         """Regra que atinge apenas outro caminho não impede a leitura da página."""
         politica = _politica_com(200, "User-agent: *\nDisallow: /admin\n")
-        self.assertTrue(politica.decidir("https://exemplo.org/painel").allowed)
+        self.assertTrue(politica.decide("https://exemplo.org/painel").allowed)
 
     def test_diretiva_para_outro_agente_permite(self):
         """Regra endereçada a outro robô não se aplica ao observatório."""
         politica = _politica_com(200, "User-agent: OutroRobo\nDisallow: /\n")
-        self.assertTrue(politica.decidir("https://exemplo.org/pagina").allowed)
+        self.assertTrue(politica.decide("https://exemplo.org/pagina").allowed)
 
     def test_arquivo_ausente_permite(self):
         """404 significa que não há regra a aplicar."""
         politica = _politica_com(404)
-        decisao = politica.decidir("https://exemplo.org/pagina")
+        decisao = politica.decide("https://exemplo.org/pagina")
         self.assertTrue(decisao.allowed)
         self.assertEqual(decisao.reason, "sem_arquivo")
 
     def test_403_no_arquivo_permite(self):
         """403 no `robots.txt` não é proibição de leitura declarada."""
-        self.assertTrue(_politica_com(403).decidir("https://exemplo.org/pagina").allowed)
+        self.assertTrue(_politica_com(403).decide("https://exemplo.org/pagina").allowed)
 
     def test_falha_de_rede_nao_vira_proibicao(self):
         """Timeout na consulta não pode fazer o site desaparecer do acervo."""
         politica = _politica_com(None, erro="TimeoutError: timed out")
-        decisao = politica.decidir("https://exemplo.org/pagina")
+        decisao = politica.decide("https://exemplo.org/pagina")
         self.assertTrue(decisao.allowed)
         self.assertEqual(decisao.reason, "sem_consulta")
 
     def test_erro_5xx_nao_vira_proibicao(self):
         """Falha do servidor ao servir `robots.txt` não é regra do operador."""
-        self.assertTrue(_politica_com(503).decidir("https://exemplo.org/pagina").allowed)
+        self.assertTrue(_politica_com(503).decide("https://exemplo.org/pagina").allowed)
 
     def test_consulta_uma_vez_por_host(self):
         """Duas páginas no mesmo host devem gerar uma única consulta de rede."""
@@ -166,9 +166,9 @@ class TestDecisaoDeRobots(unittest.TestCase):
                 return False
 
         with patch("urllib.request.urlopen", return_value=_Resposta()) as urlopen:
-            politica.decidir("https://exemplo.org/a")
-            politica.decidir("https://exemplo.org/b")
-            politica.decidir("https://exemplo.org/c")
+            politica.decide("https://exemplo.org/a")
+            politica.decide("https://exemplo.org/b")
+            politica.decide("https://exemplo.org/c")
         self.assertEqual(urlopen.call_count, 1)
 
 
@@ -183,7 +183,7 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
 
         from observatorio.engine import run_batch_audit
 
-        catalogo = [
+        catalog = [
             {"nome": "Proibido", "url": "https://proibido.org"},
             {"nome": "Livre", "url": "https://livre.org"},
         ]
@@ -207,12 +207,12 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
         )
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            entrada = tmp / "cat.json"
-            entrada.write_text(json.dumps(catalogo), encoding="utf-8")
+            entry = tmp / "cat.json"
+            entry.write_text(json.dumps(catalog), encoding="utf-8")
             laudo = tmp / "laudo.json"
             manifesto = tmp / "estado.json"
             relatorios = run_batch_audit(
-                input_file=entrada,
+                input_file=entry,
                 output_file=laudo,
                 manifest_file=manifesto,
                 skip_archive=True,
@@ -222,11 +222,11 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
                 robots_policy=politica,
             )
             gravados = json.loads(laudo.read_text(encoding="utf-8"))
-            estado = json.loads(manifesto.read_text(encoding="utf-8"))
+            current_state = json.loads(manifesto.read_text(encoding="utf-8"))
 
         self.assertEqual([r.tool_id for r in relatorios], ["livre"])
         self.assertEqual([r["tool_id"] for r in gravados], ["livre"])
-        self.assertEqual([e["tool_id"] for e in estado["entries"]], ["livre"])
+        self.assertEqual([e["tool_id"] for e in current_state["entries"]], ["livre"])
         provedor.fetch.assert_called_once()
 
     def test_sem_politica_nada_e_pulado(self):
@@ -237,7 +237,7 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
 
         from observatorio.engine import run_batch_audit
 
-        catalogo = [{"nome": "Livre", "url": "https://livre.org"}]
+        catalog = [{"nome": "Livre", "url": "https://livre.org"}]
         provedor = MagicMock()
         provedor.fetch.return_value = FetchResult(
             url="https://livre.org",
@@ -250,10 +250,10 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
         )
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            entrada = tmp / "cat.json"
-            entrada.write_text(json.dumps(catalogo), encoding="utf-8")
+            entry = tmp / "cat.json"
+            entry.write_text(json.dumps(catalog), encoding="utf-8")
             relatorios = run_batch_audit(
-                input_file=entrada,
+                input_file=entry,
                 output_file=tmp / "laudo.json",
                 manifest_file=tmp / "estado.json",
                 skip_archive=True,

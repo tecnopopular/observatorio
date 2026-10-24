@@ -39,7 +39,7 @@ class TestLint(unittest.TestCase):
 
     def test_sem_codigo_morto(self):
         """Não deve existir função, classe, importação ou constante sem consumidor."""
-        resultado = _rodar([sys.executable, "tools/verificar_codigo_morto.py"])
+        resultado = _rodar([sys.executable, "tools/verify_dead_code.py"])
         self.assertEqual(resultado.returncode, 0, resultado.stdout + resultado.stderr)
 
 

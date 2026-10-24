@@ -142,10 +142,10 @@ def extract_visible_text(html: str, limit: int = MAX_INPUT_CHARS) -> str:
         sopa = BeautifulSoup(html, "html.parser")
         for tag in sopa(["script", "style", "noscript", "svg"]):
             tag.decompose()
-        texto = " ".join(sopa.get_text(separator=" ").split())
+        text = " ".join(sopa.get_text(separator=" ").split())
     except Exception:
-        texto = " ".join(html.split())
-    return texto[:limit]
+        text = " ".join(html.split())
+    return text[:limit]
 
 
 class NullClassifier:
@@ -194,7 +194,7 @@ class JevClassifier:
         self.timeout = timeout
         self.max_retries = max_retries
 
-    def _payload(self, texto: str) -> dict:
+    def _payload(self, text: str) -> dict:
         """Monta o corpo da requisição de classificação.
 
         Cada rótulo vira uma pergunta `noul` própria porque os rótulos são independentes e
@@ -203,7 +203,7 @@ class JevClassifier:
         pergunta `score` separada, com os níveis em lista, formato que a API exige.
 
         Args:
-            texto: Texto visível já extraído da página.
+            text: Texto visível já extraído da página.
 
         Returns:
             Dicionário com modelo, estado e perguntas no formato esperado pela API.
@@ -217,7 +217,7 @@ class JevClassifier:
             "instructions": "Qual a intensidade do enquadramento polarizador no texto.",
             "criteria": INTENSITY_LEVELS,
         }
-        return {"model": self.model, "state": {"texto": texto}, "questions": questions}
+        return {"model": self.model, "state": {"texto": text}, "questions": questions}
 
     def classify_html(self, html: str) -> SemanticResult:
         """Classifica o enquadramento do conteúdo e devolve a evidência produzida.
@@ -234,8 +234,8 @@ class JevClassifier:
             `SemanticResult` com rótulos, intensidade, uso e latência, ou com a descrição
             da falha em `error`.
         """
-        texto = extract_visible_text(html)
-        if not texto:
+        text = extract_visible_text(html)
+        if not text:
             return SemanticResult(
                 provider=self.name, model=self.model, error="sem texto visível para classificar"
             )
@@ -243,18 +243,18 @@ class JevClassifier:
             return SemanticResult(
                 provider=self.name,
                 model=self.model,
-                input_chars=len(texto),
+                input_chars=len(text),
                 error="TYPESAFE_API_KEY ausente (ambiente ou Keychain)",
             )
 
-        payload = self._payload(texto)
+        payload = self._payload(text)
         inicio = time.perf_counter()
-        ultimo_erro = "falha desconhecida"
+        last_error = "falha desconhecida"
 
         for tentativa in range(self.max_retries):
             try:
                 with httpx.Client(timeout=self.timeout) as client:
-                    resposta = client.post(
+                    response = client.post(
                         self.endpoint,
                         json=payload,
                         headers={
@@ -264,52 +264,52 @@ class JevClassifier:
                     )
                 decorrido = int((time.perf_counter() - inicio) * 1000)
 
-                if resposta.status_code >= 400:
-                    ultimo_erro = f"typesafe HTTP {resposta.status_code}"
-                    if resposta.status_code in (400, 401, 403, 404, 422):
+                if response.status_code >= 400:
+                    last_error = f"typesafe HTTP {response.status_code}"
+                    if response.status_code in (400, 401, 403, 404, 422):
                         return SemanticResult(
                             provider=self.name,
                             model=self.model,
-                            input_chars=len(texto),
+                            input_chars=len(text),
                             latency_ms=decorrido,
-                            error=ultimo_erro,
+                            error=last_error,
                         )
                     time.sleep(0.5 * (tentativa + 1))
                     continue
 
-                corpo = resposta.json()
-                answers = corpo.get("answers") or {}
+                body = response.json()
+                answers = body.get("answers") or {}
                 labels = {
                     nome: float(answers.get(nome, {}).get("noul") or 0.0) for nome in LABEL_INSTRUCTIONS
                 }
                 if not any(labels.values()):
-                    ultimo_erro = "resposta sem rótulos noul"
+                    last_error = "resposta sem rótulos noul"
                     time.sleep(0.5 * (tentativa + 1))
                     continue
 
                 score = answers.get(INTENSITY_QUESTION) or {}
                 return SemanticResult(
                     provider=self.name,
-                    model=corpo.get("model", self.model),
+                    model=body.get("model", self.model),
                     labels=labels,
                     intensity=score.get("score"),
                     intensity_confidence=score.get("confidence"),
                     probabilities=score.get("probabilities", {}) or {},
-                    input_chars=len(texto),
+                    input_chars=len(text),
                     latency_ms=decorrido,
-                    usage=corpo.get("usage", {}) or {},
+                    usage=body.get("usage", {}) or {},
                 )
             except Exception as exc:
-                ultimo_erro = f"typesafe {type(exc).__name__}: {exc}"[:200]
+                last_error = f"typesafe {type(exc).__name__}: {exc}"[:200]
                 time.sleep(0.5 * (tentativa + 1))
 
         decorrido = int((time.perf_counter() - inicio) * 1000)
         return SemanticResult(
             provider=self.name,
             model=self.model,
-            input_chars=len(texto),
+            input_chars=len(text),
             latency_ms=decorrido,
-            error=ultimo_erro,
+            error=last_error,
         )
 
 

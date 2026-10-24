@@ -5,8 +5,8 @@ User-Agent institucional e classifica a situação de cada iniciativa. Não alte
 laudo: serve para decidir, com número, se a consulta deve existir.
 
 Uso:
-    uv run python tools/medir_robots.py                 # catálogo em data/data_iniciativas.json
-    uv run python tools/medir_robots.py --catalogo x.json --saida y.json
+    uv run python tools/measure_robots.py                 # catálogo em data/data_iniciativas.json
+    uv run python tools/measure_robots.py --catalogo x.json --saida y.json
 
 A classificação segue a RFC 9309, que é o que os rastreadores aplicam na prática:
 
@@ -32,11 +32,11 @@ sys.path.insert(0, str(RAIZ / "src"))
 
 from observatorio.fetch import INSTITUTIONAL_USER_AGENT  # noqa: E402
 
-CATALOGO_PADRAO = RAIZ / "data" / "data_iniciativas.json"
-SAIDA_PADRAO = Path("/tmp/robots.json")
+DEFAULT_CATALOG = RAIZ / "data" / "data_iniciativas.json"
+DEFAULT_OUTPUT = Path("/tmp/robots.json")
 
 
-def buscar_robots(host: str, timeout: int) -> tuple[int | None, str | None, str | None]:
+def fetch_robots(host: str, timeout: int) -> tuple[int | None, str | None, str | None]:
     """Busca o `robots.txt` de um host.
 
     Args:
@@ -50,21 +50,21 @@ def buscar_robots(host: str, timeout: int) -> tuple[int | None, str | None, str 
     url = f"https://{host}/robots.txt"
     requisicao = urllib.request.Request(url, headers={"User-Agent": INSTITUTIONAL_USER_AGENT})
     try:
-        with urllib.request.urlopen(requisicao, timeout=timeout) as resposta:
-            corpo = resposta.read(200_000).decode("utf-8", errors="ignore")
-            return getattr(resposta, "status", 200), corpo, None
+        with urllib.request.urlopen(requisicao, timeout=timeout) as response:
+            body = response.read(200_000).decode("utf-8", errors="ignore")
+            return getattr(response, "status", 200), body, None
     except urllib.error.HTTPError as erro:
         return erro.code, None, None
     except Exception as erro:
         return None, None, f"{type(erro).__name__}: {erro}"
 
 
-def interpretar(codigo: int | None, corpo: str | None, erro: str | None, url: str) -> tuple[str, str]:
+def interpret(codigo: int | None, body: str | None, erro: str | None, url: str) -> tuple[str, str]:
     """Classifica a leitura de uma página à luz do `robots.txt` do host.
 
     Args:
         codigo: Código HTTP da resposta ao `robots.txt`, ou None em falha de rede.
-        corpo: Conteúdo do arquivo, quando existir.
+        body: Conteúdo do arquivo, quando existir.
         erro: Mensagem de falha de rede, quando houver.
         url: Endereço da iniciativa que seria lido.
 
@@ -79,26 +79,26 @@ def interpretar(codigo: int | None, corpo: str | None, erro: str | None, url: st
         return "permitido_sem_regras", f"robots.txt respondeu {codigo}: não existe"
     if codigo is not None and codigo >= 500:
         return "bloqueado_por_falha", f"robots.txt respondeu {codigo}: falha do servidor"
-    if codigo != 200 or not corpo:
+    if codigo != 200 or not body:
         return "permitido_sem_regras", f"robots.txt respondeu {codigo or 'sem corpo'}: sem regras"
 
     interpretador = urllib.robotparser.RobotFileParser()
-    interpretador.parse(corpo.splitlines())
+    interpretador.parse(body.splitlines())
     if interpretador.can_fetch(INSTITUTIONAL_USER_AGENT, url):
         return "permitido", "regras aplicadas ao User-Agent institucional permitem a leitura"
 
     regra_generica = urllib.robotparser.RobotFileParser()
-    regra_generica.parse(corpo.splitlines())
+    regra_generica.parse(body.splitlines())
     if not regra_generica.can_fetch("*", url):
         return "bloqueado_por_regra", "regras do robots.txt proíbem este endereço para todos os agentes"
     return "bloqueado_por_agente", "robots.txt tem diretiva específica que atinge o observatório"
 
 
-def medir(catalogo: list[dict], timeout: int, workers: int) -> dict[str, dict]:
+def measure(catalog: list[dict], timeout: int, workers: int) -> dict[str, dict]:
     """Executa a medição sobre todos os hosts distintos do catálogo.
 
     Args:
-        catalogo: Registros do catálogo, com `nome` e `url`.
+        catalog: Registros do catálogo, com `nome` e `url`.
         timeout: Tempo limite por requisição, em segundos.
         workers: Número de threads simultâneas.
 
@@ -106,7 +106,7 @@ def medir(catalogo: list[dict], timeout: int, workers: int) -> dict[str, dict]:
         Dicionário de host para o resultado da consulta e os registros que ele atende.
     """
     por_host: dict[str, list[dict]] = {}
-    for item in catalogo:
+    for item in catalog:
         host = urlparse(item["url"]).netloc.lower()
         por_host.setdefault(host, []).append(item)
 
@@ -119,10 +119,10 @@ def medir(catalogo: list[dict], timeout: int, workers: int) -> dict[str, dict]:
         Returns:
             Par com o host e o resultado da consulta, incluindo as iniciativas classificadas.
         """
-        codigo, corpo, erro = buscar_robots(host, timeout)
+        codigo, body, erro = fetch_robots(host, timeout)
         resultados = []
         for item in por_host[host]:
-            categoria, detalhe = interpretar(codigo, corpo, erro, item["url"])
+            categoria, detalhe = interpret(codigo, body, erro, item["url"])
             resultados.append(
                 {
                     "nome": item["nome"],
@@ -137,7 +137,7 @@ def medir(catalogo: list[dict], timeout: int, workers: int) -> dict[str, dict]:
         return dict(executor.map(processar, sorted(por_host)))
 
 
-def resumir(medicao: dict[str, dict]) -> int:
+def summarize(medicao: dict[str, dict]) -> int:
     """Imprime o resumo da medição e devolve o código de saída.
 
     Args:
@@ -179,17 +179,17 @@ def main(argv: list[str] | None = None) -> int:
         Código de saída do processo.
     """
     parser = argparse.ArgumentParser(description="Mede o efeito de consultar robots.txt.")
-    parser.add_argument("--catalogo", default=str(CATALOGO_PADRAO), help="catálogo de iniciativas")
-    parser.add_argument("--saida", default=str(SAIDA_PADRAO), help="arquivo JSON com o detalhe")
+    parser.add_argument("--catalogo", default=str(DEFAULT_CATALOG), help="catálogo de iniciativas")
+    parser.add_argument("--saida", default=str(DEFAULT_OUTPUT), help="arquivo JSON com o detalhe")
     parser.add_argument("--timeout", type=int, default=10, help="tempo limite por requisição")
     parser.add_argument("--workers", type=int, default=12, help="consultas simultâneas")
     args = parser.parse_args(argv)
 
-    catalogo = json.loads(Path(args.catalogo).read_text(encoding="utf-8"))
-    medicao = medir(catalogo, args.timeout, args.workers)
+    catalog = json.loads(Path(args.catalog).read_text(encoding="utf-8"))
+    medicao = measure(catalog, args.timeout, args.workers)
     Path(args.saida).write_text(json.dumps(medicao, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"detalhe por host gravado em {args.saida}\n")
-    return resumir(medicao)
+    return summarize(medicao)
 
 
 if __name__ == "__main__":

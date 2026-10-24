@@ -7,16 +7,16 @@ não depois.
 
 Roda na publicação de uma release e também localmente, depois de qualquer ciclo:
 
-    uv run python tools/verificar_cache.py
+    uv run python tools/verify_cache.py
 """
 
 import argparse
 import sys
 from pathlib import Path
 
-from observatorio.state import conferir_cache, load_manifest
+from observatorio.state import load_manifest, verify_cache
 
-MANIFESTO = Path("data/estado_hashes.json")
+MANIFEST = Path("data/estado_hashes.json")
 CACHE = Path("data/raw/html_cache")
 
 
@@ -33,7 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Confere se o cache de HTML corresponde aos hashes do manifesto de estado."
     )
-    parser.add_argument("--manifesto", default=str(MANIFESTO), help="Manifesto de estado a conferir")
+    parser.add_argument("--manifesto", default=str(MANIFEST), help="Manifesto de estado a conferir")
     parser.add_argument("--cache", default=str(CACHE), help="Diretório do cache de HTML")
     args = parser.parse_args(argv)
 
@@ -47,7 +47,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[-] Cache de HTML não encontrado: {caminho_cache}", file=sys.stderr)
         return 1
 
-    resultado = conferir_cache(load_manifest(caminho_manifesto), caminho_cache)
+    resultado = verify_cache(load_manifest(caminho_manifesto), caminho_cache)
 
     print(f"[*] Corpos conferidos: {resultado.conferidos}")
     print(f"[*] Entradas sem hash registrado, fora da conferência: {len(resultado.sem_hash)}")
@@ -63,7 +63,7 @@ def main(argv: list[str] | None = None) -> int:
         for tool_id in resultado.divergentes[:10]:
             print(f"    {tool_id}", file=sys.stderr)
 
-    if not resultado.integro:
+    if not resultado.intact:
         print(
             "[*] Sem cache fiel ao manifesto, o laudo não é recalculável offline: "
             "refaça o ciclo com --refresh antes de publicar.",

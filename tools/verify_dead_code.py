@@ -13,8 +13,8 @@ elas existem para o serializador, e sinalizá-las produziria centenas de falsos 
 treinariam quem lê a ignorar o verificador.
 
 Uso:
-    uv run python tools/verificar_codigo_morto.py            # via pyproject.toml
-    uv run python tools/verificar_codigo_morto.py --min-confidence 80
+    uv run python tools/verify_dead_code.py            # via pyproject.toml
+    uv run python tools/verify_dead_code.py --min-confidence 80
 """
 
 import argparse
@@ -24,13 +24,13 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-PADRAO = re.compile(
+PATTERN = re.compile(
     r"^(?P<arquivo>.+?):(?P<linha>\d+): unused (?P<tipo>[a-z ]+) '(?P<nome>[^']+)' \((?P<confianca>\d+)% confidence\)$"
 )
-TIPOS_RELEVANTES = {"function", "method", "class", "import", "property"}
+RELEVANT_KINDS = {"function", "method", "class", "import", "property"}
 
 
-def executar_vulture(min_confidence: int, caminhos: list[str]) -> str:
+def run_vulture(min_confidence: int, caminhos: list[str]) -> str:
     """Executa o vulture e devolve sua saída bruta.
 
     Args:
@@ -52,7 +52,7 @@ def executar_vulture(min_confidence: int, caminhos: list[str]) -> str:
     return processo.stdout + processo.stderr
 
 
-def selecionar(saida: str) -> list[str]:
+def select(saida: str) -> list[str]:
     """Separa as ocorrências acionáveis das que são ruído estrutural.
 
     Args:
@@ -63,12 +63,12 @@ def selecionar(saida: str) -> list[str]:
     """
     relevantes: list[str] = []
     for linha in saida.splitlines():
-        achado = PADRAO.match(linha.strip())
+        achado = PATTERN.match(linha.strip())
         if not achado:
             continue
         tipo = achado.group("tipo")
         nome = achado.group("nome")
-        if tipo in TIPOS_RELEVANTES or (tipo == "variable" and nome.isupper()):
+        if tipo in RELEVANT_KINDS or (tipo == "variable" and nome.isupper()):
             relevantes.append(linha.strip())
     return relevantes
 
@@ -87,8 +87,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("caminhos", nargs="*", default=["src", "tools", "tests"], help="diretórios")
     args = parser.parse_args(argv)
 
-    saida = executar_vulture(args.min_confidence, args.caminhos)
-    relevantes = selecionar(saida)
+    saida = run_vulture(args.min_confidence, args.caminhos)
+    relevantes = select(saida)
 
     if not relevantes:
         print(f"[OK] Nenhum código morto acionável em {', '.join(args.caminhos)}.")

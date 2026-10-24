@@ -23,7 +23,7 @@ def register_withdrawal(registry, url, reason, requested_on):
     """Acrescenta um evento de retirada ao registro.      # texto em português
     ...
     """
-    print("[-] Endereço já registrado como retirado")     # mensagem em português
+    print("[-] Endereço já registrado como retirado")  # mensagem em português
 ```
 
 ## 3. Interface de linha de comando: português

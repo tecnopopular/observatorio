@@ -60,10 +60,10 @@ jobs:
           uv run ruff format --check .
 
       - name: Detecção de Código Morto (vulture)
-        run: uv run python tools/verificar_codigo_morto.py
+        run: uv run python tools/verify_dead_code.py
 
       - name: Padrão de Docstrings e Ausência de Comentários
-        run: uv run python tools/verificar_docstrings.py
+        run: uv run python tools/verify_docstrings.py
 
       - name: Executar Bateria de Testes Unitários
         run: uv run python -m unittest discover tests

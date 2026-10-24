@@ -32,7 +32,7 @@ class AuditLevel(str, Enum):
     AUDITADO = "auditado"
     EM_REVISAO = "em_revisao"
     REJEITADO = "rejeitado"
-    NAO_INSPECIONADO = "nao_inspecionado"
+    NOT_INSPECTED = "nao_inspecionado"
 
 
 NivelConformidade = AuditLevel
@@ -220,7 +220,7 @@ class Iniciativa(BaseModel):
     tool_id: str = Field(..., description="Slug canônico em minúsculas, congelado na inclusão")
     nome: str = Field(..., description="Nome público da iniciativa")
     url: str = Field(..., description="URL direta e pública da aplicação")
-    dominio: str | None = Field(None, description="Domínio limpo da aplicação")
+    domain: str | None = Field(None, description="Domínio limpo da aplicação")
     categoria: str | None = Field("Iniciativa Cívica", description="Eixo temático no catálogo")
     descricao: str | None = Field("", description="Descrição e propósito da ferramenta")
     repositorio: str | None = Field(None, description="URL pública do repositório git declarado")
@@ -319,7 +319,7 @@ class CivicAuditReport(BaseModel):
         return self.model_dump(mode="json", exclude=STATE_EXCLUDE)
 
 
-class TipoDeEvento(str, Enum):
+class EventType(str, Enum):
     """Natureza do evento registrado sobre uma iniciativa.
 
     Attributes:
@@ -327,11 +327,11 @@ class TipoDeEvento(str, Enum):
         READMISSAO: Pedido de volta, que devolve a iniciativa ao catálogo.
     """
 
-    RETIRADA = "retirada"
-    READMISSAO = "readmissao"
+    WITHDRAWAL = "retirada"
+    READMISSION = "readmissao"
 
 
-class EventoDeRetirada(BaseModel):
+class WithdrawalEvent(BaseModel):
     """Evento de retirada ou readmissão, com o motivo informado por quem pediu.
 
     O registro guarda eventos, e não um estado: retirar uma iniciativa do catálogo apagaria
@@ -351,19 +351,19 @@ class EventoDeRetirada(BaseModel):
             a readmissão sem obrigar o operador a reconstruir categoria e descrição.
     """
 
-    tipo: TipoDeEvento = Field(..., description="Natureza do evento")
+    tipo: EventType = Field(..., description="Natureza do evento")
     nome: str = Field(..., min_length=1, description="Nome da iniciativa no momento do evento")
     url: str = Field(..., min_length=8, description="Endereço do evento, como constava do catálogo")
     motivo: str = Field(..., min_length=3, description="Motivo informado pelo solicitante")
     canal: str = Field(default="email", min_length=1, description="Origem do pedido")
     solicitado_em: date = Field(..., description="Data em que o pedido foi feito")
     registrado_em: date = Field(default_factory=lambda: datetime.now(UTC).date())
-    entrada_original: dict[str, Any] | None = Field(
+    original_entry: dict[str, Any] | None = Field(
         default=None, description="Registro do catálogo antes da retirada, usado na readmissão"
     )
 
 
-class RegistroDeRetiradas(BaseModel):
+class WithdrawalRegistry(BaseModel):
     """Registro append-only de retiradas e readmissões, versionado junto com o catálogo.
 
     Attributes:
@@ -372,7 +372,7 @@ class RegistroDeRetiradas(BaseModel):
     """
 
     versao: int = Field(default=1, description="Versão do esquema do arquivo")
-    eventos: list[EventoDeRetirada] = Field(default_factory=list, description="Eventos registrados")
+    eventos: list[WithdrawalEvent] = Field(default_factory=list, description="Eventos registrados")
 
 
 DiagnosticoCivico = CivicAuditReport

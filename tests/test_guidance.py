@@ -134,17 +134,17 @@ class TestProjecaoDeEstado(unittest.TestCase):
 
     def test_estado_omite_texto_derivado(self):
         """A projeção de estado não carrega sumário nem texto de orientação."""
-        estado = self.reports[0].model_dump_state()
-        self.assertNotIn("summary_markdown", estado)
-        for score in estado["dimension_scores"].values():
+        current_state = self.reports[0].model_dump_state()
+        self.assertNotIn("summary_markdown", current_state)
+        for score in current_state["dimension_scores"].values():
             self.assertNotIn("guidance", score)
 
     def test_estado_preserva_hash_e_pontuacao(self):
         """A projeção de estado precisa manter o que o motor usa para decidir o cache."""
-        estado = self.reports[0].model_dump_state()
-        self.assertEqual(estado["html_sha256"], self.reports[0].html_sha256)
-        self.assertEqual(estado["total_score"], self.reports[0].total_score)
-        self.assertEqual(estado["status"], self.reports[0].status.value)
+        current_state = self.reports[0].model_dump_state()
+        self.assertEqual(current_state["html_sha256"], self.reports[0].html_sha256)
+        self.assertEqual(current_state["total_score"], self.reports[0].total_score)
+        self.assertEqual(current_state["status"], self.reports[0].status.value)
 
     def test_reconstrucao_a_partir_do_estado(self):
         """O laudo reconstruído do estado coincide em identidade, nota e orientação."""
@@ -175,9 +175,9 @@ class TestProjecaoDeEstado(unittest.TestCase):
         de tamanho ao longo do tempo.
         """
         publicacao = [r.model_dump(mode="json") for r in self.reports]
-        estado = [r.model_dump_state() for r in self.reports]
+        current_state = [r.model_dump_state() for r in self.reports]
         tamanho_publicacao = len(json.dumps(publicacao, ensure_ascii=False))
-        tamanho_estado = len(json.dumps(estado, ensure_ascii=False))
+        tamanho_estado = len(json.dumps(current_state, ensure_ascii=False))
         self.assertLess(tamanho_estado, tamanho_publicacao * 0.5)
 
         proporcao = tamanho_estado / tamanho_publicacao

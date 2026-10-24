@@ -8,7 +8,7 @@ import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from .catalogo import assign_tool_ids, slugify, validar_catalogo
+from .catalog import assign_tool_ids, slugify, validate_catalog
 from .evaluator import CivicEvaluator
 from .fetch import MAX_PAYLOAD_BYTES, ContentFetcher, FetchResult, build_fetcher
 from .models import (
@@ -16,11 +16,11 @@ from .models import (
     CivicAuditReport,
 )
 from .preservation import archive_target, calculate_sha256, check_content_changed
-from .retiradas import REGISTRO_PADRAO, chave, chaves_retiradas
-from .retiradas import carregar as carregar_retiradas
 from .robots import RobotsPolicy
 from .semantic import SemanticClassifier, build_classifier
 from .state import build_manifest, changed_since, load_manifest, write_manifest
+from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
+from .withdrawals import load as carregar_retiradas
 
 DEFAULT_CACHE_DIR = Path("data/raw/html_cache")
 
@@ -163,7 +163,7 @@ def audit_single_initiative(
     slug = item.get("_tool_id") or slugify(name)
 
     if robots_policy is not None:
-        decisao = robots_policy.decidir(url)
+        decisao = robots_policy.decide(url)
         if not decisao.allowed:
             print(f" [PULA] {name[:28]:<28} | robots.txt | {decisao.detail}")
             return None
@@ -185,11 +185,11 @@ def audit_single_initiative(
     current_sha256 = calculate_sha256(raw_html) if raw_html else ""
 
     inspecionado = bool(raw_html) and not snapshot.access_gate
-    motivo_sem_leitura = None
+    no_read_reason = None
     if snapshot.access_gate:
-        motivo_sem_leitura = snapshot.error or "acesso restrito"
+        no_read_reason = snapshot.error or "acesso restrito"
     elif not raw_html:
-        motivo_sem_leitura = snapshot.error or "sem conteúdo legível"
+        no_read_reason = snapshot.error or "sem conteúdo legível"
 
     prev = previous_audits.get(slug)
     prev_sha256 = prev.get("html_sha256") if prev else None
@@ -230,7 +230,7 @@ def audit_single_initiative(
         inspection_truncated=snapshot.truncated,
         inspection_limit_bytes=max_bytes,
         inspected=inspecionado,
-        inspection_reason=motivo_sem_leitura,
+        inspection_reason=no_read_reason,
         classifier=classifier,
     )
 
@@ -243,19 +243,19 @@ def audit_single_initiative(
             else (
                 "[REV ]"
                 if report.status == AuditLevel.EM_REVISAO
-                else ("[S/LEI]" if report.status == AuditLevel.NAO_INSPECIONADO else "[BLOQ]")
+                else ("[S/LEI]" if report.status == AuditLevel.NOT_INSPECTED else "[BLOQ]")
             )
         )
     )
-    nota = f"{report.total_score:4.1f}" if report.total_score is not None else " n/d"
+    score = f"{report.total_score:4.1f}" if report.total_score is not None else " n/d"
     print(
-        f" {tag} {report.tool_name[:28]:<28} | Score: {nota} | {report.status.value.upper():<10} | {report.badge_label}"
+        f" {tag} {report.tool_name[:28]:<28} | Score: {score} | {report.status.value.upper():<10} | {report.badge_label}"
     )
 
     return report
 
 
-def chave_do_alvo(item: dict) -> str:
+def target_key(item: dict) -> str:
     """Devolve a chave comparável do endereço de um registro do catálogo.
 
     Args:
@@ -264,7 +264,7 @@ def chave_do_alvo(item: dict) -> str:
     Returns:
         Chave normalizada, comparável com o registro de retiradas.
     """
-    return chave(item.get("url", ""))
+    return url_key(item.get("url", ""))
 
 
 def run_batch_audit(
@@ -281,7 +281,7 @@ def run_batch_audit(
     fetcher: ContentFetcher | None = None,
     robots_policy: RobotsPolicy | None = None,
     respect_robots: bool = True,
-    retiradas_file: Path = REGISTRO_PADRAO,
+    withdrawals_file: Path = DEFAULT_REGISTRY,
 ) -> list[CivicAuditReport]:
     """
     Executa a bateria completa do observatório sobre as iniciativas catalogadas.
@@ -315,7 +315,7 @@ def run_batch_audit(
             `respect_robots` é verdadeiro, uma política nova é criada com o `timeout` do ciclo.
         respect_robots: Quando verdadeiro, sites que proíbem a leitura em `robots.txt` não
             recebem laudo e permanecem apenas no catálogo.
-        retiradas_file: Registro de retiradas acatadas. Um endereço retirado a pedido não é
+        withdrawals_file: Registro de retiradas acatadas. Um endereço retirado a pedido não é
             auditado, mesmo que ainda conste do catálogo.
 
     Returns:
@@ -331,22 +331,22 @@ def run_batch_audit(
     with open(input_file, encoding="utf-8") as f:
         targets = json.load(f)
 
-    problemas = validar_catalogo(targets)
+    problemas = validate_catalog(targets)
     if problemas:
         detalhe = "\n".join(f"        {p}" for p in problemas)
         raise ValueError(f"Catálogo inválido em {input_file}:\n{detalhe}")
 
-    registro_retiradas = carregar_retiradas(retiradas_file)
-    retirados = chaves_retiradas(registro_retiradas)
-    if retirados:
-        remanescentes = [t for t in targets if chave_do_alvo(t) in retirados]
+    withdrawal_registry = carregar_retiradas(withdrawals_file)
+    withdrawn = withdrawn_keys(withdrawal_registry)
+    if withdrawn:
+        remanescentes = [t for t in targets if target_key(t) in withdrawn]
         for item in remanescentes:
             print(f" [RET ] {item['nome'][:28]:<28} | retirada | pedido acatado, presente no catálogo")
         if remanescentes:
             print(
                 f"[AVISO] {len(remanescentes)} iniciativa(s) retirada(s) ainda no catálogo: remova a entrada."
             )
-        targets = [t for t in targets if chave_do_alvo(t) not in retirados]
+        targets = [t for t in targets if target_key(t) not in withdrawn]
 
     colisoes = assign_tool_ids(targets)
     if colisoes:
@@ -382,7 +382,7 @@ def run_batch_audit(
         robots_policy = RobotsPolicy(timeout=timeout)
     print(f"[*] robots.txt: {'consultado' if robots_policy is not None else 'ignorado'}")
     reports: list[CivicAuditReport] = []
-    pulados: list[tuple] = []
+    skipped: list[tuple] = []
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
@@ -405,7 +405,7 @@ def run_batch_audit(
             try:
                 rep = fut.result()
                 if rep is None:
-                    pulados.append((futures[fut].get("nome"), "robots.txt"))
+                    skipped.append((futures[fut].get("nome"), "robots.txt"))
                 else:
                     reports.append(rep)
             except Exception as e:
@@ -424,7 +424,7 @@ def run_batch_audit(
         AuditLevel.CATALOGADO.value: sum(1 for r in reports if r.status == AuditLevel.CATALOGADO),
         AuditLevel.EM_REVISAO.value: sum(1 for r in reports if r.status == AuditLevel.EM_REVISAO),
         AuditLevel.REJEITADO.value: sum(1 for r in reports if r.status == AuditLevel.REJEITADO),
-        AuditLevel.NAO_INSPECIONADO.value: sum(1 for r in reports if r.status == AuditLevel.NAO_INSPECIONADO),
+        AuditLevel.NOT_INSPECTED.value: sum(1 for r in reports if r.status == AuditLevel.NOT_INSPECTED),
     }
 
     print("\n" + "=" * 60)
@@ -436,8 +436,8 @@ def run_batch_audit(
     print(f"  [REJEITA ] Bloqueadores Críticos:                {counts['rejeitado']}")
     print(f"  [SEM LEIT] Não Inspecionadas:                    {counts['nao_inspecionado']}")
     print(f"  [TOTAL   ] Iniciativas Inspecionadas:            {len(reports)}")
-    if pulados:
-        print(f"  [PULADAS ] Proibidas por robots.txt:             {len(pulados)}")
+    if skipped:
+        print(f"  [PULADAS ] Proibidas por robots.txt:             {len(skipped)}")
     print(f"\n[+] Relatório estruturado salvo com sucesso em: {output_file}")
 
     completas = sum(1 for r in reports if r.coverage and r.coverage.complete)

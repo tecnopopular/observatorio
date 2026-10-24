@@ -49,10 +49,10 @@ jobs:
         run: uv run ruff check .
 
       - name: Portão de docstrings
-        run: uv run python tools/verificar_docstrings.py
+        run: uv run python tools/verify_docstrings.py
 
       - name: Portão de código morto
-        run: uv run python tools/verificar_codigo_morto.py
+        run: uv run python tools/verify_dead_code.py
 
       - name: Suíte de testes
         run: uv run python -m unittest discover tests
@@ -64,7 +64,7 @@ jobs:
         run: uv run python -m observatorio.cli audit-all --workers 8 --timeout 12
 
       - name: Portão de integridade do cache
-        run: uv run python tools/verificar_cache.py
+        run: uv run python tools/verify_cache.py
 
       - name: Empacotar cache de HTML
         run: tar -czf cache-html.tar.gz -C data/raw html_cache
@@ -109,7 +109,7 @@ jobs:
               "",
               "Para recalcular as notas a partir do cache anexado:",
               "  tar -xzf cache-html.tar.gz -C data/raw",
-              "  uv run python tools/verificar_cache.py",
+              "  uv run python tools/verify_cache.py",
               "  uv run python -m observatorio.cli audit-all --refresh",
               "",
               "O laudo não é versionado no repositório: ele é publicado aqui, e o manifesto",

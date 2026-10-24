@@ -14,21 +14,21 @@ import sys
 from datetime import UTC, date, datetime
 from pathlib import Path
 
-from .catalogo import CATEGORIAS, acrescentar, extrair_dominio, novo_tool_id, sem_fragmento, validar_entrada
+from .catalog import CATEGORIES, append_entry, extract_domain, new_tool_id, strip_fragment, validate_entry
 from .engine import run_batch_audit
 from .privacy_guard import CivicPrivacyGuard, ViolationSeverity
-from .retiradas import (
-    carregar,
-    chave,
-    devolver_ao_catalogo,
-    entrada_original,
-    esta_retirada,
-    registrar_readmissao,
-    registrar_retirada,
-    remover_do_catalogo,
-    salvar,
-)
 from .robots import RobotsPolicy
+from .withdrawals import (
+    is_withdrawn,
+    load,
+    original_entry,
+    register_readmission,
+    register_withdrawal,
+    remove_from_catalog,
+    restore_to_catalog,
+    save,
+    url_key,
+)
 
 
 def cmd_audit_all(args: argparse.Namespace) -> int:
@@ -56,7 +56,7 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
             fetch_provider=args.fetch_provider,
             semantic=args.semantic,
             max_bytes=args.max_bytes,
-            retiradas_file=Path(args.retiradas),
+            withdrawals_file=Path(args.withdrawals),
         )
         return 0
     except Exception as e:
@@ -121,7 +121,7 @@ def cmd_verify_privacy(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_retirar(args: argparse.Namespace) -> int:
+def cmd_withdraw(args: argparse.Namespace) -> int:
     """Registra uma retirada a pedido e remove a iniciativa do catálogo.
 
     A ordem importa: o registro é gravado antes da remoção do catálogo. Se a gravação falhar, o
@@ -139,21 +139,21 @@ def cmd_retirar(args: argparse.Namespace) -> int:
         0 quando a retirada é registrada; 1 quando o endereço não consta do catálogo, já consta do
         registro, a data informada é inválida ou o motivo traz dado pessoal que seria publicado.
     """
-    caminho_catalogo = Path(args.catalogo)
-    caminho_registro = Path(args.registro)
+    catalog_path = Path(args.catalog)
+    registry_path = Path(args.registry)
 
-    if not caminho_catalogo.is_file():
-        print(f"[-] Catálogo não encontrado: {caminho_catalogo}", file=sys.stderr)
+    if not catalog_path.is_file():
+        print(f"[-] Catálogo não encontrado: {catalog_path}", file=sys.stderr)
         return 1
 
-    catalogo = json.loads(caminho_catalogo.read_text(encoding="utf-8"))
-    registro = carregar(caminho_registro)
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    registry = load(registry_path)
 
-    if esta_retirada(args.url, registro):
+    if is_withdrawn(args.url, registry):
         print(f"[-] Endereço já registrado como retirado: {args.url}", file=sys.stderr)
         return 1
 
-    encontrados = [item for item in catalogo if chave(item.get("url", "")) == chave(args.url)]
+    encontrados = [item for item in catalog if url_key(item.get("url", "")) == url_key(args.url)]
     if not encontrados:
         print(f"[-] Endereço não consta do catálogo: {args.url}", file=sys.stderr)
         return 1
@@ -180,30 +180,30 @@ def cmd_retirar(args: argparse.Namespace) -> int:
         )
         return 1
 
-    retirada = registrar_retirada(
-        registro,
+    event = register_withdrawal(
+        registry,
         encontrados[0]["nome"],
         args.url,
         args.motivo,
         solicitado_em,
         args.canal,
-        entrada=encontrados[0],
+        entry=encontrados[0],
     )
-    salvar(registro, caminho_registro)
+    save(registry, registry_path)
 
-    restantes = remover_do_catalogo(catalogo, args.url)
+    restantes = remove_from_catalog(catalog, args.url)
     conteudo = json.dumps(restantes, ensure_ascii=False, indent=2)
-    caminho_catalogo.write_text(conteudo + "\n", encoding="utf-8")
+    catalog_path.write_text(conteudo + "\n", encoding="utf-8")
 
-    print(f"[+] Retirada registrada em {caminho_registro}: {retirada.nome}")
-    print(f"    motivo informado: {retirada.motivo[:80]}")
-    print(f"    solicitado em {retirada.solicitado_em} | registrado em {retirada.registrado_em}")
-    print(f"[+] Catálogo atualizado: {len(catalogo)} -> {len(restantes)} iniciativas")
+    print(f"[+] Retirada registrada em {registry_path}: {event.nome}")
+    print(f"    motivo informado: {event.motivo[:80]}")
+    print(f"    solicitado em {event.solicitado_em} | registrado em {event.registrado_em}")
+    print(f"[+] Catálogo atualizado: {len(catalog)} -> {len(restantes)} iniciativas")
     print("[*] O manifesto de estado deixa de citar a iniciativa no próximo ciclo.")
     return 0
 
 
-def cmd_readmitir(args: argparse.Namespace) -> int:
+def cmd_readmit(args: argparse.Namespace) -> int:
     """Registra a readmissão de uma iniciativa retirada e a devolve ao catálogo.
 
     A readmissão é um evento novo, não a edição do pedido anterior: o histórico de saída e volta
@@ -220,25 +220,25 @@ def cmd_readmitir(args: argparse.Namespace) -> int:
         catálogo, a retirada não guardou a entrada original, a data é inválida ou o motivo traz
         dado pessoal que seria publicado.
     """
-    caminho_catalogo = Path(args.catalogo)
-    caminho_registro = Path(args.registro)
+    catalog_path = Path(args.catalog)
+    registry_path = Path(args.registry)
 
-    if not caminho_catalogo.is_file():
-        print(f"[-] Catálogo não encontrado: {caminho_catalogo}", file=sys.stderr)
+    if not catalog_path.is_file():
+        print(f"[-] Catálogo não encontrado: {catalog_path}", file=sys.stderr)
         return 1
 
-    catalogo = json.loads(caminho_catalogo.read_text(encoding="utf-8"))
-    registro = carregar(caminho_registro)
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    registry = load(registry_path)
 
-    if not esta_retirada(args.url, registro):
+    if not is_withdrawn(args.url, registry):
         print(f"[-] Endereço não está retirado no registro: {args.url}", file=sys.stderr)
         return 1
-    if any(chave(item.get("url", "")) == chave(args.url) for item in catalogo):
+    if any(url_key(item.get("url", "")) == url_key(args.url) for item in catalog):
         print(f"[-] Endereço já consta do catálogo: {args.url}", file=sys.stderr)
         return 1
 
-    entrada = entrada_original(registro, args.url)
-    if entrada is None:
+    entry = original_entry(registry, args.url)
+    if entry is None:
         print(f"[-] A retirada de {args.url} não guardou a entrada original do catálogo.", file=sys.stderr)
         print(
             "[*] Reconstrua a entrada em data/data_iniciativas.json e registre a readmissão à mão.",
@@ -268,22 +268,22 @@ def cmd_readmitir(args: argparse.Namespace) -> int:
         )
         return 1
 
-    evento = registrar_readmissao(registro, args.url, args.motivo, solicitado_em, args.canal)
-    salvar(registro, caminho_registro)
+    evento = register_readmission(registry, args.url, args.motivo, solicitado_em, args.canal)
+    save(registry, registry_path)
 
-    atualizado = devolver_ao_catalogo(catalogo, entrada)
+    atualizado = restore_to_catalog(catalog, entry)
     conteudo = json.dumps(atualizado, ensure_ascii=False, indent=2)
-    caminho_catalogo.write_text(conteudo + "\n", encoding="utf-8")
+    catalog_path.write_text(conteudo + "\n", encoding="utf-8")
 
-    print(f"[+] Readmissão registrada em {caminho_registro}: {evento.nome}")
+    print(f"[+] Readmissão registrada em {registry_path}: {evento.nome}")
     print(f"    motivo informado: {evento.motivo[:80]}")
     print(f"    solicitado em {evento.solicitado_em} | registrado em {evento.registrado_em}")
-    print(f"[+] Catálogo atualizado: {len(catalogo)} -> {len(atualizado)} iniciativas")
+    print(f"[+] Catálogo atualizado: {len(catalog)} -> {len(atualizado)} iniciativas")
     print("[*] A iniciativa volta a ser auditada no próximo ciclo.")
     return 0
 
 
-def cmd_adicionar(args: argparse.Namespace) -> int:
+def cmd_add(args: argparse.Namespace) -> int:
     """Inclui uma iniciativa no catálogo com identificador congelado.
 
     O `tool_id` é gravado na entrada e não muda depois: ele é o endereço público do laudo, e
@@ -304,27 +304,27 @@ def cmd_adicionar(args: argparse.Namespace) -> int:
         0 quando a iniciativa é incluída; 1 quando o endereço já existe, o host proíbe a leitura,
         a entrada é inválida ou o texto traz dado pessoal que seria publicado.
     """
-    caminho_catalogo = Path(args.catalogo)
-    if not caminho_catalogo.is_file():
-        print(f"[-] Catálogo não encontrado: {caminho_catalogo}", file=sys.stderr)
+    catalog_path = Path(args.catalog)
+    if not catalog_path.is_file():
+        print(f"[-] Catálogo não encontrado: {catalog_path}", file=sys.stderr)
         return 1
 
-    catalogo = json.loads(caminho_catalogo.read_text(encoding="utf-8"))
-    url = sem_fragmento(args.url)
-    alvo = chave(url)
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    url = strip_fragment(args.url)
+    alvo = url_key(url)
 
-    if any(chave(str(item.get("url") or "")) == alvo for item in catalogo):
+    if any(url_key(str(item.get("url") or "")) == alvo for item in catalog):
         print(f"[-] Endereço já consta do catálogo: {url}", file=sys.stderr)
         return 1
 
-    registro = carregar(Path(args.registro))
-    if esta_retirada(url, registro):
+    registry = load(Path(args.registry))
+    if is_withdrawn(url, registry):
         print(f"[-] Endereço consta do registro como retirado: {url}", file=sys.stderr)
         print("[*] Use o subcomando readmitir para devolvê-lo ao catálogo.", file=sys.stderr)
         return 1
 
     if not args.ignorar_robots:
-        decisao = RobotsPolicy().decidir(url)
+        decisao = RobotsPolicy().decide(url)
         print(f"[*] robots.txt: {decisao.reason}")
         if not decisao.allowed:
             print(f"[-] O host não permite a leitura deste endereço: {url}", file=sys.stderr)
@@ -345,37 +345,37 @@ def cmd_adicionar(args: argparse.Namespace) -> int:
         )
         return 1
 
-    entrada: dict[str, object] = {
+    entry: dict[str, object] = {
         "nome": args.nome.strip(),
-        "tool_id": (args.tool_id or novo_tool_id(args.nome, catalogo)).strip(),
+        "tool_id": (args.tool_id or new_tool_id(args.nome, catalog)).strip(),
         "url": url,
-        "dominio": extrair_dominio(url),
+        "dominio": extract_domain(url),
         "categoria": args.categoria,
         "descricao": args.descricao.strip(),
         "adicionado_em": datetime.now(UTC).date().isoformat(),
     }
     if args.repositorio:
-        entrada["repositorio"] = args.repositorio.strip()
+        entry["repositorio"] = args.repositorio.strip()
     if args.fontes_primarias:
         fontes = [parte.strip() for parte in args.fontes_primarias.split(",") if parte.strip()]
         if fontes:
-            entrada["fontes_primarias"] = fontes
+            entry["fontes_primarias"] = fontes
 
-    problemas = validar_entrada(entrada, catalogo)
+    problemas = validate_entry(entry, catalog)
     if problemas:
         print("[-] Entrada recusada:", file=sys.stderr)
         for problema in problemas:
             print(f"    {problema}", file=sys.stderr)
         return 1
 
-    atualizado = acrescentar(catalogo, entrada)
+    atualizado = append_entry(catalog, entry)
     conteudo = json.dumps(atualizado, ensure_ascii=False, indent=2)
-    caminho_catalogo.write_text(conteudo + "\n", encoding="utf-8")
+    catalog_path.write_text(conteudo + "\n", encoding="utf-8")
 
-    print(f"[+] Iniciativa incluída: {entrada['nome']}")
-    print(f"    tool_id congelado: {entrada['tool_id']}")
-    print(f"    laudo público em: auditoria/{entrada['tool_id']}.html")
-    print(f"[+] Catálogo atualizado: {len(catalogo)} -> {len(atualizado)} iniciativas")
+    print(f"[+] Iniciativa incluída: {entry['nome']}")
+    print(f"    tool_id congelado: {entry['tool_id']}")
+    print(f"    laudo público em: auditoria/{entry['tool_id']}.html")
+    print(f"[+] Catálogo atualizado: {len(catalog)} -> {len(atualizado)} iniciativas")
     print("[*] A iniciativa entra no próximo ciclo de auditoria; para avaliar já, rode audit-all --refresh.")
     return 0
 
@@ -394,115 +394,123 @@ def main() -> None:
     )
     subparsers = parser.add_subparsers(dest="command", help="Comandos disponíveis")
 
-    audit_parser = subparsers.add_parser(
+    audit_command_parser = subparsers.add_parser(
         "audit-all", help="Executa a varredura e avaliação em lote das iniciativas"
     )
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
         "--input", "-i", default="data/data_iniciativas.json", help="Caminho do catálogo base"
     )
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
         "--output",
         "-o",
         default="dist/auditoria_iniciativas.json",
         help="Caminho do laudo completo (publicação)",
     )
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
         "--manifest", "-m", default="data/estado_hashes.json", help="Caminho do manifesto compacto de estado"
     )
-    audit_parser.add_argument("--workers", "-w", type=int, default=10, help="Número de threads simultâneas")
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
+        "--workers", "-w", type=int, default=10, help="Número de threads simultâneas"
+    )
+    audit_command_parser.add_argument(
         "--refresh", "-r", action="store_true", help="Força reavaliação ignorando cache"
     )
-    audit_parser.add_argument("--skip-archive", action="store_true", help="Pula disparos ao Internet Archive")
-    audit_parser.add_argument("--timeout", "-t", type=int, default=8, help="Timeout de conexão em segundos")
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
+        "--skip-archive", action="store_true", help="Pula disparos ao Internet Archive"
+    )
+    audit_command_parser.add_argument(
+        "--timeout", "-t", type=int, default=8, help="Timeout de conexão em segundos"
+    )
+    audit_command_parser.add_argument(
         "--fetch-provider",
         choices=["http", "firecrawl"],
         default="http",
         help="Provedor de aquisição do HTML: http (direto, TLS verificado) ou firecrawl (renderização remota para SPA)",
     )
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
         "--max-bytes",
         type=int,
         default=4_000_000,
         help="Limite de leitura por página, em bytes (padrão 4 MB; páginas maiores são declaradas como inspeção parcial)",
     )
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
         "--semantic",
         choices=["off", "jev"],
         default="off",
         help="Camada semântica calibrada: off (determinístico puro) ou jev (TypeSafe, consome tokens por iniciativa)",
     )
 
-    audit_parser.add_argument(
+    audit_command_parser.add_argument(
         "--retiradas",
         default="data/retiradas.json",
         help="Registro de retiradas acatadas; endereços ali não são auditados",
     )
 
-    retirar_parser = subparsers.add_parser(
+    withdraw_command_parser = subparsers.add_parser(
         "retirar", help="Registra retirada a pedido e remove a iniciativa do catálogo"
     )
-    retirar_parser.add_argument("--url", required=True, help="Endereço da iniciativa a retirar")
-    retirar_parser.add_argument("--motivo", required=True, help="Motivo informado pelo solicitante")
-    retirar_parser.add_argument(
+    withdraw_command_parser.add_argument("--url", required=True, help="Endereço da iniciativa a retirar")
+    withdraw_command_parser.add_argument("--motivo", required=True, help="Motivo informado pelo solicitante")
+    withdraw_command_parser.add_argument(
         "--solicitado-em", default=None, help="Data do pedido no formato AAAA-MM-DD (padrão: hoje)"
     )
-    retirar_parser.add_argument("--canal", default="email", help="Origem do pedido")
-    retirar_parser.add_argument(
+    withdraw_command_parser.add_argument("--canal", default="email", help="Origem do pedido")
+    withdraw_command_parser.add_argument(
         "--catalogo", default="data/data_iniciativas.json", help="Catálogo a atualizar"
     )
-    retirar_parser.add_argument(
+    withdraw_command_parser.add_argument(
         "--registro", default="data/retiradas.json", help="Registro de retiradas a atualizar"
     )
 
-    adicionar_parser = subparsers.add_parser(
+    add_command_parser = subparsers.add_parser(
         "adicionar", help="Inclui uma iniciativa no catálogo com identificador congelado"
     )
-    adicionar_parser.add_argument("--url", required=True, help="Endereço público da aplicação")
-    adicionar_parser.add_argument("--nome", required=True, help="Nome público da iniciativa")
-    adicionar_parser.add_argument(
-        "--categoria", required=True, choices=CATEGORIAS, help="Eixo temático no catálogo"
+    add_command_parser.add_argument("--url", required=True, help="Endereço público da aplicação")
+    add_command_parser.add_argument("--nome", required=True, help="Nome público da iniciativa")
+    add_command_parser.add_argument(
+        "--categoria", required=True, choices=CATEGORIES, help="Eixo temático no catálogo"
     )
-    adicionar_parser.add_argument("--descricao", required=True, help="O que a ferramenta faz")
-    adicionar_parser.add_argument("--repositorio", default=None, help="URL pública do repositório git")
-    adicionar_parser.add_argument(
+    add_command_parser.add_argument("--descricao", required=True, help="O que a ferramenta faz")
+    add_command_parser.add_argument("--repositorio", default=None, help="URL pública do repositório git")
+    add_command_parser.add_argument(
         "--fontes-primarias", default=None, help="Órgãos públicos citados, separados por vírgula"
     )
-    adicionar_parser.add_argument(
+    add_command_parser.add_argument(
         "--tool-id", default=None, help="Identificador explícito (padrão: slug do nome)"
     )
-    adicionar_parser.add_argument(
+    add_command_parser.add_argument(
         "--ignorar-robots", action="store_true", help="Inclui mesmo quando o host proíbe a leitura"
     )
-    adicionar_parser.add_argument(
+    add_command_parser.add_argument(
         "--catalogo", default="data/data_iniciativas.json", help="Catálogo a atualizar"
     )
-    adicionar_parser.add_argument(
+    add_command_parser.add_argument(
         "--registro", default="data/retiradas.json", help="Registro de retiradas consultado"
     )
 
-    readmitir_parser = subparsers.add_parser(
+    readmit_command_parser = subparsers.add_parser(
         "readmitir", help="Registra a volta de uma iniciativa retirada e a devolve ao catálogo"
     )
-    readmitir_parser.add_argument("--url", required=True, help="Endereço da iniciativa a readmitir")
-    readmitir_parser.add_argument("--motivo", required=True, help="Motivo informado pelo solicitante")
-    readmitir_parser.add_argument(
+    readmit_command_parser.add_argument("--url", required=True, help="Endereço da iniciativa a readmitir")
+    readmit_command_parser.add_argument("--motivo", required=True, help="Motivo informado pelo solicitante")
+    readmit_command_parser.add_argument(
         "--solicitado-em", default=None, help="Data do pedido no formato AAAA-MM-DD (padrão: hoje)"
     )
-    readmitir_parser.add_argument("--canal", default="email", help="Origem do pedido")
-    readmitir_parser.add_argument(
+    readmit_command_parser.add_argument("--canal", default="email", help="Origem do pedido")
+    readmit_command_parser.add_argument(
         "--catalogo", default="data/data_iniciativas.json", help="Catálogo a atualizar"
     )
-    readmitir_parser.add_argument(
+    readmit_command_parser.add_argument(
         "--registro", default="data/retiradas.json", help="Registro de eventos a atualizar"
     )
 
-    privacy_parser = subparsers.add_parser("verify-privacy", help="Executa o portão de privacidade (LGPD)")
-    privacy_parser.add_argument(
+    privacy_command_parser = subparsers.add_parser(
+        "verify-privacy", help="Executa o portão de privacidade (LGPD)"
+    )
+    privacy_command_parser.add_argument(
         "--staged", action="store_true", help="Inspeciona apenas arquivos no stage do git"
     )
-    privacy_parser.add_argument(
+    privacy_command_parser.add_argument(
         "--all-files", action="store_true", help="Inspeciona todos os arquivos rastreados"
     )
 
@@ -520,18 +528,18 @@ def main() -> None:
         args.fetch_provider = "http"
         args.semantic = "off"
         args.max_bytes = 4_000_000
-        args.retiradas = "data/retiradas.json"
+        args.withdrawals = "data/retiradas.json"
 
     if args.command == "audit-all":
         sys.exit(cmd_audit_all(args))
     elif args.command == "verify-privacy":
         sys.exit(cmd_verify_privacy(args))
     elif args.command == "adicionar":
-        sys.exit(cmd_adicionar(args))
+        sys.exit(cmd_add(args))
     elif args.command == "retirar":
-        sys.exit(cmd_retirar(args))
+        sys.exit(cmd_withdraw(args))
     elif args.command == "readmitir":
-        sys.exit(cmd_readmitir(args))
+        sys.exit(cmd_readmit(args))
 
 
 if __name__ == "__main__":

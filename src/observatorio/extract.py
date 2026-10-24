@@ -143,10 +143,10 @@ def parse_page(html: str, max_text_chars: int = MAX_TEXT_CHARS) -> PageEvidence:
 
     meta: dict[str, str] = {}
     for tag in sopa.find_all("meta"):
-        chave = (tag.get("name") or tag.get("property") or "").strip().lower()
+        meta_key = (tag.get("name") or tag.get("property") or "").strip().lower()
         valor = (tag.get("content") or "").strip()
-        if chave and valor and chave not in meta:
-            meta[chave] = valor
+        if meta_key and valor and meta_key not in meta:
+            meta[meta_key] = valor
 
     input_names = [
         (tag.get("name") or "").strip().lower()
@@ -156,11 +156,11 @@ def parse_page(html: str, max_text_chars: int = MAX_TEXT_CHARS) -> PageEvidence:
 
     for tag in sopa(["script", "style", "noscript", "svg"]):
         tag.decompose()
-    texto_completo = " ".join(sopa.get_text(separator=" ").split())
+    full_text = " ".join(sopa.get_text(separator=" ").split())
     inline_completo = "\n".join(inline)
 
     return PageEvidence(
-        visible_text=texto_completo[:max_text_chars],
+        visible_text=full_text[:max_text_chars],
         script_srcs=script_srcs,
         inline_scripts=inline_completo[:max_text_chars],
         links=links,
@@ -169,8 +169,8 @@ def parse_page(html: str, max_text_chars: int = MAX_TEXT_CHARS) -> PageEvidence:
         rel_license=rel_license,
         resource_urls=resource_urls,
         comments=comentarios[:50],
-        text_chars_total=len(texto_completo),
-        text_truncated=len(texto_completo) > max_text_chars,
+        text_chars_total=len(full_text),
+        text_truncated=len(full_text) > max_text_chars,
         inline_scripts_truncated=len(inline_completo) > max_text_chars,
     )
 

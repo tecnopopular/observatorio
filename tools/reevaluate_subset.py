@@ -1,7 +1,7 @@
 """Reavalia um recorte do catálogo e compara com o laudo publicado.
 
 Uso:
-    uv run python tools/reavaliar_recorte.py --status rejeitado [--limite 10]
+    uv run python tools/reevaluate_subset.py --status rejeitado [--limite 10]
 
 Serve para medir o efeito de mudanças de heurística sobre avaliações já publicadas.
 """
@@ -14,8 +14,8 @@ from pathlib import Path
 from observatorio.engine import assign_tool_ids, run_batch_audit
 
 RAIZ = Path(__file__).resolve().parent.parent
-LAUDO = RAIZ / "dist" / "auditoria_iniciativas.json"
-CATALOGO = RAIZ / "data" / "data_iniciativas.json"
+REPORT = RAIZ / "dist" / "auditoria_iniciativas.json"
+CATALOG = RAIZ / "data" / "data_iniciativas.json"
 
 
 def main() -> None:
@@ -34,12 +34,12 @@ def main() -> None:
     parser.add_argument("--timeout", type=int, default=10)
     args = parser.parse_args()
 
-    if not LAUDO.exists():
-        raise SystemExit(f"laudo não encontrado: {LAUDO}\nGere o ciclo antes de reavaliar um recorte.")
-    antigos = json.loads(LAUDO.read_text(encoding="utf-8"))
-    catalogo = json.loads(CATALOGO.read_text(encoding="utf-8"))
-    assign_tool_ids(catalogo)
-    por_id = {item["_tool_id"]: item for item in catalogo}
+    if not REPORT.exists():
+        raise SystemExit(f"laudo não encontrado: {REPORT}\nGere o ciclo antes de reavaliar um recorte.")
+    antigos = json.loads(REPORT.read_text(encoding="utf-8"))
+    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    assign_tool_ids(catalog)
+    por_id = {item["_tool_id"]: item for item in catalog}
 
     alvo_ids = [r["tool_id"] for r in antigos if r["status"] == args.status]
     if args.limite:
@@ -52,10 +52,10 @@ def main() -> None:
     antes = {r["tool_id"]: r for r in antigos}
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
-        entrada = tmp / "cat.json"
-        entrada.write_text(json.dumps(alvos, ensure_ascii=False), encoding="utf-8")
+        entry = tmp / "cat.json"
+        entry.write_text(json.dumps(alvos, ensure_ascii=False), encoding="utf-8")
         novos = run_batch_audit(
-            input_file=entrada,
+            input_file=entry,
             output_file=tmp / "laudo.json",
             manifest_file=tmp / "estado.json",
             max_workers=8,

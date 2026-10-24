@@ -31,8 +31,8 @@ Rodam antes de qualquer resultado ser considerado válido, e no CI a cada push:
 ```bash
 uv run ruff format --check .
 uv run ruff check .
-uv run python tools/verificar_docstrings.py
-uv run python tools/verificar_codigo_morto.py
+uv run python tools/verify_docstrings.py
+uv run python tools/verify_dead_code.py
 uv run python -m unittest discover tests
 uv run python -m observatorio.cli verify-privacy --all-files
 ```
@@ -97,7 +97,7 @@ Esses números mudam a cada ciclo, e mudam por três motivos distintos: o conte�
 si; o que caracteriza erro é divergência sem nenhuma dessas três causas. Para comparar dois ciclos:
 
 ```bash
-uv run python tools/comparar_ciclos.py
+uv run python tools/compare_cycles.py
 ```
 
 O comando compara o laudo do ciclo atual com o manifesto gravado no último commit e informa o que
@@ -123,11 +123,11 @@ sites:
 gh release download v0.1.0
 sha256sum -c SHA256SUMS
 tar -xzf cache-html.tar.gz -C data/raw
-uv run python tools/verificar_cache.py
+uv run python tools/verify_cache.py
 uv run python -m observatorio.cli audit-all --refresh
 ```
 
-O portão `tools/verificar_cache.py` confronta cada corpo em cache com o hash registrado no
+O portão `tools/verify_cache.py` confronta cada corpo em cache com o hash registrado no
 manifesto. No ciclo de referência, 166 corpos foram conferidos, nenhum divergiu e 5 entradas ficaram
 fora por não terem hash registrado — são as não inspecionadas, que não produziram nota.
 

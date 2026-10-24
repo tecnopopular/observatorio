@@ -150,7 +150,7 @@ def changed_since(manifest: Manifest, reports: Iterable[CivicAuditReport]) -> li
 
 
 @dataclass(frozen=True)
-class ResultadoDoCache:
+class CacheCheck:
     """Resultado da conferência entre o manifesto de estado e o cache de HTML.
 
     Attributes:
@@ -166,7 +166,7 @@ class ResultadoDoCache:
     sem_hash: list[str]
 
     @property
-    def integro(self) -> bool:
+    def intact(self) -> bool:
         """Informa se o cache corresponde integralmente ao manifesto.
 
         Returns:
@@ -175,37 +175,37 @@ class ResultadoDoCache:
         return not self.divergentes and not self.ausentes
 
 
-def digest_do_arquivo(caminho: Path) -> str:
+def file_digest(path: Path) -> str:
     """Calcula o SHA-256 de um corpo gravado em disco, sem tradução de fim de linha.
 
     Ler o arquivo em modo texto converteria `\r\n` em `\n` e mudaria o hash de qualquer página
     servida com CRLF. O cache é corpo bruto: bytes entram, bytes saem.
 
     Args:
-        caminho: Arquivo de cache do corpo.
+        path: Arquivo de cache do corpo.
 
     Returns:
         Digest SHA-256 dos bytes gravados, em hexadecimal minúsculo.
     """
-    return hashlib.sha256(caminho.read_bytes()).hexdigest()
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def digest_do_corpo(texto: str) -> str:
+def body_digest(text: str) -> str:
     """Calcula o SHA-256 de um corpo lido da web, como o motor o registra.
 
     O motor hasheia o texto decodificado em UTF-8, e não os bytes recebidos na rede. Recalcular
     pela mesma via é o que permite comparar o cache com o manifesto sem reabrir conexão.
 
     Args:
-        texto: Corpo da página como lido do cache ou da rede.
+        text: Corpo da página como lido do cache ou da rede.
 
     Returns:
         Digest SHA-256 em hexadecimal minúsculo.
     """
-    return hashlib.sha256(texto.encode("utf-8")).hexdigest()
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def conferir_cache(manifest: Manifest, cache_dir: Path) -> ResultadoDoCache:
+def verify_cache(manifest: Manifest, cache_dir: Path) -> CacheCheck:
     """Confere se o cache de HTML reproduz os hashes registrados no manifesto.
 
     O manifesto afirma qual conteúdo foi avaliado; o cache guarda esse conteúdo. Quando os dois
@@ -224,20 +224,20 @@ def conferir_cache(manifest: Manifest, cache_dir: Path) -> ResultadoDoCache:
     ausentes: list[str] = []
     sem_hash: list[str] = []
 
-    for entrada in manifest.entries:
-        if not entrada.html_sha256:
-            sem_hash.append(entrada.tool_id)
+    for entry in manifest.entries:
+        if not entry.html_sha256:
+            sem_hash.append(entry.tool_id)
             continue
-        arquivo = cache_dir / f"{entrada.tool_id}.html"
-        if not arquivo.is_file():
-            ausentes.append(entrada.tool_id)
+        cache_file = cache_dir / f"{entry.tool_id}.html"
+        if not cache_file.is_file():
+            ausentes.append(entry.tool_id)
             continue
-        if digest_do_arquivo(arquivo) == entrada.html_sha256:
+        if file_digest(cache_file) == entry.html_sha256:
             conferidos += 1
         else:
-            divergentes.append(entrada.tool_id)
+            divergentes.append(entry.tool_id)
 
-    return ResultadoDoCache(
+    return CacheCheck(
         conferidos=conferidos,
         divergentes=sorted(divergentes),
         ausentes=sorted(ausentes),

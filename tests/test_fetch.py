@@ -105,13 +105,13 @@ class TestHttpFetcher(unittest.TestCase):
 
     def test_sucesso_mede_status_e_bytes(self):
         """Aquisição bem-sucedida registra código, tamanho em bytes e provedor."""
-        corpo = b"<html><body>ok</body></html>"
-        with patch("urllib.request.urlopen", return_value=_FakeResponse(corpo, 200)):
+        body = b"<html><body>ok</body></html>"
+        with patch("urllib.request.urlopen", return_value=_FakeResponse(body, 200)):
             resultado = HttpFetcher().fetch("https://exemplo.org")
         self.assertTrue(resultado.ok)
         self.assertEqual(resultado.status_code, 200)
-        self.assertEqual(resultado.content_bytes, len(corpo))
-        self.assertEqual(resultado.html, corpo.decode())
+        self.assertEqual(resultado.content_bytes, len(body))
+        self.assertEqual(resultado.html, body.decode())
         self.assertEqual(resultado.provider, "http")
 
     def test_falha_de_rede_devolve_erro_sem_excecao(self):
@@ -136,11 +136,11 @@ class TestFirecrawlFetcher(unittest.TestCase):
         Returns:
             Gerenciador de contexto que substitui `httpx.Client`.
         """
-        resposta = MagicMock()
-        resposta.status_code = status_code
-        resposta.json.return_value = payload
+        response = MagicMock()
+        response.status_code = status_code
+        response.json.return_value = payload
         cliente = MagicMock()
-        cliente.post.return_value = resposta
+        cliente.post.return_value = response
         contexto = MagicMock()
         contexto.__enter__.return_value = cliente
         contexto.__exit__.return_value = False
@@ -326,10 +326,10 @@ class TestTruncamentoNaAquisicao(unittest.TestCase):
 
     def test_content_length_maior_que_leitura_marca_truncado(self):
         """Content-Length acima do corpo recebido marca a leitura como parcial."""
-        corpo = b"x" * 50
-        resposta = _FakeResponse(corpo, 200)
-        resposta.headers = {"Content-Length": "5000"}
-        with patch("urllib.request.urlopen", return_value=resposta):
+        body = b"x" * 50
+        response = _FakeResponse(body, 200)
+        response.headers = {"Content-Length": "5000"}
+        with patch("urllib.request.urlopen", return_value=response):
             resultado = HttpFetcher(max_bytes=50).fetch("https://exemplo.org")
         self.assertTrue(resultado.truncated)
         self.assertEqual(resultado.declared_bytes, 5000)
@@ -337,10 +337,10 @@ class TestTruncamentoNaAquisicao(unittest.TestCase):
 
     def test_resposta_chunked_tambem_detecta_corte(self):
         """Sem Content-Length, o corte precisa ser detectado pelo byte excedente lido."""
-        corpo = b"x" * 51
-        resposta = _FakeResponse(corpo, 200)
-        resposta.headers = {}
-        with patch("urllib.request.urlopen", return_value=resposta):
+        body = b"x" * 51
+        response = _FakeResponse(body, 200)
+        response.headers = {}
+        with patch("urllib.request.urlopen", return_value=response):
             resultado = HttpFetcher(max_bytes=50).fetch("https://exemplo.org")
         self.assertTrue(resultado.truncated)
         self.assertIsNone(resultado.declared_bytes)
@@ -348,13 +348,13 @@ class TestTruncamentoNaAquisicao(unittest.TestCase):
 
     def test_pagina_inteira_nao_marca_truncado(self):
         """Página menor que o limite não pode ser declarada truncada."""
-        corpo = b"<html>ok</html>"
-        resposta = _FakeResponse(corpo, 200)
-        resposta.headers = {"Content-Length": str(len(corpo))}
-        with patch("urllib.request.urlopen", return_value=resposta):
+        body = b"<html>ok</html>"
+        response = _FakeResponse(body, 200)
+        response.headers = {"Content-Length": str(len(body))}
+        with patch("urllib.request.urlopen", return_value=response):
             resultado = HttpFetcher(max_bytes=50).fetch("https://exemplo.org")
         self.assertFalse(resultado.truncated)
-        self.assertEqual(resultado.declared_bytes, len(corpo))
+        self.assertEqual(resultado.declared_bytes, len(body))
 
 
 if __name__ == "__main__":

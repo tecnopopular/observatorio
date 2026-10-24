@@ -14,9 +14,9 @@ import re
 import unicodedata
 from urllib.parse import urlsplit
 
-from .retiradas import chave
+from .withdrawals import url_key
 
-CATEGORIAS = (
+CATEGORIES = (
     "Dados e Mapas",
     "Informação e Persuasão",
     "Plataformas e Mobilização",
@@ -26,7 +26,7 @@ CATEGORIAS = (
     "Abstenção e Virada",
 )
 
-ESQUEMAS_ACEITOS = ("http", "https")
+ACCEPTED_SCHEMES = ("http", "https")
 
 
 def slugify(text: str) -> str:
@@ -45,7 +45,7 @@ def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", normalized.lower()).strip("-")
 
 
-def sem_fragmento(url: str) -> str:
+def strip_fragment(url: str) -> str:
     """Remove o fragmento de um endereço, que nunca é enviado ao servidor.
 
     `https://exemplo.org/#painel` e `https://exemplo.org` são a mesma página: o fragmento é
@@ -61,7 +61,7 @@ def sem_fragmento(url: str) -> str:
     return url.strip().split("#", 1)[0]
 
 
-def extrair_dominio(url: str) -> str:
+def extract_domain(url: str) -> str:
     """Extrai o domínio de um endereço público.
 
     Args:
@@ -73,35 +73,35 @@ def extrair_dominio(url: str) -> str:
     return urlsplit(url.strip()).netloc.lower()
 
 
-def ids_em_uso(catalogo: list[dict]) -> set[str]:
+def ids_in_use(catalog: list[dict]) -> set[str]:
     """Devolve todos os `tool_id` que o catálogo ocupa, inclusive os derivados do nome.
 
     A simulação passa por `assign_tool_ids` porque entradas antigas, sem `tool_id` gravado,
     recebem sufixo numérico quando o nome se repete — e esse sufixo também está ocupado.
 
     Args:
-        catalogo: Registros do catálogo.
+        catalog: Registros do catálogo.
 
     Returns:
         Conjunto de identificadores já atribuídos, sem modificar o catálogo recebido.
     """
-    copia = [dict(item) for item in catalogo]
+    copia = [dict(item) for item in catalog]
     assign_tool_ids(copia)
     return {item["_tool_id"] for item in copia}
 
 
-def novo_tool_id(nome: str, catalogo: list[dict]) -> str:
+def new_tool_id(nome: str, catalog: list[dict]) -> str:
     """Propõe um `tool_id` livre a partir do nome, sem colidir com o catálogo.
 
     Args:
         nome: Nome público da iniciativa.
-        catalogo: Registros do catálogo onde o identificador precisa ser inédito.
+        catalog: Registros do catálogo onde o identificador precisa ser inédito.
 
     Returns:
         Slug derivado do nome, com sufixo numérico quando o slug já está em uso.
     """
     base = slugify(nome)
-    ocupados = ids_em_uso(catalogo)
+    ocupados = ids_in_use(catalog)
     if base not in ocupados:
         return base
     sufixo = 2
@@ -138,7 +138,7 @@ def assign_tool_ids(targets: list[dict]) -> list[tuple]:
     return colisoes
 
 
-def validar_catalogo(catalogo: list[dict]) -> list[str]:
+def validate_catalog(catalog: list[dict]) -> list[str]:
     """Verifica se o catálogo pode entrar em um ciclo de auditoria.
 
     Checa apenas o que quebraria o ciclo ou publicaria laudo enganoso: entrada sem nome ou URL,
@@ -147,7 +147,7 @@ def validar_catalogo(catalogo: list[dict]) -> list[str]:
     porque a auditoria de uma iniciativa sem descrição continua sendo possível.
 
     Args:
-        catalogo: Registros do catálogo como lidos do disco.
+        catalog: Registros do catálogo como lidos do disco.
 
     Returns:
         Lista de problemas encontrados, vazia quando o catálogo está utilizável.
@@ -156,7 +156,7 @@ def validar_catalogo(catalogo: list[dict]) -> list[str]:
     vistos_endereco: dict[str, int] = {}
     vistos_id: dict[str, int] = {}
 
-    for posicao, item in enumerate(catalogo, start=1):
+    for posicao, item in enumerate(catalog, start=1):
         if not isinstance(item, dict):
             problemas.append(f"registro {posicao}: não é um objeto")
             continue
@@ -172,16 +172,16 @@ def validar_catalogo(catalogo: list[dict]) -> list[str]:
             continue
 
         esquema = urlsplit(url).scheme.lower()
-        if esquema not in ESQUEMAS_ACEITOS:
+        if esquema not in ACCEPTED_SCHEMES:
             problemas.append(f"{rotulo}: URL sem esquema http/https ({url})")
 
-        alvo = chave(url)
+        alvo = url_key(url)
         if alvo in vistos_endereco:
             problemas.append(f"{rotulo}: mesmo endereço do registro {vistos_endereco[alvo]} ({url})")
         vistos_endereco.setdefault(alvo, posicao)
 
         categoria = item.get("categoria")
-        if categoria and categoria not in CATEGORIAS:
+        if categoria and categoria not in CATEGORIES:
             problemas.append(f"{rotulo}: categoria fora da lista conhecida ({categoria})")
 
         identificador = str(item.get("tool_id") or "").strip()
@@ -195,7 +195,7 @@ def validar_catalogo(catalogo: list[dict]) -> list[str]:
     return problemas
 
 
-def validar_entrada(entrada: dict, catalogo: list[dict]) -> list[str]:
+def validate_entry(entry: dict, catalog: list[dict]) -> list[str]:
     """Verifica uma entrada nova antes de acrescentá-la ao catálogo.
 
     É mais exigente que `validar_catalogo`: uma inclusão precisa de categoria conhecida, descrição
@@ -203,44 +203,44 @@ def validar_entrada(entrada: dict, catalogo: list[dict]) -> list[str]:
     dimensão de enquadramento lê o propósito declarado da ferramenta.
 
     Args:
-        entrada: Registro proposto.
-        catalogo: Catálogo onde ele seria acrescentado.
+        entry: Registro proposto.
+        catalog: Catálogo onde ele seria acrescentado.
 
     Returns:
         Lista de problemas encontrados, vazia quando a entrada pode ser gravada.
     """
-    problemas = validar_catalogo([entrada])
+    problemas = validate_catalog([entry])
 
-    categoria = entrada.get("categoria")
+    categoria = entry.get("categoria")
     if not categoria:
         problemas.append("entrada sem categoria")
-    descricao = str(entrada.get("descricao") or "").strip()
+    descricao = str(entry.get("descricao") or "").strip()
     if len(descricao) < 20:
         problemas.append("descrição ausente ou curta demais: escreva o que a ferramenta faz")
 
-    identificador = str(entrada.get("tool_id") or "").strip()
+    identificador = str(entry.get("tool_id") or "").strip()
     if not identificador:
         problemas.append("entrada sem tool_id")
     elif identificador != slugify(identificador):
         problemas.append(f"tool_id fora do padrão de slug: {identificador}")
-    elif identificador in ids_em_uso(catalogo):
+    elif identificador in ids_in_use(catalog):
         problemas.append(f"tool_id já usado no catálogo: {identificador}")
 
-    alvo = chave(str(entrada.get("url") or ""))
-    if any(chave(str(item.get("url") or "")) == alvo for item in catalogo):
-        problemas.append(f"endereço já consta do catálogo: {entrada.get('url')}")
+    alvo = url_key(str(entry.get("url") or ""))
+    if any(url_key(str(item.get("url") or "")) == alvo for item in catalog):
+        problemas.append(f"endereço já consta do catálogo: {entry.get('url')}")
 
     return problemas
 
 
-def acrescentar(catalogo: list[dict], entrada: dict) -> list[dict]:
+def append_entry(catalog: list[dict], entry: dict) -> list[dict]:
     """Devolve o catálogo com a entrada nova ao final.
 
     Args:
-        catalogo: Registros do catálogo.
-        entrada: Registro validado a acrescentar.
+        catalog: Registros do catálogo.
+        entry: Registro validado a acrescentar.
 
     Returns:
         Nova lista de registros, com a entrada ao final.
     """
-    return [*catalogo, dict(entrada)]
+    return [*catalog, dict(entry)]

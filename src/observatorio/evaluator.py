@@ -272,11 +272,11 @@ class CivicEvaluator:
         total_score = sum(ds.weighted_score for ds in dim_scores.values())
         has_critical = len(crit_blockers) > 0
 
-        nota_publicavel: float | None = round(total_score, 1)
+        publishable_score: float | None = round(total_score, 1)
         if not inspected:
-            status = AuditLevel.NAO_INSPECIONADO
+            status = AuditLevel.NOT_INSPECTED
             badge_label = "Não Inspecionado (sem leitura útil)"
-            nota_publicavel = None
+            publishable_score = None
         elif has_critical:
             status = AuditLevel.REJEITADO
             badge_label = "Bloqueador Crítico de Privacidade"
@@ -295,7 +295,7 @@ class CivicEvaluator:
             target_url=target_url,
             status=status,
             badge_label=badge_label,
-            total_score=nota_publicavel,
+            total_score=publishable_score,
             dim_scores=dim_scores,
             critical_blockers=crit_blockers,
         )
@@ -306,7 +306,7 @@ class CivicEvaluator:
             target_url=target_url,
             evaluated_at=datetime.now(UTC),
             status=status,
-            total_score=nota_publicavel,
+            total_score=publishable_score,
             html_sha256=html_sha256,
             archive_url=archive_url,
             has_critical_blocker=has_critical,
@@ -426,14 +426,14 @@ class CivicEvaluator:
         limitacoes = self._coverage_limitations(coverage)
         if not limitacoes:
             return
-        for dimensao, score in dim_scores.items():
+        for dimension, score in dim_scores.items():
             aplicaveis = [
-                limitacoes[chave] for chave in self.SCOPE_DEPENDENCY.get(dimensao, ()) if chave in limitacoes
+                limitacoes[key] for key in self.SCOPE_DEPENDENCY.get(dimension, ()) if key in limitacoes
             ]
             if not aplicaveis:
                 continue
             prefixo = (
-                "Inspeção parcial" if dimensao == DimensionType.ACESSIBILIDADE_DESEMPENHO else "Ressalva"
+                "Inspeção parcial" if dimension == DimensionType.ACESSIBILIDADE_DESEMPENHO else "Ressalva"
             )
             score.findings.append(f"{prefixo}: cobertura incompleta — {'; '.join(aplicaveis)}.")
 

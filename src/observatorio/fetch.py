@@ -456,10 +456,10 @@ def fetch_with_fallback(
     Returns:
         Primeiro `FetchResult` com sucesso, ou o último resultado obtido.
     """
-    ultimo = FetchResult(url=url, provider="none", error="nenhum provedor configurado")
+    last = FetchResult(url=url, provider="none", error="nenhum provedor configurado")
     for fetcher in fetchers:
         resultado = fetcher.fetch(url)
         if resultado.ok:
             return resultado
-        ultimo = resultado
-    return ultimo
+        last = resultado
+    return last

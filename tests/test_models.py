@@ -43,7 +43,7 @@ class TestObservatorioModels(unittest.TestCase):
             tool_id="radar-da-virada",
             nome="Radar da Virada",
             url="https://radardavirada.pages.dev",
-            dominio="radardavirada.pages.dev",
+            domain="radardavirada.pages.dev",
             categoria="Dados e Mapas",
             descricao="Painel visual de acompanhamento da movimentação eleitoral.",
             repositorio="https://github.com/exemplo/radar",

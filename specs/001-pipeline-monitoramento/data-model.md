@@ -271,7 +271,7 @@ class AuditLevel(str, Enum):
     AUDITADO = "auditado"
     EM_REVISAO = "em_revisao"
     REJEITADO = "rejeitado"
-    NAO_INSPECIONADO = "nao_inspecionado"
+    NOT_INSPECTED = "nao_inspecionado"
 
 
 class DimensionType(str, Enum):
@@ -309,7 +309,7 @@ O manifesto omite `summary_markdown` e o texto de `guidance`, que são derivados
 
 ---
 
-### 2.10 `EventoDeRetirada` e `RegistroDeRetiradas` — histórico de saída e volta
+### 2.10 `WithdrawalEvent` e `WithdrawalRegistry` — histórico de saída e volta
 
 ```json
 {

@@ -128,6 +128,33 @@ Garantias da camada de aquisição:
 
 O laudo registra o provedor efetivo e o status HTTP em `performance.fetch_provider` e `performance.http_status`.
 
+### Provedor de aquisição: HTTP direto ou Firecrawl
+
+O ciclo padrão lê as páginas por HTTP direto, sem chave e sem serviço externo. O Firecrawl é
+opcional, escolhido com `--fetch-provider firecrawl` ou pelo campo `provider` no disparo manual do
+workflow.
+
+Medição em 2026-10-24, amostra de 30 iniciativas do acervo, os dois provedores sobre os mesmos
+endereços:
+
+| Medida | HTTP direto | Firecrawl |
+| :--- | :--- | :--- |
+| Endereços com texto extraível | 29 de 30 | 16 de 30 |
+| Falhas de aquisição | 1 | 14, todas HTTP 429 |
+| Texto extraído (mediana) | 4.441 caracteres | 320 caracteres |
+| Leitura 20% maior que a do outro provedor | — | 11 endereços, até 9.156 para 58.589 caracteres |
+| Nota final | — | mediana -1,5 ponto; 14 de 15 notas comparáveis mudaram |
+
+O Firecrawl renderiza JavaScript e por isso enxerga conteúdo que o HTTP direto não vê. O limite, com
+a chave atual, é de cota: a partir de cerca de quinze requisições seguidas o serviço responde 429, o
+que torna a varredura do acervo inteiro inviável por essa via.
+
+A consequência metodológica importa mais que a operacional: **as duas vias não medem a mesma coisa**.
+Trocar de provedor muda nota (14 de 15 casos comparáveis), então um laudo produzido com Firecrawl não
+é comparável a um laudo produzido com HTTP direto, e misturar os dois no mesmo acervo criaria uma
+série temporal incoerente. Por isso o padrão é HTTP direto, e o provedor externo é escolha explícita,
+registrada no log do ciclo e no disparo do workflow.
+
 ### Consulta de `robots.txt`
 
 Antes de ler uma página, o observatório consulta o `robots.txt` do host, uma vez por ciclo, e
@@ -135,7 +162,7 @@ aplica as regras ao seu próprio User-Agent. Se o site proíbe a leitura, **a in
 laudo**: ela permanece no catálogo, sem diagnóstico, e o ciclo informa quantas foram puladas.
 
 A decisão de consultar foi tomada depois de medir o efeito sobre o acervo
-(`tools/medir_robots.py`, 170 hosts, 175 iniciativas no momento da medição):
+(`tools/measure_robots.py`, 170 hosts, 175 iniciativas no momento da medição):
 
 | Situação | Iniciativas |
 | :--- | ---: |
@@ -306,9 +333,9 @@ Com `--semantic off` (padrão), o motor é 100% determinístico e nenhuma chamad
 
 | Ferramenta | Para quê |
 | :--- | :--- |
-| `uv run python tools/verificar_cache.py` | Confere se o cache de HTML reproduz os hashes do manifesto — é o que sustenta recalcular as notas offline |
-| `uv run python tools/comparar_ciclos.py` | Compara o laudo publicado (git `HEAD`) com o ciclo atual em `dist/`: mudanças de status, selos perdidos/ganhos e laudos sem leitura |
-| `uv run python tools/reavaliar_recorte.py --status rejeitado` | Reaudita um recorte do catálogo e mostra quais status mudaram |
+| `uv run python tools/verify_cache.py` | Confere se o cache de HTML reproduz os hashes do manifesto — é o que sustenta recalcular as notas offline |
+| `uv run python tools/compare_cycles.py` | Compara o laudo publicado (git `HEAD`) com o ciclo atual em `dist/`: mudanças de status, selos perdidos/ganhos e laudos sem leitura |
+| `uv run python tools/reevaluate_subset.py --status rejeitado` | Reaudita um recorte do catálogo e mostra quais status mudaram |
 
 As duas leem apenas artefatos reais e falham com mensagem explícita quando o laudo não existe —
 nenhuma inventa um ciclo a partir de dados em `/tmp`.
@@ -321,8 +348,8 @@ Quatro portões rodam em `uv run python -m unittest discover tests` e no CI, ant
 | :--- | :--- | :--- |
 | Lint | `uv run ruff check .` | importação órfã, nome indefinido, variável não usada, erro de exceção sem `from` |
 | Formatação | `uv run ruff format --check .` | divergência de estilo entre arquivos |
-| Código morto | `uv run python tools/verificar_codigo_morto.py` | função, método, classe, importação ou constante sem consumidor |
-| Docstrings | `uv run python tools/verificar_docstrings.py` | função sem docstring Google e comentário `#` residual |
+| Código morto | `uv run python tools/verify_dead_code.py` | função, método, classe, importação ou constante sem consumidor |
+| Docstrings | `uv run python tools/verify_docstrings.py` | função sem docstring Google e comentário `#` residual |
 
 `ruff` e `vulture` são dependências do grupo `dev` e entram com `uv sync`.
 
