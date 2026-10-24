@@ -1516,5 +1516,15 @@
     "fontes_primarias": [
       "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-751-de-26-de-fevereiro-de-2026"
     ]
+  },
+  {
+    "nome": "Politicômetro",
+    "tool_id": "politicometro",
+    "url": "https://www.politicometro.org",
+    "dominio": "www.politicometro.org",
+    "adicionado_em": "2026-10-24",
+    "fontes_primarias": [
+      "https://dadosabertos.camara.leg.br/swagger/api.html"
+    ]
   }
 ]
