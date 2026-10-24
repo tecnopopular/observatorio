@@ -143,7 +143,7 @@ endereços:
 | Falhas de aquisição | 1 | 14, todas HTTP 429 |
 | Texto extraído (mediana) | 4.441 caracteres | 320 caracteres |
 | Leitura 20% maior que a do outro provedor | — | 11 endereços, até 9.156 para 58.589 caracteres |
-| Nota final | — | mediana -1,5 ponto; 14 de 15 notas comparáveis mudaram |
+| Nota final | — | mediana -1,5 ponto, entre -19,6 e +7,7; 14 de 15 notas comparáveis mudaram |
 
 O Firecrawl renderiza JavaScript e por isso enxerga conteúdo que o HTTP direto não vê. O limite, com
 a chave atual, é de cota: a partir de cerca de quinze requisições seguidas o serviço responde 429, o
