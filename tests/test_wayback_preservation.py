@@ -444,6 +444,38 @@ class TestIndiceDoWayback(unittest.TestCase):
 
         self.assertIsNone(find_snapshot("https://exemplo.org/"))
 
+    @patch("urllib.request.urlopen")
+    def test_indice_de_disponibilidade_sem_resposta_cai_no_cdx(self, mock_urlopen: MagicMock) -> None:
+        """Índice de disponibilidade vazio não encerra a busca: o CDX ainda é consultado.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        respostas = [
+            resposta(json.dumps({"archived_snapshots": {}})),
+            resposta('[["timestamp","statuscode"],["20261012011651","200"]]'),
+        ]
+        mock_urlopen.return_value.__enter__.side_effect = respostas
+
+        self.assertEqual(
+            find_snapshot("https://exemplo.org/"),
+            "https://web.archive.org/web/20261012011651/https://exemplo.org/",
+        )
+
+    @patch("urllib.request.urlopen")
+    def test_sem_captura_em_nenhum_indice_devolve_nulo(self, mock_urlopen: MagicMock) -> None:
+        """Endereço sem captura em nenhum dos índices devolve nulo.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        mock_urlopen.return_value.__enter__.side_effect = [
+            resposta(json.dumps({"archived_snapshots": {}})),
+            resposta("[]"),
+        ]
+
+        self.assertIsNone(find_snapshot("https://exemplo.org/"))
+
 
 if __name__ == "__main__":
     unittest.main()

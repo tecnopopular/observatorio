@@ -31,6 +31,10 @@ from .models import ArchiveStatus
 
 SAVE_ENDPOINT = "https://web.archive.org/save"
 AVAILABILITY_ENDPOINT = "https://archive.org/wayback/available?url={target}"
+CDX_ENDPOINT = (
+    "https://web.archive.org/cdx/search/cdx?url={target}&output=json&fl=timestamp,statuscode"
+    "&limit=-1&filter=statuscode:200"
+)
 STATUS_ENDPOINT = "https://web.archive.org/save/status/{job_id}"
 SNAPSHOT_ENDPOINT = "https://web.archive.org/web/{timestamp}/{target}"
 JOB_PATTERN = re.compile(r"spn2-[a-z0-9]+")
@@ -337,8 +341,9 @@ def find_snapshot(target_url: str, timeout: int = 15) -> str | None:
     """Consulta o índice público do Wayback pelo snapshot mais próximo do endereço.
 
     Serve para reaproveitar captura que já existe — inclusive a feita por terceiros — em vez de
-    gastar uma submissão. O índice é consultado sem autenticação; quando ele responde com limite
-    de requisições, a resposta é ausência de endereço, e não erro do ciclo.
+    gastar uma submissão. Consulta primeiro o índice de disponibilidade e, quando ele não
+    responde, o CDX; os dois são públicos e nenhum deles exige autenticação. Limite de
+    requisições aqui significa ausência de endereço, e não erro do ciclo.
 
     Args:
         target_url: Endereço público procurado.
@@ -361,12 +366,47 @@ def find_snapshot(target_url: str, timeout: int = 15) -> str | None:
     except json.JSONDecodeError:
         return None
     mais_proximo = (dados.get("archived_snapshots") or {}).get("closest") or {}
-    if not mais_proximo.get("available"):
+    if mais_proximo.get("available"):
+        endereco = str(mais_proximo.get("url") or "")
+        if endereco:
+            return endereco.replace("http://web.archive.org/", "https://web.archive.org/")
+    return _ultima_captura_no_cdx(target_url, timeout=timeout)
+
+
+def _ultima_captura_no_cdx(target_url: str, timeout: int = 15) -> str | None:
+    """Procura a última captura bem-sucedida no índice CDX.
+
+    O índice de disponibilidade não responde para todo endereço que tem captura — medido em
+    2026-10-24 com três páginas que o CDX listava e ele não. Por isso a consulta ao CDX é o
+    segundo caminho, e não uma duplicação: sem ela, um snapshot existente seria registrado como
+    inexistente.
+
+    Args:
+        target_url: Endereço público procurado.
+        timeout: Tempo limite da consulta, em segundos.
+
+    Returns:
+        Endereço perene da última captura, ou None quando não há captura ou a consulta falha.
+    """
+    alvo = urllib.parse.quote(target_url, safe="")
+    pedido = urllib.request.Request(
+        CDX_ENDPOINT.format(target=alvo), headers={"User-Agent": INSTITUTIONAL_USER_AGENT}
+    )
+    try:
+        with urllib.request.urlopen(pedido, timeout=timeout) as resposta:
+            corpo = resposta.read(400_000).decode("utf-8", "ignore")
+    except Exception:
         return None
-    endereco = str(mais_proximo.get("url") or "")
-    if not endereco:
+    try:
+        linhas = json.loads(corpo)
+    except json.JSONDecodeError:
         return None
-    return endereco.replace("http://web.archive.org/", "https://web.archive.org/")
+    if not isinstance(linhas, list) or len(linhas) < 2:
+        return None
+    carimbo = str(linhas[-1][0])
+    if not carimbo.isdigit() or len(carimbo) != 14:
+        return None
+    return snapshot_url(carimbo, target_url)
 
 
 def _reason_text(erro: Exception) -> str:
