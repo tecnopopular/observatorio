@@ -55,7 +55,7 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
             manifest_file=Path(args.manifest),
             semantic=args.semantic,
             max_bytes=args.max_bytes,
-            withdrawals_file=Path(args.withdrawals),
+            withdrawals_file=Path(args.retiradas),
         )
         return 0
     except Exception as e:
@@ -138,8 +138,8 @@ def cmd_withdraw(args: argparse.Namespace) -> int:
         0 quando a retirada é registrada; 1 quando o endereço não consta do catálogo, já consta do
         registro, a data informada é inválida ou o motivo traz dado pessoal que seria publicado.
     """
-    catalog_path = Path(args.catalog)
-    registry_path = Path(args.registry)
+    catalog_path = Path(args.catalogo)
+    registry_path = Path(args.registro)
 
     if not catalog_path.is_file():
         print(f"[-] Catálogo não encontrado: {catalog_path}", file=sys.stderr)
@@ -219,8 +219,8 @@ def cmd_readmit(args: argparse.Namespace) -> int:
         catálogo, a retirada não guardou a entrada original, a data é inválida ou o motivo traz
         dado pessoal que seria publicado.
     """
-    catalog_path = Path(args.catalog)
-    registry_path = Path(args.registry)
+    catalog_path = Path(args.catalogo)
+    registry_path = Path(args.registro)
 
     if not catalog_path.is_file():
         print(f"[-] Catálogo não encontrado: {catalog_path}", file=sys.stderr)
@@ -303,7 +303,7 @@ def cmd_add(args: argparse.Namespace) -> int:
         0 quando a iniciativa é incluída; 1 quando o endereço já existe, o host proíbe a leitura,
         a entrada é inválida ou o texto traz dado pessoal que seria publicado.
     """
-    catalog_path = Path(args.catalog)
+    catalog_path = Path(args.catalogo)
     if not catalog_path.is_file():
         print(f"[-] Catálogo não encontrado: {catalog_path}", file=sys.stderr)
         return 1
@@ -316,7 +316,7 @@ def cmd_add(args: argparse.Namespace) -> int:
         print(f"[-] Endereço já consta do catálogo: {url}", file=sys.stderr)
         return 1
 
-    registry = load(Path(args.registry))
+    registry = load(Path(args.registro))
     if is_withdrawn(url, registry):
         print(f"[-] Endereço consta do registro como retirado: {url}", file=sys.stderr)
         print("[*] Use o subcomando readmitir para devolvê-lo ao catálogo.", file=sys.stderr)
@@ -533,7 +533,7 @@ def main() -> None:
         args.timeout = 8
         args.semantic = "off"
         args.max_bytes = 4_000_000
-        args.withdrawals = "data/retiradas.json"
+        args.retiradas = "data/retiradas.json"
 
     if args.command == "audit-all":
         sys.exit(cmd_audit_all(args))

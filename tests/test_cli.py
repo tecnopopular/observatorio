@@ -5,10 +5,38 @@ pegaria isso: a esteira roda, o parser é que não abre. Aqui cada subcomando é
 analisado sem executar nada.
 """
 
+import ast
 import unittest
+from pathlib import Path
 
+from observatorio import cli
 from observatorio.catalog import CATEGORIES
 from observatorio.cli import build_parser
+
+SUBCOMANDO_DE = {
+    "cmd_audit_all": "audit-all",
+    "cmd_add": "adicionar",
+    "cmd_withdraw": "retirar",
+    "cmd_readmit": "readmitir",
+    "cmd_verify_privacy": "verify-privacy",
+}
+
+LINHA_MINIMA = {
+    "audit-all": [],
+    "adicionar": [
+        "--url",
+        "https://exemplo.org",
+        "--nome",
+        "X",
+        "--categoria",
+        CATEGORIES[0],
+        "--descricao",
+        "d" * 25,
+    ],
+    "retirar": ["--url", "https://exemplo.org", "--motivo", "pedido"],
+    "readmitir": ["--url", "https://exemplo.org", "--motivo", "volta"],
+    "verify-privacy": [],
+}
 
 
 class TestParser(unittest.TestCase):
@@ -61,6 +89,31 @@ class TestParser(unittest.TestCase):
         )
         self.assertEqual(retirada.registro, "data/retiradas.json")
         self.assertEqual(readmissao.registro, retirada.registro)
+
+    def test_todo_atributo_usado_existe_no_namespace(self):
+        """Cada `args.x` lido por um subcomando precisa existir no parser daquele subcomando.
+
+        Renomear um destino de argumento sem acompanhar o uso gera `AttributeError` só em tempo de
+        execução, e só no caminho daquele comando. Este teste confronta o código com o parser.
+        """
+        arvore = ast.parse(Path(cli.__file__).read_text(encoding="utf-8"))
+        problemas = {}
+        for no in arvore.body:
+            if not isinstance(no, ast.FunctionDef) or no.name not in SUBCOMANDO_DE:
+                continue
+            usados = {
+                atributo.attr
+                for atributo in ast.walk(no)
+                if isinstance(atributo, ast.Attribute)
+                and isinstance(atributo.value, ast.Name)
+                and atributo.value.id == "args"
+            }
+            comando = SUBCOMANDO_DE[no.name]
+            args = self.parser.parse_args([comando, *LINHA_MINIMA[comando]])
+            faltando = usados - set(vars(args))
+            if faltando:
+                problemas[no.name] = sorted(faltando)
+        self.assertEqual(problemas, {})
 
     def test_verify_privacy_abre(self):
         """O portão de privacidade continua disponível como subcomando."""
