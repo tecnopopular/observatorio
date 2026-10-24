@@ -1572,5 +1572,12 @@
     "url": "https://naosemeta.com.br",
     "dominio": "naosemeta.com.br",
     "adicionado_em": "2026-10-24"
+  },
+  {
+    "nome": "Alquimídia",
+    "tool_id": "alquimidia",
+    "url": "https://alquimidia.org",
+    "dominio": "alquimidia.org",
+    "adicionado_em": "2026-10-24"
   }
 ]
