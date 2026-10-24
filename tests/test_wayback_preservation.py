@@ -476,6 +476,22 @@ class TestIndiceDoWayback(unittest.TestCase):
 
         self.assertIsNone(find_snapshot("https://exemplo.org/"))
 
+    @patch("urllib.request.urlopen")
+    def test_falha_de_rede_traz_causa_real(self, mock_urlopen: MagicMock) -> None:
+        """O motivo registra a causa interna, e não o nome genérico da exceção do urllib.
+
+        Args:
+            mock_urlopen: Substituto do transporte injetado pelo `patch`.
+        """
+        mock_urlopen.side_effect = urllib.error.URLError(
+            ConnectionResetError(104, "Connection reset by peer")
+        )
+
+        resultado = submit_archive("https://exemplo.org/", timeout=5)
+
+        self.assertEqual(resultado.status, "failed")
+        self.assertIn("Connection reset", resultado.detail or "")
+
 
 if __name__ == "__main__":
     unittest.main()

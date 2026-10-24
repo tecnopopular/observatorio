@@ -187,7 +187,7 @@ def submit_archive(target_url: str, timeout: int = 15) -> ArchiveOutcome:
     except urllib.error.HTTPError as erro:
         return _outcome_from_http_error(erro)
     except Exception as erro:
-        return ArchiveOutcome(status="failed", detail=f"falha de rede na submissão: {type(erro).__name__}")
+        return ArchiveOutcome(status="failed", detail=f"falha de rede na submissão: {_reason_text(erro)}")
 
     resposta_json = _json_da_submissao(corpo, target_url)
     if resposta_json is not None:

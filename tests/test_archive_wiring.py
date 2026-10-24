@@ -181,6 +181,20 @@ class TestFaseDePreservacao(unittest.TestCase):
         self.assertEqual(mock_submit.call_count, 1)
         self.assertEqual(relatorios[0].archive_status, "refused")
 
+    def test_endereco_do_manifesto_e_herdado(self) -> None:
+        """Conteúdo inalterado herda o endereço já preservado, em vez de ficar sem estado."""
+        relatorios = [laudo("painel")]
+        manifesto = {"painel": entrada("https://web.archive.org/web/20261024213206/https://painel.org/")}
+        with patch("observatorio.engine.submit_archive") as mock_submit:
+            _preserve(relatorios, manifesto, skip_archive=False, limit=10, budget=60)
+
+        mock_submit.assert_not_called()
+        self.assertEqual(relatorios[0].archive_status, "reused")
+        self.assertEqual(
+            relatorios[0].archive_url,
+            "https://web.archive.org/web/20261024213206/https://painel.org/",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

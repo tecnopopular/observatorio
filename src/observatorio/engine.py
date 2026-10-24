@@ -381,6 +381,13 @@ def _preserve(
         print("[*] Preservação: dispensada por --skip-archive")
         return
 
+    for relatorio in reports:
+        entrada = previous.get(relatorio.tool_id)
+        if entrada is None or not entrada.archive_url or _needs_capture(relatorio, previous):
+            continue
+        relatorio.archive_url = relatorio.archive_url or entrada.archive_url
+        relatorio.archive_status = "reused"
+
     modo = "conta do Internet Archive" if has_credentials() else "anônima"
     print(f"[*] Preservação: submissão com {modo}")
 
