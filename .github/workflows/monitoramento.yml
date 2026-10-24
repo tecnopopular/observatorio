@@ -88,10 +88,24 @@ jobs:
           retention-days: 90
 
       - name: Autocommit do Manifesto de Estado
+        id: autocommit
         if: github.event_name != 'pull_request' && steps.git-check.outputs.has_changes != '0'
         run: |
           git config user.name "TecnoPopular Observatorio Bot"
           git config user.email "bot@tecnopopular.org"
           git add data/estado_hashes.json
           git commit -m "chore(estado): atualiza manifesto de hashes e scores do ciclo semanal [skip ci]"
-          git push
+          if git push; then
+            echo "publicado=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publicado=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::manifesto não entrou em main: a regra do repositório recusa push direto. O arquivo segue anexado ao ciclo."
+          fi
+
+      - name: Preservar Manifesto Fora do Histórico
+        if: steps.autocommit.outputs.publicado == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: estado-manifesto
+          path: data/estado_hashes.json
+          retention-days: 90
