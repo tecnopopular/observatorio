@@ -91,6 +91,11 @@ recebem o valor derivado do nome no primeiro ciclo; a partir daí o valor é est
 não muda o endereço do laudo. Nomes repetidos continuam gerando identificadores distintos por sufixo
 ordinal (`nome-repetido`, `nome-repetido-2`), atribuídos na inclusão.
 
+`categoria` e `descricao` são **texto editorial**: nenhuma dimensão da nota os lê, e o motor não os
+valida contra lista fechada. A navegação e o texto de apresentação pertencem ao catálogo publicado; o
+que este repositório garante é identidade (`tool_id`) e as fontes declaradas (`fontes_primarias`),
+este último o único campo cadastral que entra na pontuação.
+
 `adicionado_em` registra quando a iniciativa entrou no acervo. Fica ausente nas entradas anteriores
 ao campo, e não é preenchido retroativamente com data estimada.
 

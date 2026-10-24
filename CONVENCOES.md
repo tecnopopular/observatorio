@@ -48,6 +48,15 @@ A regra do inglês vale para código, não para contrato de dados. Ficam como es
 Renomear qualquer item dessa tabela exige migração de dados e release nova, porque o estado publicado
 passaria a existir em dois vocabulários. Enquanto não houver migração, o nome antigo é o nome correto.
 
+## 4b. O que é editorial e o que é medido
+
+`categoria` e `descricao` são texto editorial do catálogo publicado: o motor não os valida, não os lê
+na avaliação e não deve inferi-los. O único campo cadastral que entra na nota é `fontes_primarias`, e
+por isso ele é declaração humana, nunca sugestão de máquina.
+
+Manter essa fronteira é o que permite ao site ter texto, navegação e camada semântica próprios sem
+tocar na série de laudos: o que muda de um lado não altera o outro.
+
 ## 5. Por que a distinção existe
 
 Um repositório de reprodução precisa que o resultado publicado sobreviva à evolução do código. Se a

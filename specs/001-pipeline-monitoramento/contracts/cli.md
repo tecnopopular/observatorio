@@ -69,8 +69,8 @@ uv run python -m observatorio.cli adicionar \
 | :--- | :--- | :--- |
 | `--url` | obrigatório | Endereço público da aplicação |
 | `--nome` | obrigatório | Nome público da iniciativa |
-| `--categoria` | obrigatório | Um dos sete eixos do catálogo; o parser recusa valor fora da lista |
-| `--descricao` | obrigatório | O que a ferramenta faz; mínimo de 20 caracteres |
+| `--categoria` | vazio | Eixo temático, texto livre; não é validado contra lista fechada |
+| `--descricao` | vazio | Texto editorial; não entra na pontuação |
 | `--repositorio` | vazio | URL pública do repositório git |
 | `--fontes-primarias` | vazio | Órgãos públicos citados, separados por vírgula |
 | `--tool-id` | slug do nome | Identificador explícito; precisa ser slug livre |

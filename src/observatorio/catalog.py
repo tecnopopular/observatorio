@@ -26,6 +26,8 @@ CATEGORIES = (
     "Abstenção e Virada",
 )
 
+CATEGORIAS_CONHECIDAS = ", ".join(CATEGORIES)
+
 ACCEPTED_SCHEMES = ("http", "https")
 
 
@@ -180,10 +182,6 @@ def validate_catalog(catalog: list[dict]) -> list[str]:
             problemas.append(f"{rotulo}: mesmo endereço do registro {vistos_endereco[alvo]} ({url})")
         vistos_endereco.setdefault(alvo, posicao)
 
-        categoria = item.get("categoria")
-        if categoria and categoria not in CATEGORIES:
-            problemas.append(f"{rotulo}: categoria fora da lista conhecida ({categoria})")
-
         identificador = str(item.get("tool_id") or "").strip()
         if identificador:
             if identificador in vistos_id:
@@ -198,9 +196,9 @@ def validate_catalog(catalog: list[dict]) -> list[str]:
 def validate_entry(entry: dict, catalog: list[dict]) -> list[str]:
     """Verifica uma entrada nova antes de acrescentá-la ao catálogo.
 
-    É mais exigente que `validar_catalogo`: uma inclusão precisa de categoria conhecida, descrição
-    com substância e identificador livre, porque é a partir deles que o laudo é publicado e que a
-    dimensão de enquadramento lê o propósito declarado da ferramenta.
+     É mais exigente que `validar_catalogo` apenas no que o ciclo realmente consome: identificador
+    livre, endereço válido e nome presente. Descrição e eixo temático não entram aqui — são texto
+    editorial, de responsabilidade do catálogo publicado, e nenhuma dimensão da nota os lê.
 
     Args:
         entry: Registro proposto.
@@ -210,13 +208,6 @@ def validate_entry(entry: dict, catalog: list[dict]) -> list[str]:
         Lista de problemas encontrados, vazia quando a entrada pode ser gravada.
     """
     problemas = validate_catalog([entry])
-
-    categoria = entry.get("categoria")
-    if not categoria:
-        problemas.append("entrada sem categoria")
-    descricao = str(entry.get("descricao") or "").strip()
-    if len(descricao) < 20:
-        problemas.append("descrição ausente ou curta demais: escreva o que a ferramenta faz")
 
     identificador = str(entry.get("tool_id") or "").strip()
     if not identificador:

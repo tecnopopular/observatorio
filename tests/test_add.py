@@ -124,17 +124,18 @@ class TestValidacaoDoCatalogo(unittest.TestCase):
         problemas = validate_catalog(catalog)
         self.assertTrue(any("tool_id repetido" in p for p in problemas))
 
-    def test_categoria_desconhecida(self):
-        """Categoria fora da lista quebraria a navegação do site."""
-        problemas = validate_catalog([{"nome": "A", "url": "https://a.org", "categoria": "Outra"}])
-        self.assertTrue(any("categoria" in p for p in problemas))
+    def test_eixo_tematico_nao_e_assunto_do_motor(self):
+        """Eixo é texto editorial: qualquer valor passa, inclusive um que o motor não conhece.
 
-    def test_entrada_sem_descricao(self):
-        """A inclusão exige descrição com substância; o catálogo lido, não."""
-        problemas = validate_entry(
-            {"nome": "A", "url": "https://a.org", "categoria": "Jogos", "tool_id": "a"}, []
-        )
-        self.assertTrue(any("descri" in p for p in problemas))
+        A navegação do catálogo pertence ao site; um eixo novo lá não pode derrubar o ciclo aqui.
+        """
+        problemas = validate_catalog([{"nome": "A", "url": "https://a.org", "categoria": "Eixo Novo"}])
+        self.assertEqual(problemas, [])
+
+    def test_entrada_sem_descricao_e_aceita(self):
+        """Descrição é texto editorial e não entra na pontuação; a inclusão não a exige."""
+        problemas = validate_entry({"nome": "A", "url": "https://a.org", "tool_id": "a"}, [])
+        self.assertEqual(problemas, [])
 
     def test_entrada_com_tool_id_ocupado(self):
         """Identificador já usado é recusado mesmo com nome diferente."""

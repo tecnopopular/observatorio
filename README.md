@@ -180,24 +180,27 @@ O catálogo cresce por um subcomando, que valida a entrada antes de gravá-la:
 ```bash
 uv run python -m observatorio.cli adicionar \
   --url https://exemplo.org \
-  --nome "Iniciativa Exemplo" \
-  --categoria "Dados e Mapas" \
-  --descricao "Painel que reúne dados de votação por seção eleitoral."
+  --nome "Iniciativa Exemplo"
 ```
+
+`--categoria` e `--descricao` são opcionais e, quando informados, gravados como estão: são texto
+editorial, responsabilidade do catálogo publicado, e **nenhuma dimensão da nota os lê**. O motor não
+valida o eixo temático contra lista fechada — um eixo novo criado no site não derruba o ciclo aqui.
 
 A inclusão grava `tool_id` e `adicionado_em` na entrada. O `tool_id` é o endereço público do laudo
 (`auditoria/<tool_id>.html`) e **não muda depois**: ele nasce do slug do nome na inclusão e fica
 gravado, para que corrigir o nome de uma iniciativa não publique o laudo seguinte em outro endereço.
 `--tool-id` permite fixar um identificador próprio quando o slug do nome não serve.
 
-Quatro verificações antecedem a gravação:
+Três verificações antecedem a gravação:
 
 | Verificação | Motivo |
 | :--- | :--- |
 | Endereço já no catálogo, comparado sem esquema, `www`, barra final e caixa do caminho | duas entradas do mesmo site gerariam dois laudos idênticos para a mesma página |
 | Endereço já no registro de retiradas | a volta de uma iniciativa retirada é o subcomando `readmitir`, que preserva o histórico |
 | `robots.txt` do host | incluir um endereço proibido cria uma entrada que nunca recebe laudo |
-| Nome e descrição pelo portão de privacidade | os dois campos são publicados no catálogo |
+
+Nome e, quando informada, descrição passam pelo portão de privacidade: são publicados no catálogo.
 
 Em produção, o mesmo comando roda por workflow, sem depender de acesso local: em **Actions →
 Incluir iniciativa no catálogo → Run workflow**, informe URL, nome, categoria e descrição. O

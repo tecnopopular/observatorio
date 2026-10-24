@@ -14,7 +14,14 @@ import sys
 from datetime import UTC, date, datetime
 from pathlib import Path
 
-from .catalog import CATEGORIES, append_entry, extract_domain, new_tool_id, strip_fragment, validate_entry
+from .catalog import (
+    CATEGORIAS_CONHECIDAS,
+    append_entry,
+    extract_domain,
+    new_tool_id,
+    strip_fragment,
+    validate_entry,
+)
 from .engine import run_batch_audit
 from .privacy_guard import CivicPrivacyGuard, ViolationSeverity
 from .robots import RobotsPolicy
@@ -332,7 +339,7 @@ def cmd_add(args: argparse.Namespace) -> int:
             return 1
 
     achados = CivicPrivacyGuard().scan_text(
-        f"{args.nome}\n{args.descricao}\n", file_path="entrada do catálogo"
+        f"{args.nome}\n{args.descricao or ''}\n", file_path="entrada do catálogo"
     )
     if achados:
         print("[-] O catálogo é público e este texto traz dado que não pode ser versionado:", file=sys.stderr)
@@ -349,10 +356,12 @@ def cmd_add(args: argparse.Namespace) -> int:
         "tool_id": (args.tool_id or new_tool_id(args.nome, catalog)).strip(),
         "url": url,
         "dominio": extract_domain(url),
-        "categoria": args.categoria,
-        "descricao": args.descricao.strip(),
         "adicionado_em": datetime.now(UTC).date().isoformat(),
     }
+    if args.categoria:
+        entry["categoria"] = args.categoria.strip()
+    if args.descricao:
+        entry["descricao"] = args.descricao.strip()
     if args.repositorio:
         entry["repositorio"] = args.repositorio.strip()
     if args.fontes_primarias:
@@ -462,9 +471,13 @@ def build_parser() -> argparse.ArgumentParser:
     add_command_parser.add_argument("--url", required=True, help="Endereço público da aplicação")
     add_command_parser.add_argument("--nome", required=True, help="Nome público da iniciativa")
     add_command_parser.add_argument(
-        "--categoria", required=True, choices=CATEGORIES, help="Eixo temático no catálogo"
+        "--categoria",
+        default=None,
+        help=f"Eixo temático, texto livre; eixos conhecidos hoje: {CATEGORIAS_CONHECIDAS}",
     )
-    add_command_parser.add_argument("--descricao", required=True, help="O que a ferramenta faz")
+    add_command_parser.add_argument(
+        "--descricao", default=None, help="Descrição editorial; não entra na pontuação"
+    )
     add_command_parser.add_argument("--repositorio", default=None, help="URL pública do repositório git")
     add_command_parser.add_argument(
         "--fontes-primarias", default=None, help="Órgãos públicos citados, separados por vírgula"
