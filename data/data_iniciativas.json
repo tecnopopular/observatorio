@@ -1565,5 +1565,12 @@
       "https://www.dadosdemercado.com.br/indices/selic",
       "https://www.dieese.org.br/analisecestabasica/salarioMinimo.html"
     ]
+  },
+  {
+    "nome": "Não se Meta",
+    "tool_id": "nao-se-meta",
+    "url": "https://naosemeta.com.br",
+    "dominio": "naosemeta.com.br",
+    "adicionado_em": "2026-10-24"
   }
 ]
