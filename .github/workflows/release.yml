@@ -72,35 +72,11 @@ jobs:
       - name: Portão de privacidade
         run: uv run python -m observatorio.cli verify-privacy --all-files
 
-      - name: Restaurar cache da release anterior
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          origem=$(gh api "repos/${{ github.repository }}/releases?per_page=20" \
-            --jq '[.[] | select(.assets[]?.name == "cache-html.tar.gz")] | sort_by(.created_at) | reverse | .[0].tag_name')
-          if [ -z "$origem" ] || [ "$origem" = "null" ]; then
-            echo "Nenhuma release anterior com cache; o ciclo baixa tudo da rede."
-            echo "CACHE_ORIGEM=nenhuma" >> "$GITHUB_ENV"
-            exit 0
-          fi
-          mkdir -p /tmp/cache-anterior data/raw
-          if gh release download "$origem" --pattern cache-html.tar.gz --dir /tmp/cache-anterior --clobber; then
-            tar -xzf /tmp/cache-anterior/cache-html.tar.gz -C data/raw
-            echo "Cache restaurado de $origem: $(ls data/raw/html_cache | wc -l) arquivos"
-            echo "CACHE_ORIGEM=$origem" >> "$GITHUB_ENV"
-          else
-            echo "Falha ao baixar o cache de $origem; o ciclo segue sem cache."
-            echo "CACHE_ORIGEM=$origem (falha ao baixar)" >> "$GITHUB_ENV"
-          fi
-
       - name: Executar o ciclo de auditoria
         run: uv run python -m observatorio.cli audit-all --workers 8 --timeout 12
 
       - name: Portão de integridade do cache
         run: uv run python tools/verify_cache.py
-
-      - name: Empacotar cache de HTML
-        run: tar -czf cache-html.tar.gz -C data/raw html_cache
 
       - name: Registrar procedência
         env:
@@ -114,7 +90,6 @@ jobs:
           from pathlib import Path
 
           tag = os.environ["TAG"]
-          cache_origem = os.environ.get("CACHE_ORIGEM", "nenhuma")
           commit = subprocess.run(
               ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True
           ).stdout.strip()
@@ -128,7 +103,6 @@ jobs:
               f"Ciclo: {manifesto['generated_at']}",
               f"Laudos emitidos: {len(laudo)}",
               f"Entradas no manifesto: {manifesto['total']}",
-              f"Cache de partida: {cache_origem}",
               "",
               "Distribuição por status:",
           ]
@@ -185,13 +159,13 @@ jobs:
               "Arquivos anexados:",
               "  auditoria_iniciativas.json  laudo completo do ciclo",
               "  estado_hashes.json          hash, status e notas por iniciativa",
-              "  cache-html.tar.gz           corpos lidos, que permitem recalcular as notas offline",
               "  SHA256SUMS                  integridade dos arquivos acima",
               "",
-              "Para recalcular as notas a partir do cache anexado:",
-              "  tar -xzf cache-html.tar.gz -C data/raw",
-              "  uv run python tools/verify_cache.py",
-              "  uv run python -m observatorio.cli audit-all --refresh",
+              "O HTML bruto das páginas auditadas não é anexado: é conteúdo de terceiros e não se",
+              "publica. Consequência prática: o hash de cada página fica registrado no manifesto,",
+              "de modo que quem buscar a mesma URL pode conferir se o corpo atual é o que foi",
+              "avaliado; quando não for, a página mudou desde o ciclo e a nota registrada é a do",
+              "snapshot datado, não a do corpo de hoje.",
               "",
               "O laudo não é versionado no repositório: ele é publicado aqui, e o manifesto",
               "versionado registra hash, status e notas de cada iniciativa.",
@@ -205,11 +179,16 @@ jobs:
         run: |
           cp dist/auditoria_iniciativas.json auditoria_iniciativas.json
           cp data/estado_hashes.json estado_hashes.json
-          ls -lh auditoria_iniciativas.json estado_hashes.json cache-html.tar.gz PROCEDENCIA.txt
+          ls -lh auditoria_iniciativas.json estado_hashes.json PROCEDENCIA.txt
+
+      - name: Portão dos anexos
+        run: >-
+          uv run python tools/verify_attachments.py
+          auditoria_iniciativas.json estado_hashes.json PROCEDENCIA.txt
 
       - name: Calcular somas de verificação
         run: |
-          sha256sum auditoria_iniciativas.json estado_hashes.json cache-html.tar.gz PROCEDENCIA.txt > SHA256SUMS
+          sha256sum auditoria_iniciativas.json estado_hashes.json PROCEDENCIA.txt > SHA256SUMS
           cat SHA256SUMS
 
       - name: Publicar a release
@@ -224,7 +203,6 @@ jobs:
           gh release upload "$TAG" \
             auditoria_iniciativas.json \
             estado_hashes.json \
-            cache-html.tar.gz \
             SHA256SUMS \
             PROCEDENCIA.txt \
             --clobber

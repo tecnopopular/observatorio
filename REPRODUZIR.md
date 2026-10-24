@@ -103,36 +103,44 @@ uv run python tools/compare_cycles.py
 O comando compara o laudo do ciclo atual com o manifesto gravado no último commit e informa o que
 mudou de nota, de status e de hash. `--anterior` e `--revisao` permitem escolher outra base.
 
-## 5. Reprodução offline a partir do cache
+## 5. Reprodução das notas e o que o cache prova
 
-Esta é a única forma de chegar às mesmas notas sem depender do estado atual dos sites.
+A aquisição guarda o corpo lido em `data/raw/html_cache/<tool_id>.html`, com sidecar
+`<tool_id>.meta.json` registrando tamanho declarado e marca de truncamento. Sem `--refresh`, o ciclo
+reaproveita esse corpo: a avaliação passa a rodar sobre conteúdo fixo e a nota é reproduzível na
+mesma máquina.
 
-A aquisição guarda o corpo lido em `data/raw/html_cache/<tool_id>.html`, com um sidecar
-`<tool_id>.meta.json` que registra o tamanho declarado e a marca de truncamento. Sem `--refresh`, o
-ciclo reaproveita esse corpo: a avaliação passa a rodar sobre conteúdo fixo, e a nota é reproduzível.
+Esse cache **não é publicado**, nem versionado nem anexado a release. Ele é conteúdo de terceiros:
+169 páginas, 15 MB de HTML alheio, com endereços de contato e outros dados que não nos pertencem e
+que não temos como certificar. Publicá-lo foi tentado nas três primeiras releases e revertido; o
+motivo está registrado no histórico do repositório e a verificação que faltava agora existe
+(`tools/verify_attachments.py`, que recusa qualquer anexo que não seja JSON ou texto).
 
-O cache não é versionado: é conteúdo de terceiros e não é nosso para publicar no histórico. Para
-citar um resultado de forma verificável, o cache e o laudo são anexados à release da tag
-correspondente (`.github/workflows/release.yml`), com o `html_sha256` do manifesto como prova de que
-aquele corpo é o que foi avaliado.
+O que o repositório oferece no lugar, para tornar a nota conferível:
 
-Publicada a release, o conteúdo pode ser recuperado e conferido sem depender do estado atual dos
-sites:
+| O que | Onde | Para que serve |
+| :--- | :--- | :--- |
+| `html_sha256` de cada página avaliada | `data/estado_hashes.json` | dizer se o corpo que você baixar é o mesmo que foi avaliado |
+| Notas por dimensão e status | `data/estado_hashes.json` | comparar com o valor que você recalculou |
+| Laudo completo do ciclo | anexo da release | ler a evidência que sustentou cada ponto |
+| Versão do protocolo | manifesto e laudo | saber sob qual critério a nota foi calculada |
+
+O procedimento de conferência, então, é este:
 
 ```bash
-gh release download v0.1.0
+gh release download v0.2.2
 sha256sum -c SHA256SUMS
-tar -xzf cache-html.tar.gz -C data/raw
-uv run python tools/verify_cache.py
+uv run python -c "import json;from pathlib import Path;print(json.loads(Path('estado_hashes.json').read_text())['entries'][0]['html_sha256'])"
+curl -sL "$URL" | sha256sum   # confere contra o hash registrado
 uv run python -m observatorio.cli audit-all --refresh
 ```
 
-O portão `tools/verify_cache.py` confronta cada corpo em cache com o hash registrado no
-manifesto. No ciclo de referência, 166 corpos foram conferidos, nenhum divergiu e 5 entradas ficaram
-fora por não terem hash registrado — são as não inspecionadas, que não produziram nota.
+Duas leituras possíveis do resultado: se o hash bater, a nota registrada é recalculável byte a byte
+na sua máquina, e qualquer divergência de nota indica defeito no motor. Se não bater, a página mudou
+depois do ciclo — a nota registrada continua sendo a daquele snapshot datado, e a diferença é
+informação sobre o site, não erro de reprodução.
 
-Uma leitura parcial continua parcial: o sidecar marca o truncamento, e o ciclo seguinte não
-transforma uma página lida pela metade em leitura completa.
+A aquisição em rede é a fonte de variância que resta, e ela está declarada na seção 6.
 
 ## 6. O que este repositório não reproduz
 
@@ -140,8 +148,8 @@ transforma uma página lida pela metade em leitura completa.
 | :--- | :--- | :--- |
 | Catálogo, `tool_id`, validação de entrada | sim, byte a byte | arquivo versionado, sem dependência externa |
 | Estrutura do manifesto e do laudo | sim | contrato definido em `specs/` |
-| Notas, com o mesmo cache de HTML | sim | a avaliação é determinística sobre o corpo lido |
-| Notas, sem cache | não | o conteúdo dos sites muda entre execuções |
+| Notas, com o mesmo cache de HTML | sim, na mesma máquina | a avaliação é determinística sobre o corpo lido; o cache não é publicado |
+| Notas, sem cache | não | o conteúdo dos sites muda entre execuções; é o caso de quem baixa a release sem ter o cache local |
 | Dimensão de acessibilidade e desempenho | não | mede a latência daquela requisição, com limiares em 1.500 ms e 3.000 ms |
 | Disponibilidade de uma iniciativa | não | um site pode sair do ar entre ciclos e a nota cai sem que o código tenha mudado |
 | Consulta de `robots.txt` | não | um host pode publicar ou revogar a diretiva a qualquer momento |
