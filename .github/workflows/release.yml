@@ -60,6 +60,27 @@ jobs:
       - name: Portão de privacidade
         run: uv run python -m observatorio.cli verify-privacy --all-files
 
+      - name: Restaurar cache da release anterior
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          origem=$(gh api "repos/${{ github.repository }}/releases?per_page=20" \
+            --jq '[.[] | select(.assets[]?.name == "cache-html.tar.gz")] | sort_by(.created_at) | reverse | .[0].tag_name')
+          if [ -z "$origem" ] || [ "$origem" = "null" ]; then
+            echo "Nenhuma release anterior com cache; o ciclo baixa tudo da rede."
+            echo "CACHE_ORIGEM=nenhuma" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          mkdir -p /tmp/cache-anterior data/raw
+          if gh release download "$origem" --pattern cache-html.tar.gz --dir /tmp/cache-anterior --clobber; then
+            tar -xzf /tmp/cache-anterior/cache-html.tar.gz -C data/raw
+            echo "Cache restaurado de $origem: $(ls data/raw/html_cache | wc -l) arquivos"
+            echo "CACHE_ORIGEM=$origem" >> "$GITHUB_ENV"
+          else
+            echo "Falha ao baixar o cache de $origem; o ciclo segue sem cache."
+            echo "CACHE_ORIGEM=$origem (falha ao baixar)" >> "$GITHUB_ENV"
+          fi
+
       - name: Executar o ciclo de auditoria
         run: uv run python -m observatorio.cli audit-all --workers 8 --timeout 12
 
@@ -81,6 +102,7 @@ jobs:
           from pathlib import Path
 
           tag = os.environ["TAG"]
+          cache_origem = os.environ.get("CACHE_ORIGEM", "nenhuma")
           commit = subprocess.run(
               ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True
           ).stdout.strip()
@@ -94,11 +116,58 @@ jobs:
               f"Ciclo: {manifesto['generated_at']}",
               f"Laudos emitidos: {len(laudo)}",
               f"Entradas no manifesto: {manifesto['total']}",
+              f"Cache de partida: {cache_origem}",
               "",
               "Distribuição por status:",
           ]
           for nome, quantidade in sorted(status.items()):
               linhas.append(f"  {nome}: {quantidade}")
+
+          try:
+              gravado = json.loads(
+                  subprocess.run(
+                      ["git", "show", "HEAD:data/estado_hashes.json"],
+                      capture_output=True,
+                      text=True,
+                      check=True,
+                  ).stdout
+              )
+          except Exception:
+              gravado = None
+
+          if gravado is None:
+              linhas += ["", "Manifesto commitado na tag não encontrado: sem base de comparação."]
+          else:
+              na_tag = {entrada["tool_id"]: entrada for entrada in gravado["entries"]}
+              agora = {entrada["tool_id"]: entrada for entrada in manifesto["entries"]}
+              mudou_status = [
+                  (chave, na_tag[chave]["status"], agora[chave]["status"])
+                  for chave in sorted(na_tag)
+                  if chave in agora and na_tag[chave]["status"] != agora[chave]["status"]
+              ]
+              mudou_html = [
+                  chave
+                  for chave in na_tag
+                  if chave in agora and na_tag[chave]["html_sha256"] != agora[chave]["html_sha256"]
+              ]
+              linhas += [
+                  "",
+                  "Divergência em relação ao manifesto commitado na tag:",
+                  f"  Manifesto da tag: ciclo {gravado['generated_at']}, protocolo {gravado['protocol_version']}",
+                  f"  Status diferentes: {len(mudou_status)} de {len(na_tag)}",
+              ]
+              for chave, antes, depois in mudou_status[:20]:
+                  linhas.append(f"    {chave}: {antes} -> {depois}")
+              if len(mudou_status) > 20:
+                  linhas.append(f"    ... e mais {len(mudou_status) - 20}")
+              linhas += [
+                  f"  HTML diferente: {len(mudou_html)} de {len(na_tag)}",
+                  "  A divergência é esperada: esta release reexecutou o ciclo em vez de copiar o",
+                  "  manifesto da tag. Status diferente indica página que respondeu de outro modo ao",
+                  "  runner; HTML diferente indica conteúdo volátil ou alteração real desde a tag.",
+                  "  O estado vigente do repositório é o manifesto commitado; este anexo é o snapshot",
+                  "  do ciclo executado na publicação.",
+              ]
           linhas += [
               "",
               "Arquivos anexados:",
