@@ -1,0 +1,1496 @@
+[
+  {
+    "nome": "Acervo da vitória",
+    "tool_id": "acervo-da-vitoria",
+    "url": "https://acervodavitoria.pages.dev",
+    "dominio": "acervodavitoria.pages.dev",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Repositório com acervo de materiais, peças digitais e documentos da campanha."
+  },
+  {
+    "nome": "Curadoria Vira Voto",
+    "tool_id": "curadoria-vira-voto",
+    "url": "https://acervolula13.lovable.app",
+    "dominio": "acervolula13.lovable.app",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Curadoria com materiais selecionados para apoiar a campanha do Lula e ajudar na conversa com diferentes eleitores."
+  },
+  {
+    "nome": "Adote um indeciso",
+    "tool_id": "adote-um-indeciso",
+    "url": "https://adoteumindeciso.com",
+    "dominio": "adoteumindeciso.com",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Guia para incentivar o diálogo e a conversão de eleitores indecisos."
+  },
+  {
+    "nome": "Baralho interativo",
+    "tool_id": "baralho-interativo",
+    "url": "https://baralhointerativo.netlify.app",
+    "dominio": "baralhointerativo.netlify.app",
+    "categoria": "Jogos",
+    "descricao": "Jogo interativo onde a pessoa julga frases políticas/econômicas como \"bom\" ou \"ruim\" para descobrir com quais ideias e figuras públicas se identifica."
+  },
+  {
+    "nome": "A Batalha dos Influs",
+    "tool_id": "a-batalha-dos-influs",
+    "url": "https://batalhadosinflus.the-mojo.studio",
+    "dominio": "batalhadosinflus.the-mojo.studio",
+    "categoria": "Dados e Mapas",
+    "descricao": "Contagem ao vivo de declarações (ou não) de voto de influenciadores e links para seus perfis."
+  },
+  {
+    "nome": "Bora Lula",
+    "tool_id": "bora-lula",
+    "url": "https://bora-lula.online",
+    "dominio": "bora-lula.online",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Materiais de mobilização para baixar ou compartilhar nas redes sociais."
+  },
+  {
+    "nome": "Bora Lula",
+    "tool_id": "bora-lula-2",
+    "url": "https://boralula.org",
+    "dominio": "boralula.org",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "App que captura eventos do Instagram com IA, conecta militantes, distribui materiais e coleta relatos do \"boca a boca\" para inteligência de campanha."
+  },
+  {
+    "nome": "Brasil Feliz de Novo",
+    "tool_id": "brasil-feliz-de-novo",
+    "url": "https://brasil-feliz-de-novo.vercel.app",
+    "dominio": "brasil-feliz-de-novo.vercel.app",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Site provocativo com simulação em vídeo sobre perda de direitos trabalhistas para comover indecisos."
+  },
+  {
+    "nome": "Brasil Futuro (Comparador de Planos)",
+    "tool_id": "brasil-futuro-comparador-de-planos",
+    "url": "https://brasil-futuro.vercel.app",
+    "dominio": "brasil-futuro.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Plataforma de comparação temática entre o plano de governo Lula e o plano opositor, com planos de candidatos do 1º turno."
+  },
+  {
+    "nome": "Brasil Melhor",
+    "tool_id": "brasil-melhor",
+    "url": "https://brasil-melhor.vercel.app",
+    "dominio": "brasil-melhor.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "App de diagnóstico onde a pessoa insere seus valores e vê o alinhamento com as propostas do governo Lula."
+  },
+  {
+    "nome": "Brasil em Jogo",
+    "tool_id": "brasil-em-jogo",
+    "url": "https://brasilemjogo.ariu.com.br",
+    "dominio": "brasilemjogo.ariu.com.br",
+    "categoria": "Jogos",
+    "descricao": "Jogo estilo novela visual sobre 4 moradores de bairro popular para tomada de decisões sobre programas sociais e políticas públicas."
+  },
+  {
+    "nome": "Carona do Voto",
+    "tool_id": "carona-do-voto",
+    "url": "https://carona-kohl.vercel.app",
+    "dominio": "carona-kohl.vercel.app",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "MVP de aplicação para conectar eleitores que precisam de transporte com motoristas voluntários."
+  },
+  {
+    "nome": "Carona solidária",
+    "tool_id": "carona-solidaria",
+    "url": "https://carona.casamarighella.com.br",
+    "dominio": "carona.casamarighella.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma de mobilização e coordenação de caronas solidárias para eleitores.",
+    "fontes_primarias": [
+      "Casa Marighella"
+    ]
+  },
+  {
+    "nome": "Mapeamento de Zonas Prioritárias (SP)",
+    "tool_id": "mapeamento-de-zonas-prioritarias-sp",
+    "url": "https://claude.ai/artifact/Fm6yiV6cYYBEmk4AsSWpbh",
+    "dominio": "claude.ai",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento de zonas eleitorais prioritárias cruzadas com votação da base aliada e pontos de interesse (expansível de SP para o país)."
+  },
+  {
+    "nome": "Atendimento CliAtende",
+    "tool_id": "atendimento-cliatende",
+    "url": "https://cliatende.com.br",
+    "dominio": "cliatende.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma de atendimento/automação via WhatsApp para comunicação e diálogo com eleitores."
+  },
+  {
+    "nome": "Como Isso Me Afeta",
+    "tool_id": "como-isso-me-afeta",
+    "url": "https://como-isso-me-afeta.vercel.app",
+    "dominio": "como-isso-me-afeta.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Ferramenta interativa que personaliza o impacto das políticas públicas de acordo com o perfil e local do usuário."
+  },
+  {
+    "nome": "Como vira voto",
+    "tool_id": "como-vira-voto",
+    "url": "https://comoviravoto.vercel.app",
+    "dominio": "comoviravoto.vercel.app",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Guia e ferramenta prática de orientação para militância e diálogo direto."
+  },
+  {
+    "nome": "Compara Brasil",
+    "tool_id": "compara-brasil",
+    "url": "https://comparabrasil.app",
+    "dominio": "comparabrasil.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Indicadores públicos para comparar dados, baixar ou compartilhar o desempenho dos governos Lula e Bolsonaro."
+  },
+  {
+    "nome": "Confere Aí (IA Anti-Fake News)",
+    "tool_id": "confere-ai-ia-anti-fake-news",
+    "url": "https://confere-ai-five.vercel.app",
+    "dominio": "confere-ai-five.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "App com IA que checa veracidade de notícias, consulta histórico eleitoral e rastreia dados de deputados."
+  },
+  {
+    "nome": "Conversa que muda",
+    "tool_id": "conversa-que-muda",
+    "url": "https://conversaquemuda.com",
+    "dominio": "conversaquemuda.com",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Roteiros e simulações para treinar conversas respeitosas e persuasivas."
+  },
+  {
+    "nome": "Cortes do Lula / Orquestrador de Pautas",
+    "tool_id": "cortes-do-lula-orquestrador-de-pautas",
+    "url": "https://cortesdolula.com.br",
+    "dominio": "cortesdolula.com.br",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Plataforma de orquestração de pautas diárias e compartilhamento massivo articulado com coletivos de influenciadores (inclui Um Pixel e Lula Responde)."
+  },
+  {
+    "nome": "Atlas Dado Popular",
+    "tool_id": "atlas-dado-popular",
+    "url": "https://dadopopular.com.br/atlas",
+    "dominio": "dadopopular.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Ferramenta de inteligência visual de dados legislativos e da corrida presidencial em tempo real."
+  },
+  {
+    "nome": "Dá pra virar",
+    "tool_id": "da-pra-virar",
+    "url": "https://dapravirar.org",
+    "dominio": "dapravirar.org",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Visualização e monitoramento de números de abstenção e metas de virada."
+  },
+  {
+    "nome": "Data2Comms (Acervo)",
+    "tool_id": "data2comms-acervo",
+    "url": "https://data2comms.com.br",
+    "dominio": "data2comms.com.br",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Acervo e repositório centralizado de conteúdos e dados para comunicação."
+  },
+  {
+    "nome": "Diretório 13",
+    "tool_id": "diretorio-13",
+    "url": "https://diretorio13.com",
+    "dominio": "diretorio13.com",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Diretório e categorizador central de sites, ferramentas e links da campanha."
+  },
+  {
+    "nome": "Do seu bolso",
+    "tool_id": "do-seu-bolso",
+    "url": "https://doseubolso.com.br",
+    "dominio": "doseubolso.com.br",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Calculadora para saber quanto custariam os remédios que a pessoa recebe gratuitamente hoje com a Farmácia Popular.",
+    "fontes_primarias": [
+      "DATASUS",
+      "Ministério da Saúde"
+    ]
+  },
+  {
+    "nome": "Em Frente (Calendário de Atos)",
+    "tool_id": "em-frente-calendario-de-atos",
+    "url": "https://em-frente.com/calendario",
+    "dominio": "em-frente.com",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma e calendário para anúncio, busca e visualização no mapa de protestos e atos de rua pelo Brasil."
+  },
+  {
+    "nome": "Eu Vou Votar",
+    "tool_id": "eu-vou-votar",
+    "url": "https://euvouvotar.com.br",
+    "dominio": "euvouvotar.com.br",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Central de orientações neutras sobre local de votação, regularização de título e combate ao abstencionismo.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "Fandoms pelo Brasil",
+    "tool_id": "fandoms-pelo-brasil",
+    "url": "https://fandomspelobrasil.com",
+    "dominio": "fandomspelobrasil.com",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Mobilização e organização de fanbases e fã-clubes para atos de rua."
+  },
+  {
+    "nome": "Promessas e Registros",
+    "tool_id": "promessas-e-registros",
+    "url": "https://fatos-bolsonaro.github.io/Promessas-e-Registros",
+    "dominio": "fatos-bolsonaro.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Agrega promessas do governo Bolsonaro e deixa evidente, através de fontes, o que foi cumprido."
+  },
+  {
+    "nome": "Falas de Flavio",
+    "tool_id": "falas-de-flavio",
+    "url": "https://flaviofalou.netlify.app",
+    "dominio": "flaviofalou.netlify.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Compilado e acervo de declarações e posicionamentos para argumentação."
+  },
+  {
+    "nome": "Fortaleza nas Urnas",
+    "tool_id": "fortaleza-nas-urnas",
+    "url": "https://fortalezanasurnas.netlify.app",
+    "dominio": "fortalezanasurnas.netlify.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Portal mostrando o panorama eleitoral e votação por áreas no município de Fortaleza.",
+    "fontes_primarias": [
+      "TSE",
+      "TRE-CE"
+    ]
+  },
+  {
+    "nome": "Fortaleza por Lula",
+    "tool_id": "fortaleza-por-lula",
+    "url": "https://fortalezaporlula.netlify.app",
+    "dominio": "fortalezaporlula.netlify.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Painel tático para orientar a militância em Fortaleza sobre áreas prioritárias de panfletagem e diálogo."
+  },
+  {
+    "nome": "Fura Bolha",
+    "tool_id": "fura-bolha",
+    "url": "https://fura-bolha.com",
+    "dominio": "fura-bolha.com",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Plataforma com vídeos focados em facilitar o compartilhamento nas redes sociais."
+  },
+  {
+    "nome": "Futuro BR Revisão",
+    "tool_id": "futuro-br-revisao",
+    "url": "https://futurobr-revisao.netlify.app",
+    "dominio": "futurobr-revisao.netlify.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Comparador de programas de governo destacando os impactos diretos no país de acordo com o perfil do eleitor."
+  },
+  {
+    "nome": "Ganha Voto",
+    "tool_id": "ganha-voto",
+    "url": "https://ganhavoto.htmly.com.br",
+    "dominio": "ganhavoto.htmly.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Análise cruzada das urnas de 2022 vs 2026 para identificar seções e locais com maior potencial de crescimento de votos."
+  },
+  {
+    "nome": "Ações 2º Turno (Agenda e Mapa)",
+    "tool_id": "acoes-2o-turno-agenda-e-mapa",
+    "url": "https://guipfranco.github.io/acoes-segundo-turno",
+    "dominio": "guipfranco.github.io",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Ferramenta para encontrar e cadastrar ações de panfletagem, atos e mobilização perto do usuário."
+  },
+  {
+    "nome": "Ideias em comum",
+    "tool_id": "ideias-em-comum",
+    "url": "https://ideiasemcomum.com",
+    "dominio": "ideiasemcomum.com",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Ferramenta que compara e mostra as semelhanças das propostas de candidatos do 1º turno com as do Lula."
+  },
+  {
+    "nome": "Quiz de Políticas Públicas",
+    "tool_id": "quiz-de-politicas-publicas",
+    "url": "https://incomparable-parfait-0c4bc1.netlify.app",
+    "dominio": "incomparable-parfait-0c4bc1.netlify.app",
+    "categoria": "Jogos",
+    "descricao": "Quiz interativo para WhatsApp sobre as principais políticas do governo direcionado a indecisos e público sênior."
+  },
+  {
+    "nome": "Lab Livre Amazonia",
+    "tool_id": "lab-livre-amazonia",
+    "url": "https://lablivreamazonia.com.br/belem",
+    "dominio": "lablivreamazonia.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Dados que detalha os resultados das Eleições 2026 em Belém (PA), mostrando a votação por local e seção eleitoral."
+  },
+  {
+    "nome": "Cards oficiais da campanha por área",
+    "tool_id": "cards-oficiais-da-campanha-por-area",
+    "url": "https://lula.com.br/comparativo",
+    "dominio": "lula.com.br",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Cards e peças comparativas oficiais prontas para compartilhamento por tema/área."
+  },
+  {
+    "nome": "Lula Filtro",
+    "tool_id": "lula-filtro",
+    "url": "https://lulafiltro.tbys.dev",
+    "dominio": "lulafiltro.tbys.dev",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Gerador de molduras e aplicação de logos/frases da campanha sobre fotos dos apoiadores."
+  },
+  {
+    "nome": "Lula x Bolsonaro",
+    "tool_id": "lula-x-bolsonaro",
+    "url": "https://lulaxbolsonaro.com",
+    "dominio": "lulaxbolsonaro.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Plataforma que compara indicadores socioeconômicos dos governos Lula e Bolsonaro."
+  },
+  {
+    "nome": "Mapa de Oportunidade",
+    "tool_id": "mapa-de-oportunidade",
+    "url": "https://mapa-vira-voto.eleitoral.org.br",
+    "dominio": "mapa-vira-voto.eleitoral.org.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento territorial de oportunidades para virada de voto."
+  },
+  {
+    "nome": "Mapa da virada",
+    "tool_id": "mapa-da-virada",
+    "url": "https://mapadavirada26.com",
+    "dominio": "mapadavirada26.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento que indica onde estão os votos em abstenções e candidatos eliminados para virada eleitoral. Além de vídeos e cards para baixar, compartilhar no WhatsApp e Instagram."
+  },
+  {
+    "nome": "Mapa Segundo Turno / Materiais",
+    "tool_id": "mapa-segundo-turno-materiais",
+    "url": "https://mapasegundoturno.com.br",
+    "dominio": "mapasegundoturno.com.br",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Repositório de conteúdos para redes sociais, réplicas para comentários, cartazes para impressão e argumentos."
+  },
+  {
+    "nome": "O Brasil mudou?",
+    "tool_id": "o-brasil-mudou",
+    "url": "https://nadamudou.com.br",
+    "dominio": "nadamudou.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Comparar os governos Bolsonaro e Lula III."
+  },
+  {
+    "nome": "Páginas Temáticas Mobilização",
+    "tool_id": "paginas-tematicas-mobilizacao",
+    "url": "https://naovaidebet.github.io",
+    "dominio": "naovaidebet.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Páginas informativas focadas em temas sensíveis e de grande apelo popular (ex: regulação de apostas/bets)."
+  },
+  {
+    "nome": "Análise Cuiabá Votos",
+    "tool_id": "analise-cuiaba-votos",
+    "url": "https://noguerabreno.github.io/analisecuiabavotos",
+    "dominio": "noguerabreno.github.io",
+    "categoria": "Dados e Mapas",
+    "descricao": "SPA indicando seções, bairros e zonas eleitorais em Cuiabá comparando dados de 2024 e 2026."
+  },
+  {
+    "nome": "Nunca Mais",
+    "tool_id": "nunca-mais",
+    "url": "https://nuncamais.vercel.app",
+    "dominio": "nuncamais.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Site que reúne os principais pontos negativos de Flávio Bolsonaro, com ferramentas de compartilhamento via WhatsApp/Instagram e gerador de PDF com QR Code."
+  },
+  {
+    "nome": "O que está em jogo",
+    "tool_id": "o-que-esta-em-jogo",
+    "url": "https://o-que-esta-em-jogo.vercel.app",
+    "dominio": "o-que-esta-em-jogo.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Conteúdo informativo sobre os impactos e consequências do pleito eleitoral."
+  },
+  {
+    "nome": "O Bafafá",
+    "tool_id": "o-bafafa",
+    "url": "https://obafafa.com.br",
+    "dominio": "obafafa.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Rede social autônoma brasileira sem controle de algoritmo big tech para organização de grupos, chat e mural da militância."
+  },
+  {
+    "nome": "Brasil em Jogo",
+    "tool_id": "brasil-em-jogo-2",
+    "url": "https://obrasilemjogo.com.br",
+    "dominio": "obrasilemjogo.com.br",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Plataforma que compara com fontes oficiais as propostas, dados e realizações dos governos Lula e Bolsonaro."
+  },
+  {
+    "nome": "Odeta (NLP e Sentimento Politico)",
+    "tool_id": "odeta-nlp-e-sentimento-politico",
+    "url": "https://odeta.com.br",
+    "dominio": "odeta.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Análise de dados e processamento de linguagem natural (NLP) sobre discursos e redes sociais de políticos."
+  },
+  {
+    "nome": "O Mapa do Flávio",
+    "tool_id": "o-mapa-do-flavio",
+    "url": "https://omapadoflavio.com",
+    "dominio": "omapadoflavio.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Aplicação com mapa interativo de conexões expondo as relações, aliados e investigações do candidato opositor."
+  },
+  {
+    "nome": "Onde dá pra conversar",
+    "tool_id": "onde-da-pra-conversar",
+    "url": "https://ondedapraconversar.com.br",
+    "dominio": "ondedapraconversar.com.br",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Plataforma para facilitação de diálogos, escuta ativa e espaços de conversa."
+  },
+  {
+    "nome": "OpenMaster",
+    "tool_id": "openmaster",
+    "url": "https://open-master-delta.vercel.app",
+    "dominio": "open-master-delta.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Acompanhamento independente do caso Banco Master. Projeto open source."
+  },
+  {
+    "nome": "O que está em jogo na sua cidade",
+    "tool_id": "o-que-esta-em-jogo-na-sua-cidade",
+    "url": "https://oqueestaemjogo.ascaribe.tech",
+    "dominio": "oqueestaemjogo.ascaribe.tech",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Ferramenta interativa para consultar serviços públicos do município e os impactos de políticas federais por cidade ou CEP."
+  },
+  {
+    "nome": "O Voto Decisivo",
+    "tool_id": "o-voto-decisivo",
+    "url": "https://ovotodecisivo.com",
+    "dominio": "ovotodecisivo.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa de calor com potencial de resgate de abstenções por zona do TSE e gerador de argumentos locais com IA para o WhatsApp."
+  },
+  {
+    "nome": "Pode espalhar",
+    "tool_id": "pode-espalhar",
+    "url": "https://podeespalhar.com.br",
+    "dominio": "podeespalhar.com.br",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Materiais para compartilhamento nas redes sociais."
+  },
+  {
+    "nome": "Qual Seu Flávio",
+    "tool_id": "qual-seu-flavio",
+    "url": "https://qualseuflavio.com",
+    "dominio": "qualseuflavio.com",
+    "categoria": "Jogos",
+    "descricao": "Jogo interativo de engajamento e conscientização."
+  },
+  {
+    "nome": "Quem apoia quem",
+    "tool_id": "quem-apoia-quem",
+    "url": "https://quemapoiaquem.com.br",
+    "dominio": "quemapoiaquem.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "O posicionamento nas redes sociais de figuras públicas"
+  },
+  {
+    "nome": "Quem compara vota Lula",
+    "tool_id": "quem-compara-vota-lula",
+    "url": "https://quemcomparavotalula13.netlify.app",
+    "dominio": "quemcomparavotalula13.netlify.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Ferramenta comparativa de propostas, dados e histórico de governo."
+  },
+  {
+    "nome": "Radar da Virada",
+    "tool_id": "radar-da-virada",
+    "url": "https://radardavirada.pages.dev",
+    "dominio": "radardavirada.pages.dev",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento e visualização de dados para monitoramento e acompanhamento da virada de voto."
+  },
+  {
+    "nome": "Análise de Esforço por Bairros",
+    "tool_id": "analise-de-esforco-por-bairros",
+    "url": "https://rafadaguia.github.io/analise-de-esforco-por-bairros-lula-2026",
+    "dominio": "rafadaguia.github.io",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento tático, relatórios e tabelas que apontam bairros e cidades onde o esforço de campanha rende mais votos."
+  },
+  {
+    "nome": "Seu voto decide",
+    "tool_id": "seu-voto-decide",
+    "url": "https://seuvotodecide.com.br",
+    "dominio": "seuvotodecide.com.br",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Guias, jogos interativos, pautas checadas e sugestões de roteiro para que qualquer pessoa possa gravar e compartilhar conversas e depoimentos com familiares, amigos ou em suas redes sociais."
+  },
+  {
+    "nome": "Sistema Donas (Automação)",
+    "tool_id": "sistema-donas-automacao",
+    "url": "https://sistemadonas.com",
+    "dominio": "sistemadonas.com",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Sistema de automação de redes sociais para distribuição de conteúdos e engajamento."
+  },
+  {
+    "nome": "Super Lula World",
+    "tool_id": "super-lula-world",
+    "url": "https://super-lula-world.github.io",
+    "dominio": "super-lula-world.github.io",
+    "categoria": "Jogos",
+    "descricao": "Jogo interativo de engajamento e conscientização."
+  },
+  {
+    "nome": "Super Flávio World",
+    "tool_id": "super-flavio-world",
+    "url": "https://superflavio.com",
+    "dominio": "superflavio.com",
+    "categoria": "Jogos",
+    "descricao": "Jogo interativo de engajamento e conscientização."
+  },
+  {
+    "nome": "Análise Vira Voto TSE",
+    "tool_id": "analise-vira-voto-tse",
+    "url": "https://tatipara.github.io/vira_voto",
+    "dominio": "tatipara.github.io",
+    "categoria": "Dados e Mapas",
+    "descricao": "Análise interativa e mapas por local de votação para identificar e focar nos locais com maior abstenção."
+  },
+  {
+    "nome": "Tropa Vira Voto",
+    "tool_id": "tropa-vira-voto",
+    "url": "https://tropaviravoto.com/",
+    "dominio": "tropaviravoto.com",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma de mobilização, engajamento e organização da militância para a virada de voto."
+  },
+  {
+    "nome": "Vamos com Lula",
+    "tool_id": "vamos-com-lula",
+    "url": "https://vamoscomlula.eita.coop.br",
+    "dominio": "vamoscomlula.eita.coop.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma cooperativa de mobilização, organização e engajamento."
+  },
+  {
+    "nome": "Vamos Votar",
+    "tool_id": "vamos-votar",
+    "url": "https://vamosvotar.vercel.app",
+    "dominio": "vamosvotar.vercel.app",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Web app de combate à abstenção no 2º turno, montagem de plano de votação individual e mobilização em corrente no WhatsApp."
+  },
+  {
+    "nome": "Verdade ou Boato / Radar Esquerdista",
+    "tool_id": "verdade-ou-boato-radar-esquerdista",
+    "url": "https://verdade-ou-boato-eleicoes26.netlify.app",
+    "dominio": "verdade-ou-boato-eleicoes26.netlify.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Plataforma de verificação de boatos/fake news e agenda centralizada de manifestações/atividades locais."
+  },
+  {
+    "nome": "Vira Voto (Jogo de Persuasão)",
+    "tool_id": "vira-voto-jogo-de-persuasao",
+    "url": "https://vira.voto",
+    "dominio": "vira.voto",
+    "categoria": "Jogos",
+    "descricao": "Jogo de perguntas e respostas baseado em teorias de persuasão e enquadramento (Lakoff) para virada de votos em conversas curtas."
+  },
+  {
+    "nome": "Virada no bairro",
+    "tool_id": "virada-no-bairro",
+    "url": "https://viradanobairro.app",
+    "dominio": "viradanobairro.app",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Mapa para encontrar onde dá para virar voto, as brigadas da região e informações de como conversar, dados comparativos dos governos de Lula III e Bolsonaro e respostas para as dúvidas dos eleitores."
+  },
+  {
+    "nome": "Virar Voto 13 & Jogo Será?",
+    "tool_id": "virar-voto-13-jogo-sera",
+    "url": "https://virarvoto13.com.br",
+    "dominio": "virarvoto13.com.br",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Painel de votação por bairro no 1º turno com roteiros de conversa e o mini-game interativo \"Será?\" para indecisos/nulos."
+  },
+  {
+    "nome": "Vote Sabendo",
+    "tool_id": "vote-sabendo",
+    "url": "https://votesabendo.com.br",
+    "dominio": "votesabendo.com.br",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Guia que explica o que cada cargo político faz e quem resolve os problemas da cidade."
+  },
+  {
+    "nome": "Voto em Movimento",
+    "tool_id": "voto-em-movimento",
+    "url": "https://voto-em-movimento.vercel.app",
+    "dominio": "voto-em-movimento.vercel.app",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma de vaquinhas e auxílio de transporte para garantir o deslocamento de eleitores até a zona eleitoral."
+  },
+  {
+    "nome": "Voto Vizinho",
+    "tool_id": "voto-vizinho",
+    "url": "https://voto-vizinho.momoi-labs.dev",
+    "dominio": "voto-vizinho.momoi-labs.dev",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa interativo que analisa dados abertos do TSE por endereço/CEP indicando locais com alta abstenção no bairro.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "Voto às Cegas",
+    "tool_id": "voto-as-cegas",
+    "url": "https://votoascegas.com.br",
+    "dominio": "votoascegas.com.br",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Aplicação onde o eleitor escolhe propostas sem saber a autoria do candidato, neutralizando viés ideológico."
+  },
+  {
+    "nome": "Voto Lá Fora",
+    "tool_id": "voto-la-fora",
+    "url": "https://votolafora.com.br",
+    "dominio": "votolafora.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Conecta quem pode oferecer uma carona ou um lugar para dormir a quem precisa chegar à urna. Aberto a qualquer eleitor."
+  },
+  {
+    "nome": "Voto Sem Dono",
+    "tool_id": "voto-sem-dono",
+    "url": "https://votosemdono.pages.dev",
+    "dominio": "votosemdono.pages.dev",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Comparativo neutro de propostas de governo para atrair e engajar eleitores indecisos e abstêmios."
+  },
+  {
+    "nome": "Criativos pela Virada",
+    "tool_id": "criativos-pela-virada",
+    "url": "https://criativospelavirada.vercel.app",
+    "dominio": "criativospelavirada.vercel.app",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Oganização de trabalho em squads para a campanha"
+  },
+  {
+    "nome": "Aplicativos da Virada (Comitê de Tecnologia)",
+    "tool_id": "aplicativos-da-virada-comite-de-tecnologia",
+    "url": "https://comitedetecnologia.com.br",
+    "dominio": "comitedetecnologia.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Hub agregador oficial que reúne os aplicativos, ferramentas de diálogo, mapas e materiais de mobilização da campanha."
+  },
+  {
+    "nome": "Explorador Eleitoral",
+    "tool_id": "explorador-eleitoral",
+    "url": "https://perfil-eleitoral-2026.vercel.app",
+    "dominio": "perfil-eleitoral-2026.vercel.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Interface analítica e interativa de consulta de indicadores e perfil do eleitorado brasileiro por estado e município.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "Mapa de Abstenções (Rio de Janeiro)",
+    "tool_id": "mapa-de-abstencoes-rio-de-janeiro",
+    "url": "https://abstencoes-rio.netlify.app",
+    "dominio": "abstencoes-rio.netlify.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Visualização espacial em canvas da taxa de abstenção em cada um dos 1.449 locais de votação do Rio de Janeiro.",
+    "fontes_primarias": [
+      "TSE",
+      "TRE-RJ"
+    ]
+  },
+  {
+    "nome": "De Olho no TSE",
+    "tool_id": "de-olho-no-tse",
+    "url": "https://travahacker.com.br/deolhonotse",
+    "dominio": "travahacker.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Painel em linguagem simples sobre representações e processos judiciais eleitorais de Lula e Flávio Bolsonaro no TSE.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "Mapa da IA Soberana",
+    "tool_id": "mapa-da-ia-soberana",
+    "url": "https://travahacker.com.br/mapa-ia-soberana",
+    "dominio": "travahacker.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento nacional de candidaturas que abordam inteligência artificial e soberania digital em planos de governo.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "Apuração do 1º Turno (Análises Independentes)",
+    "tool_id": "apuracao-do-1o-turno-analises-independentes",
+    "url": "https://travahacker.com.br/eleicoes2026",
+    "dominio": "travahacker.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Análise independente dos arquivos públicos do TSE da apuração de 4 de outubro, com relatórios e animação minuto a minuto.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "De Olho na Meta",
+    "tool_id": "de-olho-na-meta",
+    "url": "https://deolhonameta.com.br",
+    "dominio": "deolhonameta.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Observatório cívico com acervo documental e notícias sobre as plataformas da Meta e suas relações com as eleições brasileiras.",
+    "fontes_primarias": [
+      "TSE",
+      "Meta Transparency"
+    ]
+  },
+  {
+    "nome": "DECISIVAS",
+    "tool_id": "decisivas",
+    "url": "https://decisivas.com.br",
+    "dominio": "decisivas.com.br",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Plataforma baseada em pesquisa eleitoral que cruza públicos e temas para orientar conversas persuasivas com indecisos.",
+    "fontes_primarias": [
+      "TSE",
+      "Datafolha",
+      "Quaest"
+    ]
+  },
+  {
+    "nome": "Pelos Seus Frutos",
+    "tool_id": "pelos-seus-frutos",
+    "url": "https://pelos-seus-frutos.netlify.app",
+    "dominio": "pelos-seus-frutos.netlify.app",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Guia de diálogo para o público evangélico e cristão, contrastando princípios bíblicos com declarações e votações políticas."
+  },
+  {
+    "nome": "Parlamentômetro",
+    "tool_id": "parlamentometro",
+    "url": "https://parlamentometro.com.br",
+    "dominio": "parlamentometro.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Plataforma de transparência e acompanhamento de votos, alinhamentos e proposições da Câmara dos Deputados e do Senado Federal.",
+    "fontes_primarias": [
+      "Câmara dos Deputados",
+      "Senado Federal",
+      "Dados Abertos"
+    ]
+  },
+  {
+    "nome": "Vote pela Democracia",
+    "tool_id": "vote-pela-democracia",
+    "url": "https://votedemocracia.com.br",
+    "dominio": "votedemocracia.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Ação de mobilização cívica em defesa da Constituição Federal com capas para impressão e gerador de cards para redes."
+  },
+  {
+    "nome": "Vamos de 13",
+    "tool_id": "vamos-de-13",
+    "url": "https://vamosde13.pages.dev",
+    "dominio": "vamosde13.pages.dev",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Gerador de pôsteres e peças personalizadas por município com dados socioeconômicos e eleitorais do primeiro turno.",
+    "fontes_primarias": [
+      "TSE",
+      "IBGE"
+    ]
+  },
+  {
+    "nome": "Censura Digital Lula",
+    "tool_id": "censura-digital-lula",
+    "url": "https://censuradigital.lula.com.br",
+    "dominio": "censuradigital.lula.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Canal para registro e mapeamento de desmonetizações, restrições e derrubadas indevidas de contas e conteúdos nas redes."
+  },
+  {
+    "nome": "Santinho Virtual",
+    "tool_id": "santinho-virtual",
+    "url": "https://santinhovirtual.web.app",
+    "dominio": "santinhovirtual.web.app",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Catálogo otimizado para celulares para distribuição de santinhos digitais e materiais de campanha prontos para redes e WhatsApp."
+  },
+  {
+    "nome": "Como Meus Vizinhos Votam",
+    "tool_id": "como-meus-vizinhos-votam",
+    "url": "https://comomeusvizinhosvotam.com.br",
+    "dominio": "comomeusvizinhosvotam.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Plataforma cívica em código aberto para consultar os resultados eleitorais do TSE e IBGE por logradouro e seção eleitoral mais próxima.",
+    "fontes_primarias": [
+      "TSE",
+      "IBGE"
+    ],
+    "repositorio": "https://github.com/juliosaulo/como-meus-vizinhos-votam"
+  },
+  {
+    "nome": "Mobilização Travahacker",
+    "tool_id": "mobilizacao-travahacker",
+    "url": "https://travahacker.com.br/voluntariado",
+    "dominio": "travahacker.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Hub central de voluntariado e tecnologia cívica da Travahacker, reunindo diretório com 88 recursos, 17 iniciativas comunitárias, canais de engajamento e projetos para as eleições de 2026.",
+    "fontes_primarias": [
+      "TSE"
+    ],
+    "repositorio": "NONE"
+  },
+  {
+    "nome": "Baralho da Virada",
+    "tool_id": "baralho-da-virada",
+    "url": "https://viravotobrasil.com.br/baralhos/virada",
+    "dominio": "viravotobrasil.com.br",
+    "categoria": "Jogos",
+    "descricao": "Baralho cívico com 21 cartas e modalidades individual e em roda, ancorado em fontes oficiais (TSE, IBGE, DOU) e processamento 100% client-side sem coleta de dados.",
+    "fontes_primarias": [
+      "TSE",
+      "IBGE",
+      "Diário Oficial da União",
+      "Câmara dos Deputados",
+      "Senado Federal"
+    ]
+  },
+  {
+    "nome": "Querido Diário",
+    "tool_id": "querido-diario",
+    "url": "https://queridodiario.ok.org.br",
+    "dominio": "queridodiario.ok.org.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Plataforma cívica aberta da Open Knowledge Brasil que liberta, centraliza e processa diários oficiais dos municípios brasileiros para controle social da administração pública.",
+    "fontes_primarias": [
+      "Diários Oficiais Municipais",
+      "LAI"
+    ],
+    "repositorio": "https://github.com/okfn-brasil/querido-diario"
+  },
+  {
+    "nome": "Operação Serenata de Amor",
+    "tool_id": "operacao-serenata-de-amor",
+    "url": "https://serenata.ai",
+    "dominio": "serenata.ai",
+    "categoria": "Dados e Mapas",
+    "descricao": "Projeto cívico pioneiro de inteligência artificial e ciência de dados para auditoria e controle social de reembolsos e gastos públicos de parlamentares federais.",
+    "fontes_primarias": [
+      "Câmara dos Deputados",
+      "CEAP",
+      "Portal da Transparência",
+      "LAI"
+    ],
+    "repositorio": "https://github.com/okfn-brasil/serenata-de-amor"
+  },
+  {
+    "nome": "Base dos Dados",
+    "tool_id": "base-dos-dados",
+    "url": "https://basedosdados.org",
+    "dominio": "basedosdados.org",
+    "categoria": "Dados e Mapas",
+    "descricao": "Organização e plataforma cívica sem fins lucrativos que estrutura, padroniza e disponibiliza os principais dados públicos socioeconômicos e eleitorais brasileiros em datalake aberto.",
+    "fontes_primarias": [
+      "TSE",
+      "IBGE",
+      "DATASUS",
+      "RAIS",
+      "LAI"
+    ],
+    "repositorio": "https://github.com/basedosdados/sdk"
+  },
+  {
+    "nome": "Brasil.IO",
+    "tool_id": "brasil-io",
+    "url": "https://brasil.io",
+    "dominio": "brasil.io",
+    "categoria": "Dados e Mapas",
+    "descricao": "Repositório colaborativo de dados abertos que converte dados governamentais de formatos complexos para tabelas e APIs públicas acessíveis à sociedade civil e jornalistas.",
+    "fontes_primarias": [
+      "TSE",
+      "Receita Federal",
+      "Governo Federal",
+      "LAI"
+    ],
+    "repositorio": "https://github.com/turicas/brasil.io"
+  },
+  {
+    "nome": "Onde Votarei",
+    "tool_id": "onde-votarei",
+    "url": "https://ondevotarei.netlify.app",
+    "dominio": "ondevotarei.netlify.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Plataforma cívica com mapa interativo e painel de auditoria de seções eleitorais alteradas pelo TSE, exibindo desempenho de votos presidenciais e taxas de abstenção por município e seção.",
+    "fontes_primarias": [
+      "TSE"
+    ]
+  },
+  {
+    "nome": "DaFem — Observatório de Feminicídio",
+    "tool_id": "dafem-observatorio-de-feminicidio",
+    "url": "https://dafemapp.streamlit.app",
+    "dominio": "dafemapp.streamlit.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Painel de análise e observatório da série histórica de feminicídio no Brasil (2016–2025), com indicadores estaduais, correlações socioeconômicas, medidas protetivas de urgência (MPU) e recorte racial/interseccional.",
+    "fontes_primarias": [
+      "FBSP",
+      "IBGE"
+    ],
+    "repositorio": "https://github.com/kaiquetheo-star/dafem"
+  },
+  {
+    "nome": "Fortaleza Vai de Lula",
+    "tool_id": "fortaleza-vai-de-lula",
+    "url": "https://fortalezavaidelula.lovable.app",
+    "dominio": "fortalezavaidelula.lovable.app",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Um site/app online que mapeia as atividades de campanha em Fortaleza e Adjacências."
+  },
+  {
+    "nome": "Agenda Popular",
+    "tool_id": "agenda-popular",
+    "url": "https://agendapopular.pages.dev",
+    "dominio": "agendapopular.pages.dev",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Uma plataforma gratuita para divulgar e organizar eventos e mobilizações por cidade e categoria. A ferramenta pode apoiar a campanha de reeleição do presidente Lula,"
+  },
+  {
+    "nome": "Mutirão dos Alunos do DCOMP",
+    "tool_id": "mutirao-dos-alunos-do-dcomp",
+    "url": "https://felipequentino.github.io/mutirao",
+    "dominio": "felipequentino.github.io",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "O site “Mutirão dos Alunos do DCOMP” surgiu como uma ferramenta para facilitar a organização de voluntários e ações de mobilização política, conectando estudantes interessados"
+  },
+  {
+    "nome": "Tech Contra Bolsonaro",
+    "tool_id": "tech-contra-bolsonaro",
+    "url": "https://techcontrabolsonaro.dev",
+    "dominio": "techcontrabolsonaro.dev",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "A nossa comunidade criou o site techcontrabolsonaro.dev para apoiar na mobilização da galera da área de Tecnologia."
+  },
+  {
+    "nome": "Vira Seguro",
+    "tool_id": "vira-seguro",
+    "url": "https://vira-seguro.vercel.app",
+    "dominio": "vira-seguro.vercel.app",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "O Vira Seguro (vira-seguro.vercel.app) é um kit de segurança gratuito para celular, feito para quem faz campanha de rua e vira-voto. Ele organiza o que"
+  },
+  {
+    "nome": "Agenda Coletiva Campinas",
+    "tool_id": "agenda-coletiva-campinas",
+    "url": "https://vaipaolla.com.br/agenda",
+    "dominio": "vaipaolla.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Agenda Coletiva Campinas"
+  },
+  {
+    "nome": "ViraVoto Rats",
+    "tool_id": "viravoto-rats",
+    "url": "https://viravotorats.vercel.app",
+    "dominio": "viravotorats.vercel.app",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "App no estilo GymRats para pequenos grupos de amigos, trabalho ou militância competirem de forma saudável registrando ações de virada de voto."
+  },
+  {
+    "nome": "Segundo Turno com Lula",
+    "tool_id": "segundo-turno-com-lula",
+    "url": "https://segundoturnocomlula.com",
+    "dominio": "segundoturnocomlula.com",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma de mobilização com tarefas diárias coordenadas no digital e no presencial, com comunidade de 20 mil membros."
+  },
+  {
+    "nome": "Baixada Santista com Lula",
+    "tool_id": "baixada-santista-com-lula",
+    "url": "https://baixadasantistacomlula.com.br",
+    "dominio": "baixadasantistacomlula.com.br",
+    "categoria": "Plataformas e Mobilização",
+    "descricao": "Plataforma de mobilização da Baixada Santista com cadastro de atividades, ações e comunidades digitais, com 10 mil membros."
+  },
+  {
+    "nome": "Brasil Acima de Tudo",
+    "tool_id": "brasil-acima-de-tudo",
+    "url": "https://brasilacimadetudo.netlify.app",
+    "dominio": "brasilacimadetudo.netlify.app",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "• Guia do 2º turno: as duas missões e argumentos prontos, inclusive para o voto 70+. • Treino de conversa: chat com 9 personagens (tio,"
+  },
+  {
+    "nome": "Conversa na Rua",
+    "tool_id": "conversa-na-rua",
+    "url": "https://conversanarua.netlify.app",
+    "dominio": "conversanarua.netlify.app",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Conversa na Rua é um guia feito por voluntárias pra ajudar a conversar com quem não foi votar ou está em dúvida no 2º turno,"
+  },
+  {
+    "nome": "Vira Lula IA (Furando a Bolha)",
+    "tool_id": "vira-lula-ia-furando-a-bolha",
+    "url": "https://levops.cc/publico/furando_a_bolha/viralulaia",
+    "dominio": "levops.cc",
+    "categoria": "Conversa e Diálogo",
+    "descricao": "Bot de IA que gera argumentos para conversas de virada de voto."
+  },
+  {
+    "nome": "Escolha Fácil",
+    "tool_id": "escolha-facil",
+    "url": "https://escolhafacil.online",
+    "dominio": "escolhafacil.online",
+    "categoria": "Informação e Persuasão",
+    "descricao": "O Escolha fácil (escolhafacil.online) é um site de linguagem simples e com fonte que mostra, por perguntas do dia a dia, por que votar 13"
+  },
+  {
+    "nome": "Desmascara Brasil",
+    "tool_id": "desmascara-brasil",
+    "url": "https://desmascarabrasil.com",
+    "dominio": "desmascarabrasil.com",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Desenvolvi o Desmascara Brasil, uma plataforma de combate à desinformação que permitirá receber denúncias de notícias suspeitas, vídeos, imagens e conteúdos compartilhados nas redes sociais."
+  },
+  {
+    "nome": "Guia de Denúncia Flávio",
+    "tool_id": "guia-de-denuncia-flavio",
+    "url": "https://guiadenunciaflavio.github.io",
+    "dominio": "guiadenunciaflavio.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Desenvolvi uma página estática que permite verificar todas as provas incriminatórias contra o Flávio no caso das rachadinhas. Tudo baseado em fatos documentados. Meu plano"
+  },
+  {
+    "nome": "Risco Real",
+    "tool_id": "risco-real",
+    "url": "https://riscoreal.com.br",
+    "dominio": "riscoreal.com.br",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Uma página para mostrar de forma pratica o impacto real do prospecto dos dois governos em cada ponto de preocupação do eleitor"
+  },
+  {
+    "nome": "Quanto a 6x1 Tira",
+    "tool_id": "quanto-a-6x1-tira",
+    "url": "https://vncsvr.github.io/quanto-a-6x1-tira",
+    "dominio": "vncsvr.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "\"Quanto a 6x1 tira\" é um app web gratuito: o trabalhador informa a própria escala e o salário e vê, em números concretos, quanto tempo"
+  },
+  {
+    "nome": "Vote Consciente",
+    "tool_id": "vote-consciente",
+    "url": "https://voteconsciente.github.io/eleicoes2026",
+    "dominio": "voteconsciente.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Uma landing page voltada a centralizar todas as informações principais que devemos mostrar aos mais afetados: idosos, aos que absteram e aos que procuram por"
+  },
+  {
+    "nome": "O Poder do Seu Voto",
+    "tool_id": "o-poder-do-seu-voto",
+    "url": "https://opoderdoseuvoto.github.io",
+    "dominio": "opoderdoseuvoto.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Fiz um site para a gente não ficar refém de narrativa falsa por aí. Sem frescura, sem cadastro, sem formulário chato e sem guardar dados"
+  },
+  {
+    "nome": "Na Ponta do Lápis",
+    "tool_id": "na-ponta-do-lapis",
+    "url": "https://napontadolapis.org",
+    "dominio": "napontadolapis.org",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Comparativo com fontes entre planos de governo e legados de Lula/Dilma, Temer e Bolsonaro, com linguagem neutra e acessível para indecisos."
+  },
+  {
+    "nome": "Análise Eleitoral (Chatbot)",
+    "tool_id": "analise-eleitoral-chatbot",
+    "url": "https://analiseeleitoral.site",
+    "dominio": "analiseeleitoral.site",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Chatbot com propostas dos dois candidatos, histórico de governo, PECs e checagem de matérias da imprensa, mostrando como cada ponto afeta o eleitor."
+  },
+  {
+    "nome": "Tesoura no Comércio",
+    "tool_id": "tesoura-no-comercio",
+    "url": "https://tesouranocomercio.pplx.app",
+    "dominio": "tesouranocomercio.pplx.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Simulador do impacto de cortes no Bolsa Família, BPC e INSS sobre o comércio local e os MEIs dos municípios de Minas Gerais."
+  },
+  {
+    "nome": "Brasil Maior que Dois Lados",
+    "tool_id": "brasil-maior-que-dois-lados",
+    "url": "https://brasilmaiorquedoislados.pages.dev",
+    "dominio": "brasilmaiorquedoislados.pages.dev",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Jornada personalizada em que o eleitor escolhe os temas que importam e vê fatos verificados sobre o que muda, o que está em risco, como votar e como cobrar."
+  },
+  {
+    "nome": "Patrão 6x1",
+    "tool_id": "patrao-6x1",
+    "url": "https://humanidadesdigitais.com.br",
+    "dominio": "humanidadesdigitais.com.br",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Chatbot satírico de IA que interpreta um patrão contrário à redução da jornada, para gerar conteúdo bem-humorado sobre o fim da escala 6x1 nas redes."
+  },
+  {
+    "nome": "Direita com Lula",
+    "tool_id": "direita-com-lula",
+    "url": "https://direitacomlula.org",
+    "dominio": "direitacomlula.org",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Site para convencer pessoas de centro direita e direita de que Flávio Bolsonaro não é a melhor opção, com argumentos factuais, lógicos e verificáveis."
+  },
+  {
+    "nome": "Perspectiva progressista",
+    "tool_id": "perspectiva-progressista",
+    "url": "https://perspectiva-progressista.github.io",
+    "dominio": "perspectiva-progressista.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Diretório com os maiores canais, perfis e fóruns progressistas pra facilitar o encontro e o polo de informações para o público."
+  },
+  {
+    "nome": "14 sinais de alerta do facismo",
+    "tool_id": "14-sinais-de-alerta-do-facismo",
+    "url": "https://pirracabr.github.io/dossie-democratico-br",
+    "dominio": "pirracabr.github.io",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Site para alertar as pessoas sobre a onda do fascismo e como isso pode estar ligado ao bolsonarismo. Isso é feito usando os 14 alertas do fascismo e relacionando cada item com eventos ligados ao círculo bolsonarista, sempre trazendo fontes verificadas para embasar cada item."
+  },
+  {
+    "nome": "Painel de eleitores 70+",
+    "tool_id": "painel-de-eleitores-70",
+    "url": "https://eleitores70mais.vercel.app",
+    "dominio": "eleitores70mais.vercel.app",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Aplicação web com dados de eleitores 70+ por município e orientações sobre conversas para trazer os votos de quem não compareceu no 1° turno. São 17 milhões de eleitores nesta faixa etária."
+  },
+  {
+    "nome": "Escolha católica",
+    "tool_id": "escolha-catolica",
+    "url": "https://escolhacatolica.org",
+    "dominio": "escolhacatolica.org",
+    "categoria": "Informação e Persuasão",
+    "descricao": "Site com fatos verificados direcionado aos católicos mostrando que Flávio Bolsonaro não é a melhor opção, com base na Palavra, na Tradição e no Magistério da Igreja."
+  },
+  {
+    "nome": "Onde Buscar Votos - Contradados",
+    "tool_id": "onde-buscar-votos-contradados",
+    "url": "https://contradados.online",
+    "dominio": "contradados.online",
+    "categoria": "Dados e Mapas",
+    "descricao": "Onde Buscar Votos - Contradados. É Um site com análise de dados e estratégias para buscar votos para Lula até o segundo turno. Com roteiros,"
+  },
+  {
+    "nome": "Eleições RJ",
+    "tool_id": "eleicoes-rj",
+    "url": "https://eleicoes-rj.streamlit.app",
+    "dominio": "eleicoes-rj.streamlit.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Aplicação que busca dados do tse de todas as cidades do Rio e trata. Gera 3 pdfs: Um com dados gráficos e comparativos Lula x"
+  },
+  {
+    "nome": "Amigos do Flávio",
+    "tool_id": "amigos-do-flavio",
+    "url": "https://amigosdoflavio.com",
+    "dominio": "amigosdoflavio.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Site com as amizades e relações do Flavinho Desmaio"
+  },
+  {
+    "nome": "Momo com Lula",
+    "tool_id": "momo-com-lula",
+    "url": "https://appmomo.com.br/guides/momo-com-lula",
+    "dominio": "appmomo.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Faço parte do desenvolvimento de um app social de descoberta cultural no estado do Rio de Janeiro. Mapeamos diariamente o que acontece na cidade a"
+  },
+  {
+    "nome": "Dados da Virada",
+    "tool_id": "dados-da-virada",
+    "url": "https://dadosdavirada.up.railway.app",
+    "dominio": "dadosdavirada.up.railway.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Base aberta que organiza e conecta os dados de outras iniciativas da campanha. Hoje reúne os 143 materiais da Curadoria Vira Voto, classificados por perfil"
+  },
+  {
+    "nome": "Mapa Duplas",
+    "tool_id": "mapa-duplas",
+    "url": "https://mapa-duplas.vercel.app",
+    "dominio": "mapa-duplas.vercel.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa nacional com dados da votação do primeiro turno cruzados com informações demograficas e associando a impactos reais e propostas do Governo Lula. Ajuda a"
+  },
+  {
+    "nome": "Observatório Tech",
+    "tool_id": "observatorio-tech",
+    "url": "https://observatorio.tech",
+    "dominio": "observatorio.tech",
+    "categoria": "Dados e Mapas",
+    "descricao": "Um observatório popular de dados eleitorais comparando os locais críticos de perda de votos do Lula do primeiro turno de 2022 para o primeiro turno"
+  },
+  {
+    "nome": "Pauta da Urna",
+    "tool_id": "pauta-da-urna",
+    "url": "https://pautadaurna.com.br",
+    "dominio": "pautadaurna.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "O sistema traça os dados públicos do IBGE em comparação com o TSE para campanhas direcionadas aos perfis que não votaram, com questões semelhantes e"
+  },
+  {
+    "nome": "Radar Ceará",
+    "tool_id": "radar-ceara",
+    "url": "https://radar-ceara.pages.dev",
+    "dominio": "radar-ceara.pages.dev",
+    "categoria": "Dados e Mapas",
+    "descricao": "Um site que monitora redes sociais da imprensa em geral e perfis determinados para ajudar na coordenação e atuação da campanha"
+  },
+  {
+    "nome": "Radar do Voto",
+    "tool_id": "radar-do-voto",
+    "url": "https://radardovoto.app.br",
+    "dominio": "radardovoto.app.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Painéis com votação e comparativo com 2022 nos níveis de brasil, estado, município e locais de votação."
+  },
+  {
+    "nome": "Onde Panfletar",
+    "tool_id": "onde-panfletar",
+    "url": "https://ondepanfletar.com",
+    "dominio": "ondepanfletar.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapeamento de zonas prioritárias para panfletar nas cidades com base na perda de votos do Lula entre 22 e 26."
+  },
+  {
+    "nome": "Mapa Eleitoral de SP",
+    "tool_id": "mapa-eleitoral-de-sp",
+    "url": "https://vaipaolla.com.br/eleicao",
+    "dominio": "vaipaolla.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa Eleitoral de SP"
+  },
+  {
+    "nome": "Mapa de Abstenção por Bairro",
+    "tool_id": "mapa-de-abstencao-por-bairro",
+    "url": "https://www.leosuricate.com.br/analises",
+    "dominio": "leosuricate.com.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa de abstenção granularizado por bairro para poder decidir aonde focar o vira voto com ação de rua"
+  },
+  {
+    "nome": "Meu Voto Brasil",
+    "tool_id": "meu-voto-brasil",
+    "url": "https://www.meuvotobrasil.com",
+    "dominio": "meuvotobrasil.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Criei um portal de dados eleitorais de 2022 e 2026 para todo o Brasil. Dados eleitorais bairro a bairro, local por local de votação. Mapeando"
+  },
+  {
+    "nome": "Índice de Potencial de Conversão (IPC)",
+    "tool_id": "indice-de-potencial-de-conversao-ipc",
+    "url": "https://script.google.com/macros/s/AKfycbw1mNGQSUD5eS7l0TvAK20URcnB-EUxoePfcm8feAC6RhReoVSqlNIBIASWL-1zGxnadA/exec",
+    "dominio": "script.google.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Painel com dados do TSE que calcula o potencial de conversão de votos por município, zona e seção, com mapa, gráficos, filtros e ranking."
+  },
+  {
+    "nome": "Mapa do Voto João Monlevade",
+    "tool_id": "mapa-do-voto-joao-monlevade",
+    "url": "https://mapadovotojm.pplx.app",
+    "dominio": "mapadovotojm.pplx.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa urna por urna das eleições em João Monlevade (MG), cruzando votação, perfil socioeconômico e serviços federais a até 1 km de cada local de votação."
+  },
+  {
+    "nome": "Mapa do 2º Turno",
+    "tool_id": "mapa-do-2o-turno",
+    "url": "https://mapa-segundo-turno.web.app",
+    "dominio": "mapa-segundo-turno.web.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Cruza resultados do TSE de 2018, 2022 e 2026, perfil do eleitorado e Bolsa Família nos 5.570 municípios, agrupados em 8 perfis, indicando onde persuadir, mobilizar ou defender a base."
+  },
+  {
+    "nome": "Vira Voto DF",
+    "tool_id": "vira-voto-df",
+    "url": "https://viravoto.coletivo.net.br",
+    "dominio": "viravoto.coletivo.net.br",
+    "categoria": "Dados e Mapas",
+    "descricao": "Plataforma aberta e replicável que cruza dados eleitorais e do Censo no Distrito Federal (em construção)."
+  },
+  {
+    "nome": "Monitor de Narrativas Eleições 2026",
+    "tool_id": "monitor-de-narrativas-eleicoes-2026",
+    "url": "https://eleicoes2026.dashboard.adsray.clusterlab.lappis.rocks/analise",
+    "dominio": "eleicoes2026.dashboard.adsray.clusterlab.lappis.rocks",
+    "categoria": "Dados e Mapas",
+    "descricao": "Painel que monitora narrativas da imprensa nas eleições de 2026, tendências, possível desinformação e atores mais citados."
+  },
+  {
+    "nome": "Dinheiro em perspectiva",
+    "tool_id": "dinheiro-em-perspectiva",
+    "url": "https://dinheiro-em-perspectiva.vercel.app/",
+    "dominio": "dinheiro-em-perspectiva.vercel.app",
+    "categoria": "Dados e Mapas",
+    "descricao": "Análise de dados com relação ao patrimônio de diferentes classes e pessoas do Brasil, demonstrando de forma visual a desigualdade existente."
+  },
+  {
+    "nome": "Simulador da virada do 2º turno",
+    "tool_id": "simulador-da-virada-do-2o-turno",
+    "url": "https://187.boravirar.com",
+    "dominio": "187.boravirar.com",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa interativo que te permite criar um perfil de ação e ver como ele interfere nos votos do Brasil em tempo real, com base em pesquisas, estudos e estatísticas. Quantos iguais a você precisamos para virar o jogo?"
+  },
+  {
+    "nome": "Eleições 2026: o mapa de cada local de votação",
+    "tool_id": "eleicoes-2026-o-mapa-de-cada-local-de-votacao",
+    "url": "https://ianr.dev/eleicoes-2026",
+    "dominio": "ianr.dev",
+    "categoria": "Dados e Mapas",
+    "descricao": "Mapa interativo dos locais de votação e resultados das eleições de 2026 no Brasil, utilizando dados públicos do TSE. Ele facilita a visualização e a consulta dos resultados e abstenções de forma geográfica, podendo servir como base para análises eleitorais, planejamento de campanhas e organização de ações por região."
+  },
+  {
+    "nome": "Sou do Bem",
+    "tool_id": "sou-do-bem",
+    "url": "https://soudobem.app",
+    "dominio": "soudobem.app",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Sou do Bem (soudobem.app) é um site para voluntários compartilharem conteúdo da campanha no status do WhatsApp com poucos toques. De manhã e à noite"
+  },
+  {
+    "nome": "Vira-Voto Media",
+    "tool_id": "vira-voto-media",
+    "url": "https://vira-voto-media.vercel.app",
+    "dominio": "vira-voto-media.vercel.app",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Agregador de vídeos criados com Remotion onde trazem os planos do governo lula 2026 de forma resumida e de fácil consumo. A ideia é agragar"
+  },
+  {
+    "nome": "Voto do Povo",
+    "tool_id": "voto-do-povo",
+    "url": "https://votodopovo.com.br",
+    "dominio": "votodopovo.com.br",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Balanço do 3º mandato de Lula (2023–2026): destaca reforma tributária, retomada de programas sociais, queda do desemprego e do desmatamento."
+  },
+  {
+    "nome": "Lula.com.vc",
+    "tool_id": "lula-com-vc",
+    "url": "https://lula.com.vc",
+    "dominio": "lula.com.vc",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Lula.com.vc - Plataforma para molduras/avatars na campanha"
+  },
+  {
+    "nome": "Bora Virar",
+    "tool_id": "bora-virar",
+    "url": "https://boravirar.com",
+    "dominio": "boravirar.com",
+    "categoria": "Materiais de Comunicação",
+    "descricao": "Repositório coletivo de links para compartilhamento nas redes. Cadastre o seu, compartilhe o dos outros!"
+  },
+  {
+    "nome": "Vira Vira BR",
+    "tool_id": "vira-vira-br",
+    "url": "https://viravirabr.com.br",
+    "dominio": "viravirabr.com.br",
+    "categoria": "Jogos",
+    "descricao": "Jogo educativo no qual o jogador coleta informações e fatos sobre crimes e projeto de governo de ambos os candidatos, o objetivo é virar votos"
+  },
+  {
+    "nome": "Salve a padroeira",
+    "tool_id": "salve-a-padroeira",
+    "url": "https://salveapadroeira.com",
+    "dominio": "salveapadroeira.com",
+    "categoria": "Jogos",
+    "descricao": "Game educacional dedicada a Nossa Senhora Aparecida, que ajuda a descobrir verdade sobre fake news."
+  },
+  {
+    "nome": "Vira voto",
+    "tool_id": "vira-voto",
+    "url": "https://viravoto.vercel.app",
+    "dominio": "viravoto.vercel.app",
+    "categoria": "Jogos",
+    "descricao": "Um jogo onde você precisa salvar o Brasil do Flácido BolsoMaster que quer entregar o país ao Peruca Laranja. Quando você perde o jogo, você perde várias coisas que são desejos populares como: carro na garagem, Nike no pé, sonho da casa própria, etc. Quando você ganha, você derrota o chefe, garante a soberania do país, mas é sinalizado que a luta não acabou, pois no congresso ainda existem Comissários da Morte (deputados) e no senado existem os Dementadores (senadores)."
+  },
+  {
+    "nome": "Antes de votar",
+    "tool_id": "antes-de-votar",
+    "url": "https://antesdevotar.vercel.app",
+    "dominio": "antesdevotar.vercel.app",
+    "categoria": "Jogos",
+    "descricao": "É basicamente um clone do WhatsApp, visto que a maioria dos brasileiros se informa por ele, a ideia é as pessoas tenham uma experiência similar. Na tela aparecem diversos grupos, cada grupo tem pessoas conversando sobre vários assuntos como: aposentadoria, bets, família, fé, caso master, rachadinha, etc. E em cada grupo desses, os participantes fictícios compartilham links de notícias sobre todas as coisas que queimam o filme do candidato miliciano."
+  },
+  {
+    "nome": "Levante 13",
+    "tool_id": "levante-13",
+    "url": "https://levante13.online",
+    "dominio": "levante13.online",
+    "categoria": "Jogos",
+    "descricao": "Um jogo estilo space Invaders para derrotar a ameaça fascista."
+  },
+  {
+    "nome": "Em quem Jesus votaria?",
+    "tool_id": "em-quem-jesus-votaria",
+    "url": "https://emquemjesusvotaria.vercel.app",
+    "dominio": "emquemjesusvotaria.vercel.app",
+    "categoria": "Jogos",
+    "descricao": "Quiz com 7 opções onde a pessoa deve escolher entre duas frases, qual delas Jesus diria, sendo uma dita pelo Lula e outra dita pelo Bozo. Cada etapa mostra um trecho bíblico corroborando ou não com a escolha da pessoa."
+  },
+  {
+    "nome": "Gamers pelo Brasil",
+    "tool_id": "gamers-pelo-brasil",
+    "url": "https://gamerspelobrasil.tech",
+    "dominio": "gamerspelobrasil.tech",
+    "categoria": "Jogos",
+    "descricao": "Hub para coletar e distribuir os jogos da comunidade e terceiros. A plataforma pretende coletar e distribuir jogos pertinentes, de forma a impulsionar os jogos que tem relação com os temas que estão em pauta no dia, permitir comunidade e conquista através de troféus e o compartilhamento em redes sociais dos scores e a vinculação das plataformas de mídia por login, de forma a trakear grupos e perfis de usuários para a tomada de decisão sobre conteúdos específicos para jovens adultos e adolescentes."
+  },
+  {
+    "nome": "Devo Votar",
+    "tool_id": "devo-votar",
+    "url": "https://devovotar.com.br",
+    "dominio": "devovotar.com.br",
+    "categoria": "Abstenção e Virada",
+    "descricao": "um website que mostra mensagens de incentivo a pessoas que abstiveram no 1ª turno, a ideia é ser algo simples e fácil de compartilhar que"
+  },
+  {
+    "nome": "Nordeste Decide",
+    "tool_id": "nordeste-decide",
+    "url": "https://nordeste-decide.vercel.app",
+    "dominio": "nordeste-decide.vercel.app",
+    "categoria": "Abstenção e Virada",
+    "descricao": "O Nordeste Decide é um aplicativo web pensado para celulares, criado por apoiadores e inspirado na minha origem nordestina. A proposta é mobilizar os cerca"
+  },
+  {
+    "nome": "Vira Votos",
+    "tool_id": "vira-votos",
+    "url": "https://viravoto13.com.br",
+    "dominio": "viravoto13.com.br",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Lista os locais de votação da cidade e filtra onde dá para virar voto (alta abstenção, eleitores 70+ e perda de votos desde 2022), com perfil do eleitor e sugestões do que falar."
+  },
+  {
+    "nome": "Mapa de abstenção",
+    "tool_id": "mapa-de-abstencao",
+    "url": "https://programadorespd-campanha-app.hf.space",
+    "dominio": "programadorespd-campanha-app.hf.space",
+    "categoria": "Abstenção e Virada",
+    "descricao": "Combina dados públicos do TSE (1º turno de 2026) com dados do Censo 2022 para traçar o perfil eleitoral de cada zona da cidade, considerando abstenções e a disputa entre candidatos. Atenção: cidades grandes podem demorar mais para carregar devido ao volume de dados. Vídeo explicativo: https://www.youtube.com/watch?v=w8W89sQhtec"
+  }
+]

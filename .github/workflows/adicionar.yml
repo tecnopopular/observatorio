@@ -1,0 +1,143 @@
+name: Incluir iniciativa no catálogo
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Endereço público da aplicação, com https://"
+        required: true
+        type: string
+      nome:
+        description: "Nome público da iniciativa"
+        required: true
+        type: string
+      categoria:
+        description: "Eixo temático"
+        required: true
+        type: choice
+        options:
+          - Dados e Mapas
+          - Informação e Persuasão
+          - Plataformas e Mobilização
+          - Jogos
+          - Materiais de Comunicação
+          - Conversa e Diálogo
+          - Abstenção e Virada
+      descricao:
+        description: "O que a ferramenta faz, em uma ou duas frases"
+        required: true
+        type: string
+      repositorio:
+        description: "URL pública do repositório git (opcional)"
+        required: false
+        type: string
+      fontes_primarias:
+        description: "Órgãos públicos citados, separados por vírgula (opcional)"
+        required: false
+        type: string
+      tool_id:
+        description: "Identificador explícito (opcional; padrão: slug do nome)"
+        required: false
+        type: string
+      ignorar_robots:
+        description: "Incluir mesmo quando o robots.txt do host proíbe a leitura"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalogo
+  cancel-in-progress: false
+
+jobs:
+  incluir:
+    name: Validar e incluir
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v5
+
+      - name: Preparar o uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sincronizar dependências
+        run: uv sync
+
+      - name: Portão de formatação
+        run: uv run ruff format --check .
+
+      - name: Portão de lint
+        run: uv run ruff check .
+
+      - name: Portão de docstrings
+        run: uv run python tools/verificar_docstrings.py
+
+      - name: Portão de código morto
+        run: uv run python tools/verificar_codigo_morto.py
+
+      - name: Suíte de testes
+        run: uv run python -m unittest discover tests
+
+      - name: Portão de privacidade
+        run: uv run python -m observatorio.cli verify-privacy --all-files
+
+      - name: Incluir a iniciativa
+        env:
+          ENTRADA_URL: ${{ inputs.url }}
+          ENTRADA_NOME: ${{ inputs.nome }}
+          ENTRADA_CATEGORIA: ${{ inputs.categoria }}
+          ENTRADA_DESCRICAO: ${{ inputs.descricao }}
+          ENTRADA_REPOSITORIO: ${{ inputs.repositorio }}
+          ENTRADA_FONTES: ${{ inputs.fontes_primarias }}
+          ENTRADA_TOOL_ID: ${{ inputs.tool_id }}
+          ENTRADA_IGNORAR_ROBOTS: ${{ inputs.ignorar_robots }}
+        run: |
+          argumentos=(
+            --url "$ENTRADA_URL"
+            --nome "$ENTRADA_NOME"
+            --categoria "$ENTRADA_CATEGORIA"
+            --descricao "$ENTRADA_DESCRICAO"
+          )
+          if [ -n "$ENTRADA_REPOSITORIO" ]; then
+            argumentos+=(--repositorio "$ENTRADA_REPOSITORIO")
+          fi
+          if [ -n "$ENTRADA_FONTES" ]; then
+            argumentos+=(--fontes-primarias "$ENTRADA_FONTES")
+          fi
+          if [ -n "$ENTRADA_TOOL_ID" ]; then
+            argumentos+=(--tool-id "$ENTRADA_TOOL_ID")
+          fi
+          if [ "$ENTRADA_IGNORAR_ROBOTS" = "true" ]; then
+            argumentos+=(--ignorar-robots)
+          fi
+          uv run python -m observatorio.cli adicionar "${argumentos[@]}"
+
+      - name: Conferir o resultado
+        run: |
+          git --no-pager diff --stat
+          git --no-pager diff -- data/data_iniciativas.json | head -40
+
+      - name: Gravar no repositório
+        env:
+          ENTRADA_NOME: ${{ inputs.nome }}
+          ENTRADA_URL: ${{ inputs.url }}
+          ENTRADA_CATEGORIA: ${{ inputs.categoria }}
+        run: |
+          git config user.name "tecnopopular-observatorio"
+          git config user.email "contato@tecnopopular.org"
+          git add data/data_iniciativas.json
+          if git diff --cached --quiet; then
+            echo "Nada a gravar: o catálogo não mudou."
+            exit 1
+          fi
+          git commit \
+            -m "feat(catalogo): adiciona ${ENTRADA_NOME}" \
+            -m "Inclusão pelo workflow de catálogo, eixo ${ENTRADA_CATEGORIA}. Endereço: ${ENTRADA_URL}. A iniciativa entra no próximo ciclo de auditoria."
+          git push origin HEAD:main

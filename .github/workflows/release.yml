@@ -1,0 +1,149 @@
+name: Publicar laudo do ciclo
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag existente a publicar (ex: v0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event_name == 'push' && github.ref_name || inputs.tag }}
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ github.event_name == 'push' && github.ref_name || inputs.tag }}
+
+jobs:
+  publicar:
+    name: Gerar e anexar o laudo
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Baixar o repositório na tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG }}
+          fetch-depth: 0
+
+      - name: Preparar o uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sincronizar dependências
+        run: uv sync
+
+      - name: Portão de formatação
+        run: uv run ruff format --check .
+
+      - name: Portão de lint
+        run: uv run ruff check .
+
+      - name: Portão de docstrings
+        run: uv run python tools/verificar_docstrings.py
+
+      - name: Portão de código morto
+        run: uv run python tools/verificar_codigo_morto.py
+
+      - name: Suíte de testes
+        run: uv run python -m unittest discover tests
+
+      - name: Portão de privacidade
+        run: uv run python -m observatorio.cli verify-privacy --all-files
+
+      - name: Executar o ciclo de auditoria
+        run: uv run python -m observatorio.cli audit-all --workers 8 --timeout 12
+
+      - name: Portão de integridade do cache
+        run: uv run python tools/verificar_cache.py
+
+      - name: Empacotar cache de HTML
+        run: tar -czf cache-html.tar.gz -C data/raw html_cache
+
+      - name: Registrar procedência
+        env:
+          TAG: ${{ env.TAG }}
+        run: |
+          uv run python - <<'PY'
+          import collections
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          tag = os.environ["TAG"]
+          commit = subprocess.run(
+              ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True
+          ).stdout.strip()
+          manifesto = json.loads(Path("data/estado_hashes.json").read_text(encoding="utf-8"))
+          laudo = json.loads(Path("dist/auditoria_iniciativas.json").read_text(encoding="utf-8"))
+          status = collections.Counter(entrada["status"] for entrada in manifesto["entries"])
+
+          linhas = [
+              f"Tag: {tag}",
+              f"Commit: {commit}",
+              f"Ciclo: {manifesto['generated_at']}",
+              f"Laudos emitidos: {len(laudo)}",
+              f"Entradas no manifesto: {manifesto['total']}",
+              "",
+              "Distribuição por status:",
+          ]
+          for nome, quantidade in sorted(status.items()):
+              linhas.append(f"  {nome}: {quantidade}")
+          linhas += [
+              "",
+              "Arquivos anexados:",
+              "  auditoria_iniciativas.json  laudo completo do ciclo",
+              "  estado_hashes.json          hash, status e notas por iniciativa",
+              "  cache-html.tar.gz           corpos lidos, que permitem recalcular as notas offline",
+              "  SHA256SUMS                  integridade dos arquivos acima",
+              "",
+              "Para recalcular as notas a partir do cache anexado:",
+              "  tar -xzf cache-html.tar.gz -C data/raw",
+              "  uv run python tools/verificar_cache.py",
+              "  uv run python -m observatorio.cli audit-all --refresh",
+              "",
+              "O laudo não é versionado no repositório: ele é publicado aqui, e o manifesto",
+              "versionado registra hash, status e notas de cada iniciativa.",
+              "",
+          ]
+          Path("PROCEDENCIA.txt").write_text("\n".join(linhas), encoding="utf-8")
+          print("\n".join(linhas[:6]))
+          PY
+
+      - name: Preparar anexos
+        run: |
+          cp dist/auditoria_iniciativas.json auditoria_iniciativas.json
+          cp data/estado_hashes.json estado_hashes.json
+          ls -lh auditoria_iniciativas.json estado_hashes.json cache-html.tar.gz PROCEDENCIA.txt
+
+      - name: Calcular somas de verificação
+        run: |
+          sha256sum auditoria_iniciativas.json estado_hashes.json cache-html.tar.gz PROCEDENCIA.txt > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Publicar a release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release $TAG já existe; anexando arquivos."
+          else
+            gh release create "$TAG" --title "$TAG" --notes-file PROCEDENCIA.txt
+          fi
+          gh release upload "$TAG" \
+            auditoria_iniciativas.json \
+            estado_hashes.json \
+            cache-html.tar.gz \
+            SHA256SUMS \
+            PROCEDENCIA.txt \
+            --clobber

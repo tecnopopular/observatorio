@@ -1,0 +1,93 @@
+name: Observatorio Monitoramento Civico
+
+on:
+  schedule:
+    # Executa semanalmente aos domingos às 03:00 UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: 'Forçar reavaliação ignorando cache de SHA-256'
+        required: false
+        default: false
+        type: boolean
+      skip_archive:
+        description: 'Pular disparos ao Internet Archive'
+        required: false
+        default: false
+        type: boolean
+  pull_request:
+    paths:
+      - 'data/data_iniciativas.json'
+      - 'src/observatorio/**'
+
+concurrency:
+  group: observatorio-pipeline
+  cancel-in-progress: true
+
+jobs:
+  monitor-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Sincronizar Dependências Python
+        run: uv sync
+
+      - name: Portão Preventivo de Privacidade (LGPD & Segredos)
+        run: uv run python -m observatorio.cli verify-privacy --all-files
+
+      - name: Lint e Formatação (ruff)
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Detecção de Código Morto (vulture)
+        run: uv run python tools/verificar_codigo_morto.py
+
+      - name: Padrão de Docstrings e Ausência de Comentários
+        run: uv run python tools/verificar_docstrings.py
+
+      - name: Executar Bateria de Testes Unitários
+        run: uv run python -m unittest discover tests
+
+      - name: Executar Esteira de Monitoramento e Avaliação Cívica
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.refresh }}" = "true" ]; then
+            ARGS="$ARGS --refresh"
+          fi
+          if [ "${{ github.event.inputs.skip_archive }}" = "true" ]; then
+            ARGS="$ARGS --skip-archive"
+          fi
+          uv run python -m observatorio.cli audit-all $ARGS
+
+      - name: Verificar Alterações no Manifesto de Estado
+        id: git-check
+        run: |
+          git status --porcelain
+          echo "has_changes=$(git status --porcelain | wc -l | tr -d ' ')" >> $GITHUB_OUTPUT
+
+      - name: Publicar Laudo Completo como Artefato do Ciclo
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-iniciativas
+          path: dist/auditoria_iniciativas.json
+          retention-days: 90
+
+      - name: Autocommit do Manifesto de Estado
+        if: github.event_name != 'pull_request' && steps.git-check.outputs.has_changes != '0'
+        run: |
+          git config user.name "TecnoPopular Observatorio Bot"
+          git config user.email "bot@tecnopopular.org"
+          git add data/estado_hashes.json
+          git commit -m "chore(estado): atualiza manifesto de hashes e scores do ciclo semanal [skip ci]"
+          git push

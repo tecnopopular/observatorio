@@ -1,0 +1,23 @@
+TecnoPopular — Observatório TecnoPopular
+Copyright (C) 2026 TecnoPopular
+
+Este produto é distribuído sob a GNU Affero General Public License, versão 3
+ou posterior. O texto integral está em LICENSE.
+
+DADOS E RESULTADOS
+Os arquivos de dados de `data/` (catálogos, laudos consolidados, metadados e
+exports) são licenciados sob Creative Commons Atribuição 4.0 Internacional
+(CC-BY-4.0). Texto integral em `data/LICENSE`.
+Atribuição exigida: "Fonte: Observatório TecnoPopular (tecnopopular.org),
+licenciado sob CC-BY-4.0".
+
+MARCA E SELO (GPLv3, seção 7(e))
+A licença do código não concede direito de uso das marcas, do nome
+"TecnoPopular", do selo "Certificado TecnoPopular", do nome "Protocolo de
+Avaliação Cívica TecnoPopular" ou de identidade visual equivalente.
+
+É permitido copiar, modificar e redistribuir o código sob os termos da AGPL-3.0
+e citar que o software deriva do Observatório TecnoPopular. Não é permitido
+apresentar uma instância modificada, um laudo ou um serviço de avaliação como
+emissão oficial do TecnoPopular, nem usar o selo para sugerir certificação
+concedida pela instituição.

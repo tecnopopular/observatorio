@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv/
+
+# Ambientes e Segredos
+.env
+*.env
+!.env.example
+
+# Dados brutos de raspagem, caches locais e temporários
+data/raw/
+scratch/
+.pytest_cache/
+.coverage
+
+# macOS
+.DS_Store
+
+# Artefatos de publicação e build (derivados, nunca versionados)
+dist/
+
+# Artefatos de processo do SDD: ficam locais, fora do repositório público
+specs/*/plan.md
+specs/*/tasks.md
+specs/*/quickstart.md
+specs/*/checklists/
+
+# Caches de ferramentas
+.ruff_cache/
+.vulture_cache/
+
+# Ferramentas de processo (Speckit): ficam locais, fora do repositório público
+.agents/
+.specify/
