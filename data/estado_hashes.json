@@ -1,12 +1,12 @@
 {
   "protocol_version": "3",
-  "generated_at": "2026-10-24T23:41:04.747232Z",
-  "total": 183,
+  "generated_at": "2026-10-25T03:25:28.174308Z",
+  "total": 184,
   "entries": [
     {
       "tool_id": "14-sinais-de-alerta-do-facismo",
       "html_sha256": "89443e4f93e786b012900dfe3f573174b00502172b70041c660ff0860c6a2a26",
-      "evaluated_at": "2026-10-24T23:35:58.710259+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.552890+00:00",
       "status": "auditado",
       "total_score": 85.2,
       "dimension_scores": {
@@ -23,7 +23,7 @@
     {
       "tool_id": "a-batalha-dos-influs",
       "html_sha256": "65091af89f9301fdf89db77c3ba4e6ed63b64d7694387a54d941d5c323d03430",
-      "evaluated_at": "2026-10-24T23:35:46.784976+00:00",
+      "evaluated_at": "2026-10-25T03:24:26.534915+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -35,12 +35,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024223956/https://batalhadosinflus.the-mojo.studio/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "acervo-da-vitoria",
       "html_sha256": "5eaed30c308c677894769b03c46ec37eadd0c2d6027e07b38fe28b322ebbb24f",
-      "evaluated_at": "2026-10-24T23:35:45.996938+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.733693+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -57,7 +57,7 @@
     {
       "tool_id": "acoes-2o-turno-agenda-e-mapa",
       "html_sha256": "8ef53deb9a3d03a18aaa40692c313310e9c54c09ed379677512581da5abc6243",
-      "evaluated_at": "2026-10-24T23:35:48.806474+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.097475+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -74,7 +74,7 @@
     {
       "tool_id": "adote-um-indeciso",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:35:45.829585+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.531624+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -90,25 +90,25 @@
     },
     {
       "tool_id": "agenda-coletiva-campinas",
-      "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:12.590532+00:00",
-      "status": "nao_inspecionado",
-      "total_score": null,
+      "html_sha256": "585003e1c77b68f1e9f947a8d3891e9573721448adee15a79ceb46814953b86f",
+      "evaluated_at": "2026-10-25T03:24:35.940612+00:00",
+      "status": "catalogado",
+      "total_score": 72.5,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
-        "privacidade_e_soberania": 50.0,
+        "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 30.0
+        "acessibilidade_desempenho": 100.0
       },
-      "coverage_complete": false,
-      "archive_url": "https://web.archive.org/web/20261024215756/https://vaipaolla.com.br/agenda",
-      "archive_status": "captured"
+      "coverage_complete": true,
+      "archive_url": "https://web.archive.org/web/20261024233729/https://vaipaolla.com.br/agenda",
+      "archive_status": "reused"
     },
     {
       "tool_id": "agenda-popular",
       "html_sha256": "abd52e394cd8da2c23dada00aa3904e55de343786770cbd9e6f6858e6138bb72",
-      "evaluated_at": "2026-10-24T23:35:55.962701+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.342889+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -120,12 +120,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215758/https://agendapopular.pages.dev/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "alquimidia",
-      "html_sha256": "e55cb781d18e9cb1c70409ffabd74fb8d6ab61f211614af76173141d8af06eb7",
-      "evaluated_at": "2026-10-24T23:36:08.673853+00:00",
+      "html_sha256": "b06fa2c5e9c24e98659dec2135896bd7259b33b17644c747ecea29bbd7046a45",
+      "evaluated_at": "2026-10-25T03:24:44.887190+00:00",
       "status": "catalogado",
       "total_score": 71.0,
       "dimension_scores": {
@@ -137,12 +137,12 @@
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261024224024/https://alquimidia.org/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "amigos-do-flavio",
       "html_sha256": "9c6f5d560d30f7b4fffb8f64bd4001950109a6e42f99bcfa9db93259c832b973",
-      "evaluated_at": "2026-10-24T23:35:59.191325+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.935643+00:00",
       "status": "catalogado",
       "total_score": 68.0,
       "dimension_scores": {
@@ -154,12 +154,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215812/https://amigosdoflavio.com/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "analise-cuiaba-votos",
       "html_sha256": "ba9ff87f53ffcde6e2fbf09de914da4c8b4abd9560166f3c57eb876c0fa55d91",
-      "evaluated_at": "2026-10-24T23:35:49.688836+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.134661+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -171,12 +171,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215813/https://noguerabreno.github.io/analisecuiabavotos/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "analise-de-esforco-por-bairros",
       "html_sha256": "143254166a3db2f431aa7f5cb34a6ebfa13ceb8e4fe5105debb374dc848d06e6",
-      "evaluated_at": "2026-10-24T23:35:51.153482+00:00",
+      "evaluated_at": "2026-10-25T03:24:29.586126+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -188,12 +188,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215812/https://rafadaguia.github.io/analise-de-esforco-por-bairros-lula-2026/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "analise-eleitoral-chatbot",
-      "html_sha256": "b87903d22cfb1afee49644cdc4a4c022b1ed13a87c3f5d44c682ebd7595aa766",
-      "evaluated_at": "2026-10-24T23:36:03.042520+00:00",
+      "html_sha256": "1b46726a9ea47c1a421b3ab792ac1ac66595df14b3160f6364978e1ca21393a8",
+      "evaluated_at": "2026-10-25T03:24:40.717442+00:00",
       "status": "catalogado",
       "total_score": 72.8,
       "dimension_scores": {
@@ -205,12 +205,12 @@
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261024224058/https://analiseeleitoral.site/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "analise-vira-voto-tse",
       "html_sha256": "65ffe70ec3b31d9db98cb3325f4f83a738f80098567dba95062cfa9167fc3bec",
-      "evaluated_at": "2026-10-24T23:35:51.895367+00:00",
+      "evaluated_at": "2026-10-25T03:24:30.297214+00:00",
       "status": "catalogado",
       "total_score": 71.8,
       "dimension_scores": {
@@ -222,12 +222,12 @@
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261024224435/https://tatipara.github.io/vira_voto/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "antes-de-votar",
       "html_sha256": "f8d0b3c54434fc19f527beb9b2267fed3a7d2c0c1b27015802a7d94a106e9ee4",
-      "evaluated_at": "2026-10-24T23:36:04.137735+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.062166+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -239,12 +239,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024224448/https://antesdevotar.vercel.app/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "aplicativos-da-virada-comite-de-tecnologia",
       "html_sha256": "db566ba6ff212452dcc609648d31163d9bc4c3cb14e62c106ef521d79729424f",
-      "evaluated_at": "2026-10-24T23:35:53.112610+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.517469+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -256,12 +256,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024224541/https://comitedetecnologia.com.br/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "apuracao-do-1o-turno-analises-independentes",
       "html_sha256": "9beae7d4ae056a11597770a050b80200c3ed0a3b89d0751b899d044128cfa25d",
-      "evaluated_at": "2026-10-24T23:35:54.979760+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.208010+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -273,12 +273,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024224515/https://travahacker.com.br/eleicoes2026/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "atendimento-cliatende",
       "html_sha256": "2e4f4c9af09e5c21a91ff2bafc8dca4ec49553d8c6710b17a2985a7aad4b9b32",
-      "evaluated_at": "2026-10-24T23:35:48.774448+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.417235+00:00",
       "status": "catalogado",
       "total_score": 71.8,
       "dimension_scores": {
@@ -295,7 +295,7 @@
     {
       "tool_id": "atlas-dado-popular",
       "html_sha256": "08acb03dd8f0cc4ec06416be658474bf78600dc3296307f7481741f63f245d6e",
-      "evaluated_at": "2026-10-24T23:35:47.226012+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.878790+00:00",
       "status": "catalogado",
       "total_score": 68.8,
       "dimension_scores": {
@@ -307,12 +307,12 @@
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261024223518/https://dadopopular.com.br/atlas",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "baixada-santista-com-lula",
       "html_sha256": "fa812f4e0726b1ca615ba1b8b118e6bfc69549a5b98d1df42015808ef10fecaa",
-      "evaluated_at": "2026-10-24T23:35:57.328640+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.192467+00:00",
       "status": "rejeitado",
       "total_score": 65.0,
       "dimension_scores": {
@@ -324,19 +324,19 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024224557/https://baixadasantistacomlula.com.br/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "baralho-da-virada",
-      "html_sha256": "c74c7f887f04e2720b03e826d246a5f40fb144d9fab65c0beae1058e097192db",
-      "evaluated_at": "2026-10-24T23:35:56.167988+00:00",
+      "html_sha256": "a5e329bde611b22b63c7102bd0d876f96f5611e9c780fb22349b24264e9acb67",
+      "evaluated_at": "2026-10-25T03:24:34.309869+00:00",
       "status": "auditado",
-      "total_score": 88.0,
+      "total_score": 85.0,
       "dimension_scores": {
         "proveniencia_dados": 100.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
-        "enquadramento_republicano": 100.0,
+        "enquadramento_republicano": 80.0,
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
@@ -346,7 +346,7 @@
     {
       "tool_id": "baralho-interativo",
       "html_sha256": "60bc72c3a7c61be7073f7b4ee5b65953451eeecbfeffbf7a79d05687c86f027a",
-      "evaluated_at": "2026-10-24T23:35:46.034245+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.732141+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -363,7 +363,7 @@
     {
       "tool_id": "base-dos-dados",
       "html_sha256": "5c8143bbbbe59a0fa638d91449b50f7fc36b93d6cd11e21e91cfb1bd0254b73b",
-      "evaluated_at": "2026-10-24T23:35:55.751161+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.734837+00:00",
       "status": "rejeitado",
       "total_score": 68.5,
       "dimension_scores": {
@@ -375,12 +375,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024224631/https://basedosdados.org/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "bora-lula",
-      "html_sha256": "ffc259117bb936b4eafcf07661f6d7f9f849277133c4a0b4e475ceab2f54573d",
-      "evaluated_at": "2026-10-24T23:35:46.025591+00:00",
+      "html_sha256": "5b05501cfb07ef8184723a6738b58fb5278440bb0bd91ac8b0a0c37f940a5841",
+      "evaluated_at": "2026-10-25T03:24:24.775210+00:00",
       "status": "catalogado",
       "total_score": 74.0,
       "dimension_scores": {
@@ -392,12 +392,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024214911/https://bora-lula.online/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "bora-lula-2",
       "html_sha256": "438684b775ee8aad66362b2d0b66c71dba3e638cd0c2ce7a65b0d2ae2e3fffd6",
-      "evaluated_at": "2026-10-24T23:35:46.071198+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.900969+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -413,8 +413,8 @@
     },
     {
       "tool_id": "bora-virar",
-      "html_sha256": "08647a5d2d1da415ae16aa3ca87a7cc765f93c58e4bee1ac36274459ad300d49",
-      "evaluated_at": "2026-10-24T23:36:05.283188+00:00",
+      "html_sha256": "e9d86d4c205c1bfcf69dff024e9c2fbcb3e5a0bd20c53e72d1a539f398e93f83",
+      "evaluated_at": "2026-10-25T03:24:41.361858+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -431,7 +431,7 @@
     {
       "tool_id": "brasil-acima-de-tudo",
       "html_sha256": "52e0bd35793eee7ccac3b5ce4f4f911829f49b8afa31453aa0e85bb6bf5538fb",
-      "evaluated_at": "2026-10-24T23:35:57.768529+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.622600+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -448,7 +448,7 @@
     {
       "tool_id": "brasil-em-jogo",
       "html_sha256": "744ea0c65f46e81a8b5d500815eff31df388a8e8c1dc1ae462a791383736c7b9",
-      "evaluated_at": "2026-10-24T23:35:47.374184+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.775802+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -465,7 +465,7 @@
     {
       "tool_id": "brasil-em-jogo-2",
       "html_sha256": "52ca6224d9f49ac219fc1414a22ce01571ab27a4610c86db70d6c66d8fbf402d",
-      "evaluated_at": "2026-10-24T23:35:50.128400+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.618323+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -482,7 +482,7 @@
     {
       "tool_id": "brasil-feliz-de-novo",
       "html_sha256": "38a60cd6d291f88ea25a34fc05add7522a9233d4ef0b8c6687a3ea2fab469a39",
-      "evaluated_at": "2026-10-24T23:35:45.885552+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.787313+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -499,7 +499,7 @@
     {
       "tool_id": "brasil-futuro-comparador-de-planos",
       "html_sha256": "cac7a2bbbe70477a9630df9f20917869f85684608a23c6413e0800df0854aa3b",
-      "evaluated_at": "2026-10-24T23:35:45.883402+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.784517+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -515,8 +515,8 @@
     },
     {
       "tool_id": "brasil-io",
-      "html_sha256": "3105e106d31b47daf8424c537f050159ab74554226fa30f1b02739b30365d0b6",
-      "evaluated_at": "2026-10-24T23:35:56.243050+00:00",
+      "html_sha256": "6793e8e713a6cf3d198cc55d848ec1a9c7b9313ccfbca06ff8998db6918d8d10",
+      "evaluated_at": "2026-10-25T03:24:34.194133+00:00",
       "status": "rejeitado",
       "total_score": 68.5,
       "dimension_scores": {
@@ -532,25 +532,25 @@
     },
     {
       "tool_id": "brasil-maior-que-dois-lados",
-      "html_sha256": "aee097ec988f2348e7597e1c5fdb7408e2998ae31029cdca04f7cda29eccd729",
-      "evaluated_at": "2026-10-24T23:35:58.303052+00:00",
-      "status": "catalogado",
-      "total_score": 72.5,
+      "html_sha256": null,
+      "evaluated_at": "2026-10-25T03:24:36.021981+00:00",
+      "status": "nao_inspecionado",
+      "total_score": null,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
-        "privacidade_e_soberania": 100.0,
+        "privacidade_e_soberania": 50.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 30.0
       },
-      "coverage_complete": true,
+      "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "deferred"
     },
     {
       "tool_id": "brasil-melhor",
       "html_sha256": "30c2a3382ad64ec5652f76d73181840830c79057e6706285cc72cb53950d00bc",
-      "evaluated_at": "2026-10-24T23:35:45.897520+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.783068+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -567,7 +567,7 @@
     {
       "tool_id": "cards-oficiais-da-campanha-por-area",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:35:48.883948+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.483356+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -584,7 +584,7 @@
     {
       "tool_id": "carona-do-voto",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:35:46.126148+00:00",
+      "evaluated_at": "2026-10-25T03:24:24.949300+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -596,12 +596,12 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "deferred"
     },
     {
       "tool_id": "carona-solidaria",
       "html_sha256": "116b2c4d2232ea4e5d5ed6c9bd3d9449b78281d07095e7537f491e95a3947a19",
-      "evaluated_at": "2026-10-24T23:35:46.525480+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.274231+00:00",
       "status": "auditado",
       "total_score": 80.2,
       "dimension_scores": {
@@ -618,7 +618,7 @@
     {
       "tool_id": "censura-digital-lula",
       "html_sha256": "6f11f7bbfb9bff2e513eaab415e9ceec00635bfa5e6f501ed1c3b5d5508759bb",
-      "evaluated_at": "2026-10-24T23:35:54.826448+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.512300+00:00",
       "status": "rejeitado",
       "total_score": 68.0,
       "dimension_scores": {
@@ -635,7 +635,7 @@
     {
       "tool_id": "como-isso-me-afeta",
       "html_sha256": "36fa69c0d9257f3270a4c33323fd8f2b38d8d88a3920cd84944272fac9312069",
-      "evaluated_at": "2026-10-24T23:35:46.333766+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.124349+00:00",
       "status": "rejeitado",
       "total_score": 60.5,
       "dimension_scores": {
@@ -652,7 +652,7 @@
     {
       "tool_id": "como-meus-vizinhos-votam",
       "html_sha256": "aa66d494d159171f2031861a66812ec6a692e5d257111c67354efb73e6a98dc1",
-      "evaluated_at": "2026-10-24T23:35:56.262267+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.672662+00:00",
       "status": "auditado",
       "total_score": 80.5,
       "dimension_scores": {
@@ -669,7 +669,7 @@
     {
       "tool_id": "como-vira-voto",
       "html_sha256": "cd1ddda667a9dc1acbdcec0b78e21ee8f1627c5d1f3da9f1653c08d509152e49",
-      "evaluated_at": "2026-10-24T23:35:46.539115+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.348614+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -686,7 +686,7 @@
     {
       "tool_id": "compara-brasil",
       "html_sha256": "b1f058fd17fac891a5dc5abe504d9ee8e0af94804b9008909a3b6a008034b371",
-      "evaluated_at": "2026-10-24T23:35:46.771853+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.431686+00:00",
       "status": "catalogado",
       "total_score": 71.8,
       "dimension_scores": {
@@ -703,7 +703,7 @@
     {
       "tool_id": "confere-ai-ia-anti-fake-news",
       "html_sha256": "cd3ef3a6de7cf4ab7e2a942f77cead8db3463e71e834e9f0be03f4fc0444fa5d",
-      "evaluated_at": "2026-10-24T23:35:46.529055+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.474675+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -720,7 +720,7 @@
     {
       "tool_id": "conversa-na-rua",
       "html_sha256": "47831f5f4ac007043fa9d987570235fc0c6b02b4071d37f2836343cac68adf41",
-      "evaluated_at": "2026-10-24T23:35:57.701262+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.698298+00:00",
       "status": "catalogado",
       "total_score": 71.0,
       "dimension_scores": {
@@ -732,12 +732,12 @@
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261025012602/https://conversanarua.netlify.app/",
-      "archive_status": "captured"
+      "archive_status": "reused"
     },
     {
       "tool_id": "conversa-que-muda",
-      "html_sha256": "1e3e809e8c169494a2230ba72d71594a39ed164a6bb29bc6d48e50e8cedfb47b",
-      "evaluated_at": "2026-10-24T23:35:47.631971+00:00",
+      "html_sha256": "3b18983481fb1f5aceef44d6a812bb2f160999df55f00b2973e290b0de6c110a",
+      "evaluated_at": "2026-10-25T03:24:26.273679+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -754,7 +754,7 @@
     {
       "tool_id": "cortes-do-lula-orquestrador-de-pautas",
       "html_sha256": "b24deab8bd13efc1390170511850d24848ca4afaaa9cd735389b04d1e953cd63",
-      "evaluated_at": "2026-10-24T23:35:46.774589+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.551429+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -771,7 +771,7 @@
     {
       "tool_id": "criativos-pela-virada",
       "html_sha256": "4a79ae622d1cdd4d7e9283dad488903b2f926706c44ef10836e95bc86df21b1f",
-      "evaluated_at": "2026-10-24T23:35:54.199512+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.290262+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -787,8 +787,8 @@
     },
     {
       "tool_id": "crimeta-russa",
-      "html_sha256": "40092a05012e88e3f9035526ed0824187e94606a48f8811e6809558c5940a779",
-      "evaluated_at": "2026-10-24T23:36:05.885888+00:00",
+      "html_sha256": "cf4ff1dfd85a5baae036d94ddfa83ac0d176333dad2eda3b801b7ee2190776bc",
+      "evaluated_at": "2026-10-25T03:24:42.123324+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -804,8 +804,8 @@
     },
     {
       "tool_id": "curadoria-vira-voto",
-      "html_sha256": "f7d61046e727c73c99621f996c0dbdef468fbbcf2d62d012d1bd6e1e83509233",
-      "evaluated_at": "2026-10-24T23:35:47.332186+00:00",
+      "html_sha256": "2717537de9cf3e837491c5b2b03c405f9915267cf5714585c2f4b29bb0d825a0",
+      "evaluated_at": "2026-10-25T03:24:25.914304+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -822,7 +822,7 @@
     {
       "tool_id": "da-pra-virar",
       "html_sha256": "56ea6aef6ed90f4f682505efd2ece6e014236e464c7ea1ebac7cdd662ef1936e",
-      "evaluated_at": "2026-10-24T23:35:47.045304+00:00",
+      "evaluated_at": "2026-10-25T03:24:25.907063+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -839,7 +839,7 @@
     {
       "tool_id": "dados-da-virada",
       "html_sha256": "862ea789cb0393aa22e4cf6cc78151783c955dd5501d42ba3e5e97321e527f06",
-      "evaluated_at": "2026-10-24T23:35:59.253110+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.145574+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -856,7 +856,7 @@
     {
       "tool_id": "dafem-observatorio-de-feminicidio",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:03.701466+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.821590+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -868,12 +868,12 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "deferred"
     },
     {
       "tool_id": "data2comms-acervo",
       "html_sha256": "500bdfe8c9ae2349ba259f6784612c858a6b4dc75319dc77a62dba8939ba2004",
-      "evaluated_at": "2026-10-24T23:35:47.848274+00:00",
+      "evaluated_at": "2026-10-25T03:24:26.379723+00:00",
       "status": "rejeitado",
       "total_score": 54.5,
       "dimension_scores": {
@@ -890,7 +890,7 @@
     {
       "tool_id": "de-olho-na-meta",
       "html_sha256": "7530d40a38a9ade039909b40ef8bd7bdacbd919fda3eaf2228b0d3856de67d59",
-      "evaluated_at": "2026-10-24T23:35:54.776844+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.104947+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -907,7 +907,7 @@
     {
       "tool_id": "de-olho-no-tse",
       "html_sha256": "a97dc34702311bdcd89d6bce80868785be732420852ee28159ce0d70f7345f1c",
-      "evaluated_at": "2026-10-24T23:35:55.027743+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.008023+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -919,12 +919,12 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "deferred"
     },
     {
       "tool_id": "decisivas",
       "html_sha256": "8b0680d18049fe2e5b6de2c4bfa22e769060e6bd6a79b6d42fa785954052dbad",
-      "evaluated_at": "2026-10-24T23:35:53.761479+00:00",
+      "evaluated_at": "2026-10-25T03:24:32.322740+00:00",
       "status": "rejeitado",
       "total_score": 60.5,
       "dimension_scores": {
@@ -940,8 +940,8 @@
     },
     {
       "tool_id": "desmascara-brasil",
-      "html_sha256": "bd0e819f90ff60ff5c78960b832980cac3f144d4c3472aa77b46cd1b27213e6c",
-      "evaluated_at": "2026-10-24T23:35:58.169962+00:00",
+      "html_sha256": "bc5253f316514d21d6fdc5836739b1c81f05df5b12a2f3dad0e13e3ef15a42f4",
+      "evaluated_at": "2026-10-25T03:24:37.161540+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -958,7 +958,7 @@
     {
       "tool_id": "devo-votar",
       "html_sha256": "863f4899d4527cd7ef884c77d62e9feaeaa0a813fcf5f7c07e135c2f0e7ea06a",
-      "evaluated_at": "2026-10-24T23:36:06.194769+00:00",
+      "evaluated_at": "2026-10-25T03:24:43.036714+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -975,7 +975,7 @@
     {
       "tool_id": "dinheiro-em-perspectiva",
       "html_sha256": "5daa38e9e7daa715866f7b0c953e96cfba30407d41ce66d9558cb1865604439d",
-      "evaluated_at": "2026-10-24T23:36:02.067473+00:00",
+      "evaluated_at": "2026-10-25T03:24:38.942006+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -992,7 +992,7 @@
     {
       "tool_id": "direita-com-lula",
       "html_sha256": "b12920d28cc214eeee4aa943dffd875b488663b0cd822628e26922f90ca0d59c",
-      "evaluated_at": "2026-10-24T23:35:58.976111+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.468438+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1008,8 +1008,8 @@
     },
     {
       "tool_id": "diretorio-13",
-      "html_sha256": "36b6b05562e17bac68ada75ecbd392468ffe4610a8f116b7cfcdb160650af9db",
-      "evaluated_at": "2026-10-24T23:35:47.519766+00:00",
+      "html_sha256": "893427e7d8d9095655cc81b24b8451c3d2e704e9eb4124f44ca5caa623681508",
+      "evaluated_at": "2026-10-25T03:24:26.021806+00:00",
       "status": "catalogado",
       "total_score": 68.8,
       "dimension_scores": {
@@ -1026,7 +1026,7 @@
     {
       "tool_id": "do-seu-bolso",
       "html_sha256": "7aef1fb5385375c33413f3f6426998f89f467a49a58f28f53582bb89ebcf7f2c",
-      "evaluated_at": "2026-10-24T23:35:47.528501+00:00",
+      "evaluated_at": "2026-10-25T03:24:26.460565+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1043,7 +1043,7 @@
     {
       "tool_id": "eleicoes-2026-o-mapa-de-cada-local-de-votacao",
       "html_sha256": "da80da1158e81e3df1d1467728116d032a3498101d6b1736a67bd724e8fe9590",
-      "evaluated_at": "2026-10-24T23:36:02.924409+00:00",
+      "evaluated_at": "2026-10-25T03:24:39.421279+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1060,7 +1060,7 @@
     {
       "tool_id": "eleicoes-rj",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:06.296389+00:00",
+      "evaluated_at": "2026-10-25T03:24:44.087634+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -1077,7 +1077,7 @@
     {
       "tool_id": "em-frente-calendario-de-atos",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:02.860835+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.845339+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -1094,7 +1094,7 @@
     {
       "tool_id": "em-quem-jesus-votaria",
       "html_sha256": "3508afe80c3160733897330585d4ea075c9f1bcb6f158cbf6b7751bc75948c4b",
-      "evaluated_at": "2026-10-24T23:36:04.579318+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.230138+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1111,7 +1111,7 @@
     {
       "tool_id": "escolha-catolica",
       "html_sha256": "58739cef5d43e51479b9bb8661d676a72c1d7341725b654fc28a6ce250987d9d",
-      "evaluated_at": "2026-10-24T23:35:59.322031+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.964830+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1128,7 +1128,7 @@
     {
       "tool_id": "escolha-facil",
       "html_sha256": "8d1eca9b31a0ca31ae59798564e3214bc7ae37f021abe14692810b7f8bc369b8",
-      "evaluated_at": "2026-10-24T23:35:57.554543+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.598712+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -1145,7 +1145,7 @@
     {
       "tool_id": "eu-vou-votar",
       "html_sha256": "0a6f5443174dce06daacdfdf770c7c3ff056496a1237e8319a7a0bf09bebf955",
-      "evaluated_at": "2026-10-24T23:35:47.359561+00:00",
+      "evaluated_at": "2026-10-25T03:24:26.493717+00:00",
       "status": "auditado",
       "total_score": 85.0,
       "dimension_scores": {
@@ -1162,7 +1162,7 @@
     {
       "tool_id": "explorador-eleitoral",
       "html_sha256": "d324ea28080359355a057c3d8a95af965ad5824e9dab578cadbdbc67ba03aa7d",
-      "evaluated_at": "2026-10-24T23:35:53.356208+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.881737+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1179,7 +1179,7 @@
     {
       "tool_id": "falas-de-flavio",
       "html_sha256": "a78e2999c12af119401f7e106e4b2864b5e2e3de4732b9988cc1adcc5eb22a1c",
-      "evaluated_at": "2026-10-24T23:35:49.790369+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.378728+00:00",
       "status": "catalogado",
       "total_score": 78.0,
       "dimension_scores": {
@@ -1195,8 +1195,8 @@
     },
     {
       "tool_id": "fandoms-pelo-brasil",
-      "html_sha256": "16fafc90609f36e3528cac1494f01214912507fa4ab09116c12a614b597a7690",
-      "evaluated_at": "2026-10-24T23:35:48.067905+00:00",
+      "html_sha256": "a89959aaea616d40237e7ce43200c30ad374209ca07b68d3b161e7ac53198511",
+      "evaluated_at": "2026-10-25T03:24:27.213396+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -1213,7 +1213,7 @@
     {
       "tool_id": "fediverse",
       "html_sha256": "786fb664356f6fb820362eee1a9537350b473c0c06003cb500f5c118b473ff35",
-      "evaluated_at": "2026-10-24T23:36:06.578883+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.471744+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1230,7 +1230,7 @@
     {
       "tool_id": "flavio-bolsonaro-a-teia",
       "html_sha256": "4b4d7b25e498ada15828b33c830ea334915a5fb832be75ba7f75f883b94bee76",
-      "evaluated_at": "2026-10-24T23:36:05.686088+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.884689+00:00",
       "status": "catalogado",
       "total_score": 71.0,
       "dimension_scores": {
@@ -1247,7 +1247,7 @@
     {
       "tool_id": "fortaleza-nas-urnas",
       "html_sha256": "13ba4d1f9cb14b34638f53462290f924b0e6d7588a4cb025e429d72b2dc9f037",
-      "evaluated_at": "2026-10-24T23:35:48.683736+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.452322+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1264,7 +1264,7 @@
     {
       "tool_id": "fortaleza-por-lula",
       "html_sha256": "ec7dfd1c1952e84097f6bc441897380cb2f1c3f981573206c9f94ec04d0d6b7c",
-      "evaluated_at": "2026-10-24T23:35:48.734976+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.516386+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1280,8 +1280,8 @@
     },
     {
       "tool_id": "fortaleza-vai-de-lula",
-      "html_sha256": "628673a142b69d1670d6a1734d35b37ac7f7bdcbbf7ef27b6945a5abc94619c9",
-      "evaluated_at": "2026-10-24T23:35:56.895599+00:00",
+      "html_sha256": "91d1ccb5db00ec472b98daf7aabe923698c6d6a451029f6e9d73a79101c791ee",
+      "evaluated_at": "2026-10-25T03:24:35.112597+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1297,8 +1297,8 @@
     },
     {
       "tool_id": "fura-bolha",
-      "html_sha256": "e3006f7c47ee8ab3650289af03a4b89d48796b2c5e9b9b4d84c6ce811043403c",
-      "evaluated_at": "2026-10-24T23:35:48.584315+00:00",
+      "html_sha256": "1524fffc8d524d49dfb429bdc29f9d1296174f0fe90bbb8f09aaa2a463a096e7",
+      "evaluated_at": "2026-10-25T03:24:27.271212+00:00",
       "status": "catalogado",
       "total_score": 78.0,
       "dimension_scores": {
@@ -1315,7 +1315,7 @@
     {
       "tool_id": "gamers-pelo-brasil",
       "html_sha256": "2c12f03682adbb0fa51ca0d0bdd2ba8948e98ca3ad2692af7230b177ab14ebb4",
-      "evaluated_at": "2026-10-24T23:36:06.098377+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.284574+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1331,8 +1331,8 @@
     },
     {
       "tool_id": "ganha-voto",
-      "html_sha256": "5490ef952cbe4014946bb3eee502bf162df770d45225e0ca59b7c4951d81927c",
-      "evaluated_at": "2026-10-24T23:35:48.431596+00:00",
+      "html_sha256": "95d37db1d67be8339db77026da106886c33c3ae45c01869997b97a499a57e804",
+      "evaluated_at": "2026-10-25T03:24:26.991473+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1349,7 +1349,7 @@
     {
       "tool_id": "governos-brasileiros-em-dados",
       "html_sha256": "c0c5be82e0dbff0fb968b20b2304288e878c69b30598476925f303c0f8e6e535",
-      "evaluated_at": "2026-10-24T23:36:06.779782+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.839203+00:00",
       "status": "auditado",
       "total_score": 88.0,
       "dimension_scores": {
@@ -1366,7 +1366,7 @@
     {
       "tool_id": "guia-de-denuncia-flavio",
       "html_sha256": "3629c651a54f9daed1e61911afccaffc9cdb38c84af6815949d0f2edc0dd4669",
-      "evaluated_at": "2026-10-24T23:35:57.654270+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.346786+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1382,8 +1382,8 @@
     },
     {
       "tool_id": "ideias-em-comum",
-      "html_sha256": "2ad6e513d8ada4d6d2ee1a092b76d7b1546affd946d53ac2086cd6fd112680c2",
-      "evaluated_at": "2026-10-24T23:35:48.621910+00:00",
+      "html_sha256": "c32dda2164bb2d83cd0eb65225068bfbd1b7eab8b38abf99b757492deb006c30",
+      "evaluated_at": "2026-10-25T03:24:27.281234+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1400,7 +1400,7 @@
     {
       "tool_id": "indice-de-potencial-de-conversao-ipc",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:01.084662+00:00",
+      "evaluated_at": "2026-10-25T03:24:38.509239+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -1417,7 +1417,7 @@
     {
       "tool_id": "janonometro",
       "html_sha256": "c409db3e857f91c43cc201713af4cc6e8f544ee21507fdc728ae51195c993ac2",
-      "evaluated_at": "2026-10-24T23:36:06.218571+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.153271+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1434,15 +1434,15 @@
     {
       "tool_id": "lab-livre-amazonia",
       "html_sha256": "79b215ecd3132727435ac2a8e5686f3e78962173e618191f887877f06a0db782",
-      "evaluated_at": "2026-10-24T23:35:53.396552+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.158485+00:00",
       "status": "auditado",
-      "total_score": 88.5,
+      "total_score": 90.0,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 100.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 65.0
+        "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
       "archive_url": null,
@@ -1451,7 +1451,7 @@
     {
       "tool_id": "levante-13",
       "html_sha256": "7e2f299c57e3fcb618f96ddace18f0d0988f3b3c346595ec5454d6718fc27dd6",
-      "evaluated_at": "2026-10-24T23:36:05.057512+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.095686+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1467,8 +1467,8 @@
     },
     {
       "tool_id": "lula-com-vc",
-      "html_sha256": "f20b459a4c8190c69c30cdd20ded162d30448b2c2209c33accd96278120f2fb7",
-      "evaluated_at": "2026-10-24T23:36:03.747628+00:00",
+      "html_sha256": "f8ff717b8693be9d663bb191cb4fa8957be01e61e10d0a1617d62acb5a231eeb",
+      "evaluated_at": "2026-10-25T03:24:40.460045+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1485,7 +1485,7 @@
     {
       "tool_id": "lula-filtro",
       "html_sha256": "c6ab67f6091192f8f31cf1976d650d817509e9d0585bc3c6c2ca4c94e3d57d7e",
-      "evaluated_at": "2026-10-24T23:35:48.957277+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.524428+00:00",
       "status": "catalogado",
       "total_score": 78.8,
       "dimension_scores": {
@@ -1502,7 +1502,7 @@
     {
       "tool_id": "lula-x-bolsonaro",
       "html_sha256": "715d7d39b47a9a8b6d9c20005190895eba3de63b7a2d91a017cf54ab591c47ae",
-      "evaluated_at": "2026-10-24T23:35:50.446125+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.034320+00:00",
       "status": "auditado",
       "total_score": 80.2,
       "dimension_scores": {
@@ -1519,7 +1519,7 @@
     {
       "tool_id": "mapa-da-ia-soberana",
       "html_sha256": "cfef7716e5a35ad0f8d949ca22c90497bf03ab0b2d537e4b2e3854946972cb4b",
-      "evaluated_at": "2026-10-24T23:35:55.252141+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.161766+00:00",
       "status": "auditado",
       "total_score": 83.5,
       "dimension_scores": {
@@ -1536,7 +1536,7 @@
     {
       "tool_id": "mapa-da-virada",
       "html_sha256": "3ec498e3b7227143be826b82663e543fb714ae4d29d895a944cc4785eb02d355",
-      "evaluated_at": "2026-10-24T23:35:49.202569+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.752654+00:00",
       "status": "catalogado",
       "total_score": 71.8,
       "dimension_scores": {
@@ -1553,7 +1553,7 @@
     {
       "tool_id": "mapa-de-abstencao",
       "html_sha256": "0fa6977ffb02a142cc2e7700dc4846a5ea5bcee61e15f57f9b98a7e606e8ff6c",
-      "evaluated_at": "2026-10-24T23:36:05.697351+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.757749+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1570,7 +1570,7 @@
     {
       "tool_id": "mapa-de-abstencao-por-bairro",
       "html_sha256": "98d3c12f1e113716a267963216f87ceb01bf1b65507d85309569fe155c947d66",
-      "evaluated_at": "2026-10-24T23:36:00.569134+00:00",
+      "evaluated_at": "2026-10-25T03:24:38.654040+00:00",
       "status": "rejeitado",
       "total_score": 60.5,
       "dimension_scores": {
@@ -1587,7 +1587,7 @@
     {
       "tool_id": "mapa-de-abstencoes-rio-de-janeiro",
       "html_sha256": "a8a6db80db82c60968ab0b988ea1590f201be94686162a9e4996e08402cdf5f7",
-      "evaluated_at": "2026-10-24T23:35:54.283640+00:00",
+      "evaluated_at": "2026-10-25T03:24:32.215100+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1604,7 +1604,7 @@
     {
       "tool_id": "mapa-de-oportunidade",
       "html_sha256": "539a9e4d143489abb46ae56dc72d75d5ec8020bbc16968df94cb27c03006f03e",
-      "evaluated_at": "2026-10-24T23:35:49.965785+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.495823+00:00",
       "status": "catalogado",
       "total_score": 68.8,
       "dimension_scores": {
@@ -1621,7 +1621,7 @@
     {
       "tool_id": "mapa-do-2o-turno",
       "html_sha256": "4170e23300edf7676b79aa1436dc7282e6ddf5e987ebb7a25f9af581cfacdb7b",
-      "evaluated_at": "2026-10-24T23:36:01.083287+00:00",
+      "evaluated_at": "2026-10-25T03:24:38.203073+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1638,7 +1638,7 @@
     {
       "tool_id": "mapa-do-voto-joao-monlevade",
       "html_sha256": "c496b26247e9020c08e212cbcd8dea584b35b44436c9edfabb164a777651f4c2",
-      "evaluated_at": "2026-10-24T23:36:01.864068+00:00",
+      "evaluated_at": "2026-10-25T03:24:38.646125+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -1655,7 +1655,7 @@
     {
       "tool_id": "mapa-duplas",
       "html_sha256": "bf3e18cb9c2b5256fdb8e221e4986b68ae69d7ced767fbb33389469de144e3cb",
-      "evaluated_at": "2026-10-24T23:35:59.358966+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.441837+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1671,25 +1671,25 @@
     },
     {
       "tool_id": "mapa-eleitoral-de-sp",
-      "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:16.138674+00:00",
-      "status": "nao_inspecionado",
-      "total_score": null,
+      "html_sha256": "585003e1c77b68f1e9f947a8d3891e9573721448adee15a79ceb46814953b86f",
+      "evaluated_at": "2026-10-25T03:24:38.106411+00:00",
+      "status": "catalogado",
+      "total_score": 72.5,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
-        "privacidade_e_soberania": 50.0,
+        "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 30.0
+        "acessibilidade_desempenho": 100.0
       },
-      "coverage_complete": false,
+      "coverage_complete": true,
       "archive_url": null,
       "archive_status": "deferred"
     },
     {
       "tool_id": "mapa-segundo-turno-materiais",
       "html_sha256": "ccd87b181332b01ddf5caea9b9d4ccd5076450bc1b900e32a3981683da1b253f",
-      "evaluated_at": "2026-10-24T23:35:49.262121+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.905588+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1705,8 +1705,8 @@
     },
     {
       "tool_id": "mapeamento-de-zonas-prioritarias-sp",
-      "html_sha256": "4a559b3be8e25cf04cd053ad739b5b6810ed82b511326c9af421b676ef8a3515",
-      "evaluated_at": "2026-10-24T23:35:46.097615+00:00",
+      "html_sha256": "38a559662c591d6d62c82b806e72513b29b46de7569ef2e54a06d0b824cf5dcf",
+      "evaluated_at": "2026-10-25T03:24:24.871229+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1723,7 +1723,7 @@
     {
       "tool_id": "meu-voto-brasil",
       "html_sha256": "c16bf8ebad4b2542b2e1fa7255ab0220f145e78dbc34389b24893c0af79cd850",
-      "evaluated_at": "2026-10-24T23:36:00.896699+00:00",
+      "evaluated_at": "2026-10-25T03:24:39.417256+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1740,7 +1740,7 @@
     {
       "tool_id": "mobilizacao-travahacker",
       "html_sha256": "7c60247733e0047f1e0eabe9df618b640d0a3dac15b4a9354652a065fdb19cdb",
-      "evaluated_at": "2026-10-24T23:35:56.704219+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.783533+00:00",
       "status": "auditado",
       "total_score": 87.5,
       "dimension_scores": {
@@ -1757,7 +1757,7 @@
     {
       "tool_id": "momo-com-lula",
       "html_sha256": "4adc9122282b783729f33e64b95fd127fcfd57a1ad3c2af342055bb2794f29ae",
-      "evaluated_at": "2026-10-24T23:35:59.374923+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.236736+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1774,7 +1774,7 @@
     {
       "tool_id": "monitor-de-narrativas-eleicoes-2026",
       "html_sha256": "69f247a2493e0565e03398141c9ee564481d49162e8d7bcd28e9262e834d63e3",
-      "evaluated_at": "2026-10-24T23:36:02.557907+00:00",
+      "evaluated_at": "2026-10-25T03:24:39.751800+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1791,7 +1791,7 @@
     {
       "tool_id": "mutirao-dos-alunos-do-dcomp",
       "html_sha256": "349a229a4e1a6e8bfd088a0b6e022402bdee000d4ec444217f6b403590a4e5b4",
-      "evaluated_at": "2026-10-24T23:35:56.675574+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.499304+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1808,7 +1808,7 @@
     {
       "tool_id": "na-ponta-do-lapis",
       "html_sha256": "17217e04104cb9c58fc7b6b116e773e98186448e77fd4d06d0e6f6b15b4f7d61",
-      "evaluated_at": "2026-10-24T23:35:58.367053+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.414837+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -1825,7 +1825,7 @@
     {
       "tool_id": "nao-se-meta",
       "html_sha256": "a71ed50d2005d42d58ad4693b1ba0052b687dc4682c4e164d2e292606b7f05f0",
-      "evaluated_at": "2026-10-24T23:36:07.480925+00:00",
+      "evaluated_at": "2026-10-25T03:24:43.403342+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1842,7 +1842,7 @@
     {
       "tool_id": "nordeste-decide",
       "html_sha256": "e8b83747968b5e615a8553cc31e82e4b8e783317d88693df97f0c2556f3623c8",
-      "evaluated_at": "2026-10-24T23:36:05.418408+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.562410+00:00",
       "status": "auditado",
       "total_score": 89.8,
       "dimension_scores": {
@@ -1859,7 +1859,7 @@
     {
       "tool_id": "nunca-mais",
       "html_sha256": "4e0443d9824b682609b05a625984b769cb7f21df8ae467435295328392e807b0",
-      "evaluated_at": "2026-10-24T23:35:49.993068+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.421215+00:00",
       "status": "catalogado",
       "total_score": 78.8,
       "dimension_scores": {
@@ -1876,7 +1876,7 @@
     {
       "tool_id": "o-bafafa",
       "html_sha256": "57cec2798170adb6b3999bd1a11aa9dc53eca3904e5d128d52e12807dba972da",
-      "evaluated_at": "2026-10-24T23:35:50.215955+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.815365+00:00",
       "status": "catalogado",
       "total_score": 77.2,
       "dimension_scores": {
@@ -1892,8 +1892,8 @@
     },
     {
       "tool_id": "o-brasil-mudou",
-      "html_sha256": "1b9f594c0b406a13f4f7eaae6c366677848558346bb1fe2f06956dd8282da174",
-      "evaluated_at": "2026-10-24T23:35:50.138479+00:00",
+      "html_sha256": "844625bad9562c64f50cfa89cd081bb497991391d86f7a6fa0bf32723980af7d",
+      "evaluated_at": "2026-10-25T03:24:28.830725+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1909,8 +1909,8 @@
     },
     {
       "tool_id": "o-mapa-do-flavio",
-      "html_sha256": "435ede5acb28d60f6d52739dbedeb17132838a52602350a599cd4ba8c650b90e",
-      "evaluated_at": "2026-10-24T23:35:50.100753+00:00",
+      "html_sha256": "23aacd2aacd3c204f6914ec26309f7a9566a0e280ccea501889abacd0e772c5a",
+      "evaluated_at": "2026-10-25T03:24:28.679815+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1927,7 +1927,7 @@
     {
       "tool_id": "o-poder-do-seu-voto",
       "html_sha256": "25fbd40ea145afa3ab81b61ad4b9a5f43f2e5d18e8ca3309d01f04dc8bf5f21b",
-      "evaluated_at": "2026-10-24T23:35:57.996824+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.033366+00:00",
       "status": "catalogado",
       "total_score": 77.2,
       "dimension_scores": {
@@ -1944,7 +1944,7 @@
     {
       "tool_id": "o-que-esta-em-jogo",
       "html_sha256": "69bb3d3c97d3dabe06dc15c1ea8c2deadf39aa59d2226fd13b77c2d033ee3e93",
-      "evaluated_at": "2026-10-24T23:35:49.797282+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.425695+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -1960,8 +1960,8 @@
     },
     {
       "tool_id": "o-que-esta-em-jogo-na-sua-cidade",
-      "html_sha256": "09850b357e127702d9342109f4fbeb4b9c635f981d709c5d8911a268c6bc285e",
-      "evaluated_at": "2026-10-24T23:35:51.747061+00:00",
+      "html_sha256": "cd80a6d3c99f60f780172633eeaf0218a90cc593db7b0261a0e85b48f56e81da",
+      "evaluated_at": "2026-10-25T03:24:29.889557+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -1978,7 +1978,7 @@
     {
       "tool_id": "o-voto-decisivo",
       "html_sha256": "77af8f071f596950bf7e036ff90001b88873d40342c65490d5c17830d00f4b61",
-      "evaluated_at": "2026-10-24T23:35:50.502394+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.821387+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -1994,8 +1994,8 @@
     },
     {
       "tool_id": "obras-do-governo-federal",
-      "html_sha256": "fffbc0d9b357281f15c0053c33265ea51830b5c348f45316d7d6b3d720be1cd2",
-      "evaluated_at": "2026-10-24T23:36:06.431837+00:00",
+      "html_sha256": "564c83514c1771d6ddabc5bdf1a36dca040bfca4130f4c0d23a4b710bc49107d",
+      "evaluated_at": "2026-10-25T03:24:42.323745+00:00",
       "status": "rejeitado",
       "total_score": 73.0,
       "dimension_scores": {
@@ -2012,7 +2012,7 @@
     {
       "tool_id": "observatorio-tech",
       "html_sha256": "e16a0179b0c2d84fa428ef33f95836d7557e41a8a4d3da23690eb401b5135465",
-      "evaluated_at": "2026-10-24T23:36:00.397590+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.929080+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2029,7 +2029,7 @@
     {
       "tool_id": "odeta-nlp-e-sentimento-politico",
       "html_sha256": "44b13afc1ef6046d8ea9de7ccccb3c2c02657eec27d3bc7b2c760da9ce317c33",
-      "evaluated_at": "2026-10-24T23:35:52.296304+00:00",
+      "evaluated_at": "2026-10-25T03:24:30.703447+00:00",
       "status": "rejeitado",
       "total_score": 66.5,
       "dimension_scores": {
@@ -2046,7 +2046,7 @@
     {
       "tool_id": "onde-buscar-votos-contradados",
       "html_sha256": "f1703a0f0f7e22c757f4b1c7336f943b6a2ef1d89568f0a37ee0ea1594badb42",
-      "evaluated_at": "2026-10-24T23:35:59.006022+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.790670+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2062,8 +2062,8 @@
     },
     {
       "tool_id": "onde-da-pra-conversar",
-      "html_sha256": "9d9f3eb64679a5fe5475c1533beed0ef53095934dab8ee65584858e687dc28a2",
-      "evaluated_at": "2026-10-24T23:35:50.755311+00:00",
+      "html_sha256": "5ff750180282e93b4950222cd4fba3ecb9c2d97a7975a1d4989cef6f56c4fdf9",
+      "evaluated_at": "2026-10-25T03:24:29.210676+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -2080,7 +2080,7 @@
     {
       "tool_id": "onde-panfletar",
       "html_sha256": "b9cdc61d71b6b308d2ef3085b78d4d8e9847596067902a9109d0ae848642b8fa",
-      "evaluated_at": "2026-10-24T23:35:59.762226+00:00",
+      "evaluated_at": "2026-10-25T03:24:38.049559+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2097,7 +2097,7 @@
     {
       "tool_id": "onde-votarei",
       "html_sha256": "36fcbfb77f35894875f45983826995f16e0d94f814a44d571dee716bb5fa3a85",
-      "evaluated_at": "2026-10-24T23:35:56.318322+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.488906+00:00",
       "status": "catalogado",
       "total_score": 71.8,
       "dimension_scores": {
@@ -2114,7 +2114,7 @@
     {
       "tool_id": "openmaster",
       "html_sha256": "007b0e97c84d7932a2d10540e9a764b904320cda3f2af4804801d5b94da078e0",
-      "evaluated_at": "2026-10-24T23:35:50.240516+00:00",
+      "evaluated_at": "2026-10-25T03:24:28.931647+00:00",
       "status": "catalogado",
       "total_score": 76.5,
       "dimension_scores": {
@@ -2130,8 +2130,8 @@
     },
     {
       "tool_id": "operacao-serenata-de-amor",
-      "html_sha256": "d3c4d61cc1c9285b93072a720d5b40a17497d3fdf98ba07c5eecbc867b906233",
-      "evaluated_at": "2026-10-24T23:35:55.352377+00:00",
+      "html_sha256": "1de1ebe8c421b70e2afb9c4ccbe662f95089126960377a5c02d34d75d61cbf77",
+      "evaluated_at": "2026-10-25T03:24:33.741307+00:00",
       "status": "rejeitado",
       "total_score": 68.5,
       "dimension_scores": {
@@ -2148,7 +2148,7 @@
     {
       "tool_id": "paginas-tematicas-mobilizacao",
       "html_sha256": "ec5d12d6c23caca3ff84bf812b874db4652f2ffcd789dd883541cbb346a9bdec",
-      "evaluated_at": "2026-10-24T23:35:49.675036+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.699837+00:00",
       "status": "rejeitado",
       "total_score": 63.8,
       "dimension_scores": {
@@ -2165,7 +2165,7 @@
     {
       "tool_id": "painel-de-eleitores-70",
       "html_sha256": "2ba0e50d4705974b0a55f818386f0bea285fcc3a53a51f64b5be61fe5517687b",
-      "evaluated_at": "2026-10-24T23:35:58.773215+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.923445+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -2182,7 +2182,7 @@
     {
       "tool_id": "parlamentometro",
       "html_sha256": "7488a7b97415f0bc01ac0f21c370cb043b4b2b9a046d849703053965a408b45b",
-      "evaluated_at": "2026-10-24T23:35:54.625076+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.053183+00:00",
       "status": "rejeitado",
       "total_score": 60.5,
       "dimension_scores": {
@@ -2199,7 +2199,7 @@
     {
       "tool_id": "patrao-6x1",
       "html_sha256": "00f53e744878abce446eb857d26185553ac5eb52d50a976367ca065e667f301b",
-      "evaluated_at": "2026-10-24T23:35:59.080267+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.751546+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2216,7 +2216,7 @@
     {
       "tool_id": "pauta-da-urna",
       "html_sha256": "e3a537c85d1a4c851fa43a9b12c83273571bb94a31aa8d79db1dd4b5829fd887",
-      "evaluated_at": "2026-10-24T23:36:00.003234+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.749228+00:00",
       "status": "auditado",
       "total_score": 86.0,
       "dimension_scores": {
@@ -2233,7 +2233,7 @@
     {
       "tool_id": "pelos-seus-frutos",
       "html_sha256": "f91c7ba75fbb88726268e106b75f70cb9c8afbf552388b003cd0d1d1115a7a71",
-      "evaluated_at": "2026-10-24T23:35:54.743453+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.038471+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2250,7 +2250,7 @@
     {
       "tool_id": "perspectiva-progressista",
       "html_sha256": "81fb6f47f9f557942e076bf3c1f5ad5a2f71b93941ef966a6ef66de9eb4e1997",
-      "evaluated_at": "2026-10-24T23:35:58.764865+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.289525+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2267,7 +2267,7 @@
     {
       "tool_id": "pode-espalhar",
       "html_sha256": "ee35ba1cb13b8963acd37ba7f64aa28c617a3684d0def72f2b7484c482cfcccb",
-      "evaluated_at": "2026-10-24T23:35:51.252162+00:00",
+      "evaluated_at": "2026-10-25T03:24:29.565101+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2284,7 +2284,7 @@
     {
       "tool_id": "politicometro",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:06.229499+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.254374+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -2301,7 +2301,7 @@
     {
       "tool_id": "promessas-e-registros",
       "html_sha256": "44f5d30ce995cf6be802a7e0a104260c9b5dfb19445c99fc0778a990cab29039",
-      "evaluated_at": "2026-10-24T23:35:47.916842+00:00",
+      "evaluated_at": "2026-10-25T03:24:26.392873+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2317,8 +2317,8 @@
     },
     {
       "tool_id": "qual-seu-flavio",
-      "html_sha256": "8e5204e43ef3300cd1373ae1196d6c92f8953ad2953bb23752d2220ed0f7c3a7",
-      "evaluated_at": "2026-10-24T23:35:52.303398+00:00",
+      "html_sha256": "7b24ffcdaff95eab93cd2ad1b7dab5681814385ef7fe6d02b58f39d58c7d1439",
+      "evaluated_at": "2026-10-25T03:24:30.424711+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2335,7 +2335,7 @@
     {
       "tool_id": "quanto-a-6x1-tira",
       "html_sha256": "82de06f97421f073a97d4116c5feb593481887e41a2187271315caccbe9a4f1b",
-      "evaluated_at": "2026-10-24T23:35:58.077306+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.631687+00:00",
       "status": "catalogado",
       "total_score": 78.8,
       "dimension_scores": {
@@ -2351,8 +2351,8 @@
     },
     {
       "tool_id": "quem-apoia-quem",
-      "html_sha256": "e4e60a796447b4f3470bc95c23be97d7e3eaf1dfb8f4ef9930a897d7de3c63fa",
-      "evaluated_at": "2026-10-24T23:35:50.957796+00:00",
+      "html_sha256": "49f9453ba70c353df1ce9a4e39fdd1106a6ef31d7b1e50c9a1fb544b44dc2c6a",
+      "evaluated_at": "2026-10-25T03:24:29.688380+00:00",
       "status": "catalogado",
       "total_score": 68.8,
       "dimension_scores": {
@@ -2369,7 +2369,7 @@
     {
       "tool_id": "quem-compara-vota-lula",
       "html_sha256": "cd60f034abc0a73fd55b6987fb479a8681412683ae2f3f10354dd7f7c036324e",
-      "evaluated_at": "2026-10-24T23:35:51.072833+00:00",
+      "evaluated_at": "2026-10-25T03:24:29.721339+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -2386,7 +2386,7 @@
     {
       "tool_id": "querido-diario",
       "html_sha256": "02a3e309d8eb3c7d6730d7e4f438426faa9d1e69a8fc63af64dee32aa5bf846e",
-      "evaluated_at": "2026-10-24T23:35:56.406194+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.557843+00:00",
       "status": "rejeitado",
       "total_score": 65.5,
       "dimension_scores": {
@@ -2403,7 +2403,7 @@
     {
       "tool_id": "quiz-de-politicas-publicas",
       "html_sha256": "ece3a24c5b84b4827a30fd25e446c2f55227a5f5acb7cdccbbce9cf640b85f1d",
-      "evaluated_at": "2026-10-24T23:35:49.119117+00:00",
+      "evaluated_at": "2026-10-25T03:24:27.838166+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2420,7 +2420,7 @@
     {
       "tool_id": "radar-ceara",
       "html_sha256": "84ba3665ce22d63c702fb36ab6a2d12eae7839efdc2ba2fcf4829c0cdff361f3",
-      "evaluated_at": "2026-10-24T23:35:59.530701+00:00",
+      "evaluated_at": "2026-10-25T03:24:37.403551+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2436,42 +2436,42 @@
     },
     {
       "tool_id": "radar-da-virada",
-      "html_sha256": "2e2a9421eeb0374863a36ed12cb51189579bf21cf0665979b02c4f28b74766ae",
-      "evaluated_at": "2026-10-24T23:35:50.843050+00:00",
-      "status": "catalogado",
-      "total_score": 74.0,
+      "html_sha256": "16cdb3e533c2514030d323087705254166ea191830336bb2338c7084b701b809",
+      "evaluated_at": "2026-10-25T03:24:29.414273+00:00",
+      "status": "auditado",
+      "total_score": 81.8,
       "dimension_scores": {
-        "proveniencia_dados": 50.0,
+        "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 90.0
+        "acessibilidade_desempenho": 100.0
       },
-      "coverage_complete": false,
+      "coverage_complete": true,
       "archive_url": null,
       "archive_status": "deferred"
     },
     {
       "tool_id": "radar-do-voto",
-      "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:16.544500+00:00",
-      "status": "nao_inspecionado",
-      "total_score": null,
+      "html_sha256": "7073d8a26d8dbd8582616831f06422487331758420d572c4a7fc0aff110d3598",
+      "evaluated_at": "2026-10-25T03:24:52.988693+00:00",
+      "status": "rejeitado",
+      "total_score": 53.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
-        "privacidade_e_soberania": 50.0,
+        "privacidade_e_soberania": 40.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 30.0
+        "acessibilidade_desempenho": 70.0
       },
-      "coverage_complete": false,
+      "coverage_complete": true,
       "archive_url": null,
       "archive_status": "deferred"
     },
     {
       "tool_id": "risco-real",
-      "html_sha256": "c3d3b2a6e8f071a02461fee2ee757429a4c4e1466d31cb9803c08ac1f0335e44",
-      "evaluated_at": "2026-10-24T23:35:58.536235+00:00",
+      "html_sha256": "19f9ae3f25c886e2ce639e3f2ac9dfd90f62bdd9c8447da848d4041d0b7448f7",
+      "evaluated_at": "2026-10-25T03:24:35.935345+00:00",
       "status": "auditado",
       "total_score": 80.2,
       "dimension_scores": {
@@ -2488,7 +2488,7 @@
     {
       "tool_id": "salve-a-padroeira",
       "html_sha256": "67d27ac2bf49ba23c0a5b87fa5257cc8dc9bd9b4c7dee2f8a1d5a50659cd6804",
-      "evaluated_at": "2026-10-24T23:36:04.381807+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.006870+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2505,7 +2505,7 @@
     {
       "tool_id": "santinho-virtual",
       "html_sha256": "ac2f108a7960150cc09a1c604d5c0ae7c3a4c871572f42000996c236319bd298",
-      "evaluated_at": "2026-10-24T23:35:54.480245+00:00",
+      "evaluated_at": "2026-10-25T03:24:33.137720+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2522,7 +2522,7 @@
     {
       "tool_id": "segundo-turno-com-lula",
       "html_sha256": "c93be694bf6788e4fe2bdbeadd8bdffe4195a8cf726879e35a08bb7175fe221f",
-      "evaluated_at": "2026-10-24T23:35:57.271327+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.379129+00:00",
       "status": "rejeitado",
       "total_score": 68.0,
       "dimension_scores": {
@@ -2539,7 +2539,7 @@
     {
       "tool_id": "seu-voto-decide",
       "html_sha256": "d11ef372fbed8c7a5faa4c721ad601d5bf46b5e76f43519b7f790e652a6f0af3",
-      "evaluated_at": "2026-10-24T23:35:52.120679+00:00",
+      "evaluated_at": "2026-10-25T03:24:30.324855+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2556,7 +2556,7 @@
     {
       "tool_id": "simulador-da-virada-do-2o-turno",
       "html_sha256": "5827f735f68a7f137a9d1e608eac373c79b292222e060524651ee4000c3945a9",
-      "evaluated_at": "2026-10-24T23:36:03.439185+00:00",
+      "evaluated_at": "2026-10-25T03:24:39.804482+00:00",
       "status": "rejeitado",
       "total_score": 60.5,
       "dimension_scores": {
@@ -2573,7 +2573,7 @@
     {
       "tool_id": "sistema-donas-automacao",
       "html_sha256": "2ace27ff7b80628144fc3382da8ee68eed5bc4e06f19742dabda121679faae29",
-      "evaluated_at": "2026-10-24T23:35:51.673086+00:00",
+      "evaluated_at": "2026-10-25T03:24:29.986914+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2589,8 +2589,8 @@
     },
     {
       "tool_id": "sou-do-bem",
-      "html_sha256": "e59fd17862dcf64a6934bf07f7738cc11b8137fc4666c81ecae70b71bb835547",
-      "evaluated_at": "2026-10-24T23:36:03.375108+00:00",
+      "html_sha256": "234b89a5389a56abd6e8ce39ddcc1c536d666106b8202c7ac454dc5f24640f1d",
+      "evaluated_at": "2026-10-25T03:24:39.972712+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2606,8 +2606,8 @@
     },
     {
       "tool_id": "super-flavio-world",
-      "html_sha256": "c77872918a562c3e370722878adf0b2a1d1a9c7a0bb14949ae7745651f7da4c0",
-      "evaluated_at": "2026-10-24T23:35:51.373940+00:00",
+      "html_sha256": "20b50a40ba68d0246ea5bf3d01cd2461b632d5fd137229ed187e4fcae0e7cf75",
+      "evaluated_at": "2026-10-25T03:24:29.928843+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -2624,7 +2624,7 @@
     {
       "tool_id": "super-lula-world",
       "html_sha256": "a65d4857417d233b0c09e80fbba151c2b025e996182b8f881ccd3a51a80d58d8",
-      "evaluated_at": "2026-10-24T23:35:51.217498+00:00",
+      "evaluated_at": "2026-10-25T03:24:29.959050+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2640,8 +2640,8 @@
     },
     {
       "tool_id": "tech-contra-bolsonaro",
-      "html_sha256": "f7203b60b85e7f7aaa4e33a67e958720292520b45f6df9b4a78b91efe55fd32e",
-      "evaluated_at": "2026-10-24T23:35:57.310935+00:00",
+      "html_sha256": "15adc2b4eabbbaec33f88f8d79ee218776f730be3cca3a9eb338619037e211d2",
+      "evaluated_at": "2026-10-25T03:24:35.753381+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2658,7 +2658,7 @@
     {
       "tool_id": "tesoura-no-comercio",
       "html_sha256": "dda41872212f2d97299ac0558fa2994b9afaa721fb185674f55bf86925fd0103",
-      "evaluated_at": "2026-10-24T23:35:58.880530+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.451840+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -2675,7 +2675,7 @@
     {
       "tool_id": "transporte-gratuito-na-eleicao",
       "html_sha256": "eafb972f7424b6e8638a6ea251c134a6fa74a96479763eed87e798b9c8517738",
-      "evaluated_at": "2026-10-24T23:36:07.247538+00:00",
+      "evaluated_at": "2026-10-25T03:24:43.093782+00:00",
       "status": "auditado",
       "total_score": 88.0,
       "dimension_scores": {
@@ -2691,25 +2691,25 @@
     },
     {
       "tool_id": "tropa-vira-voto",
-      "html_sha256": "280834bbf89f34d13ae1c58fc1e5e0c4172316d493d5d118bd13f29d079ae704",
-      "evaluated_at": "2026-10-24T23:35:51.680865+00:00",
+      "html_sha256": "49dc6b6c43935b582bc399a8e615578bfd84fef4849c72c3a74e893f9aa75bd5",
+      "evaluated_at": "2026-10-25T03:24:30.154810+00:00",
       "status": "catalogado",
-      "total_score": 71.8,
+      "total_score": 78.8,
       "dimension_scores": {
-        "proveniencia_dados": 50.0,
+        "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
-        "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 75.0
+        "enquadramento_republicano": 80.0,
+        "acessibilidade_desempenho": 100.0
       },
-      "coverage_complete": false,
+      "coverage_complete": true,
       "archive_url": null,
       "archive_status": "deferred"
     },
     {
       "tool_id": "vamos-com-lula",
       "html_sha256": "8fd62f315c83aeae791d17e14ccf16cca77930ccc0a432e885578e58e1b1f2bb",
-      "evaluated_at": "2026-10-24T23:35:52.794618+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.281597+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2724,13 +2724,30 @@
       "archive_status": "deferred"
     },
     {
-      "tool_id": "vamos-votar",
-      "html_sha256": "9e98ab2a87f8e25d9487d2281c5c92fc2a27f1a21e895d7384dc5477800bc586",
-      "evaluated_at": "2026-10-24T23:35:52.458934+00:00",
-      "status": "catalogado",
-      "total_score": 72.5,
+      "tool_id": "vamos-de-13",
+      "html_sha256": "b4d93dd151553145bdf3c7bd107a44046c7243ab9983d7c3a8e8a284f1071154",
+      "evaluated_at": "2026-10-25T03:24:33.340596+00:00",
+      "status": "auditado",
+      "total_score": 85.0,
       "dimension_scores": {
-        "proveniencia_dados": 50.0,
+        "proveniencia_dados": 100.0,
+        "privacidade_e_soberania": 100.0,
+        "codigo_aberto_floss": 40.0,
+        "enquadramento_republicano": 80.0,
+        "acessibilidade_desempenho": 100.0
+      },
+      "coverage_complete": true,
+      "archive_url": null,
+      "archive_status": "deferred"
+    },
+    {
+      "tool_id": "vamos-votar",
+      "html_sha256": "022256e0144b62b6d6a26b91c8cf8caf6b61c3cea513560c69361e2b67eb1112",
+      "evaluated_at": "2026-10-25T03:24:30.982391+00:00",
+      "status": "catalogado",
+      "total_score": 78.8,
+      "dimension_scores": {
+        "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 80.0,
@@ -2743,7 +2760,7 @@
     {
       "tool_id": "verdade-ou-boato-radar-esquerdista",
       "html_sha256": "e60d11b8c909e8fc7571c03e94d56c6df0060da463f21f6904abf7f73746c222",
-      "evaluated_at": "2026-10-24T23:35:52.530808+00:00",
+      "evaluated_at": "2026-10-25T03:24:30.884251+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2760,7 +2777,7 @@
     {
       "tool_id": "vira-lula-ia-furando-a-bolha",
       "html_sha256": "7d6e8e815e7690776f9991733406647a4572d3792aab383bf20ec12eefb776d0",
-      "evaluated_at": "2026-10-24T23:35:56.941555+00:00",
+      "evaluated_at": "2026-10-25T03:24:35.051100+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2777,7 +2794,7 @@
     {
       "tool_id": "vira-seguro",
       "html_sha256": "d571556c8c0af23edb5de96d591a953fded67d9439af9b525e0dfc65a6e989a3",
-      "evaluated_at": "2026-10-24T23:35:56.612487+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.667156+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -2793,8 +2810,8 @@
     },
     {
       "tool_id": "vira-vira-br",
-      "html_sha256": "a687e9ebaa9f45abefc2cb593fa71fb700c6878017138fc46a7395f624978627",
-      "evaluated_at": "2026-10-24T23:36:04.624565+00:00",
+      "html_sha256": "54dee63cdff4a80fbb00134645eae7e7a9e59045e87dbd29a4422d37be1ae795",
+      "evaluated_at": "2026-10-25T03:24:40.792127+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -2811,7 +2828,7 @@
     {
       "tool_id": "vira-voto",
       "html_sha256": "57fcc1f9a620b9045e52ae31348d28f1209f080bf27fd0604287ce4cb3218b5b",
-      "evaluated_at": "2026-10-24T23:36:03.959280+00:00",
+      "evaluated_at": "2026-10-25T03:24:40.942885+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2827,8 +2844,8 @@
     },
     {
       "tool_id": "vira-voto-df",
-      "html_sha256": "1ab0fb577cc8227a0b27cdee3e2ec42456a6cfbe360507087241cea481d585c0",
-      "evaluated_at": "2026-10-24T23:36:06.277862+00:00",
+      "html_sha256": "320be1264404a19d3907d7df0158f0ed09ceb125c25b6f201a9215464a5afbb4",
+      "evaluated_at": "2026-10-25T03:24:42.260827+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2845,7 +2862,7 @@
     {
       "tool_id": "vira-voto-jogo-de-persuasao",
       "html_sha256": "a2e28a87303f2c61d11c7f0c0604b44dfbcde0601a81dbc0fa2d85a3b4ed32d7",
-      "evaluated_at": "2026-10-24T23:35:53.063032+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.577480+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2862,7 +2879,7 @@
     {
       "tool_id": "vira-voto-media",
       "html_sha256": null,
-      "evaluated_at": "2026-10-24T23:36:03.158611+00:00",
+      "evaluated_at": "2026-10-25T03:24:39.631463+00:00",
       "status": "nao_inspecionado",
       "total_score": null,
       "dimension_scores": {
@@ -2879,7 +2896,7 @@
     {
       "tool_id": "virada-no-bairro",
       "html_sha256": "f8a287b93c71d862fda08a0128eff9307dbdd164743a8adbda491fc1e5e23a04",
-      "evaluated_at": "2026-10-24T23:35:52.187509+00:00",
+      "evaluated_at": "2026-10-25T03:24:30.767745+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2896,7 +2913,7 @@
     {
       "tool_id": "virar-voto-13-jogo-sera",
       "html_sha256": "cfdfdea1e956baa9bf070ac7247a1940a54278b64a9f9e388ce3768a97c06be8",
-      "evaluated_at": "2026-10-24T23:35:52.614704+00:00",
+      "evaluated_at": "2026-10-25T03:24:30.872540+00:00",
       "status": "rejeitado",
       "total_score": 57.5,
       "dimension_scores": {
@@ -2913,7 +2930,7 @@
     {
       "tool_id": "viravoto-rats",
       "html_sha256": "2a7d66fbf9bfc6480464b65c2e11c5433c4715a5516efd87570528883d26322c",
-      "evaluated_at": "2026-10-24T23:35:56.703964+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.789293+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -2930,7 +2947,7 @@
     {
       "tool_id": "voce-cairia-nessa",
       "html_sha256": "e9039dc24980f98c693e9b4029d6236393fd0b015519d2f782b45cabda76a8d9",
-      "evaluated_at": "2026-10-24T23:36:06.319802+00:00",
+      "evaluated_at": "2026-10-25T03:24:42.331376+00:00",
       "status": "catalogado",
       "total_score": 71.0,
       "dimension_scores": {
@@ -2947,7 +2964,7 @@
     {
       "tool_id": "vote-consciente",
       "html_sha256": "950cd3bcc3a3795f1a9520642c264b07e4c86e3a81e56695f08d62a6bedae5e9",
-      "evaluated_at": "2026-10-24T23:35:57.840339+00:00",
+      "evaluated_at": "2026-10-25T03:24:36.052534+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -2964,7 +2981,7 @@
     {
       "tool_id": "vote-pela-democracia",
       "html_sha256": "87bad816a4b43245a72f46421f785c9c12bb3ef494923b2b9b071e361860bc37",
-      "evaluated_at": "2026-10-24T23:35:55.225047+00:00",
+      "evaluated_at": "2026-10-25T03:24:34.162750+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -2980,16 +2997,16 @@
     },
     {
       "tool_id": "vote-sabendo",
-      "html_sha256": "c7fc8fa6c008fe394f08b0724fe57c0b53759d1d3fecb5111d0381baded2144c",
-      "evaluated_at": "2026-10-24T23:35:53.232480+00:00",
+      "html_sha256": "4eb984a4e562aa8905ac41e6aac2c7098b69a301f11efe59c69327a93e5a59f8",
+      "evaluated_at": "2026-10-25T03:24:33.013443+00:00",
       "status": "auditado",
-      "total_score": 81.8,
+      "total_score": 80.2,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": null,
@@ -2998,7 +3015,7 @@
     {
       "tool_id": "voto-as-cegas",
       "html_sha256": "9ccf4653121209655fd91112392778b1aec8a8716961db7d6638f43d8d29b2c9",
-      "evaluated_at": "2026-10-24T23:35:52.954184+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.408375+00:00",
       "status": "auditado",
       "total_score": 81.8,
       "dimension_scores": {
@@ -3015,7 +3032,7 @@
     {
       "tool_id": "voto-do-povo",
       "html_sha256": "d51ea1a0b49501a2558ba8cd06e53eca7e1ed7990cead3512d2c7e2cb91f754c",
-      "evaluated_at": "2026-10-24T23:36:05.128989+00:00",
+      "evaluated_at": "2026-10-25T03:24:41.368180+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -3032,7 +3049,7 @@
     {
       "tool_id": "voto-em-movimento",
       "html_sha256": "819e3ae020ad5babb5b5e58e45c5a82c4e8724a130020dd0cd2df0b518f02550",
-      "evaluated_at": "2026-10-24T23:35:53.441397+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.928703+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -3048,8 +3065,8 @@
     },
     {
       "tool_id": "voto-la-fora",
-      "html_sha256": "aaf6ef683b6c356dbfea54cd452b2590c19250760625b5564a170def9876864a",
-      "evaluated_at": "2026-10-24T23:35:53.966371+00:00",
+      "html_sha256": "85f71b63c230b5dd4aa6ff22fe7638ba1993bfc5f7e969480fd191865a752b72",
+      "evaluated_at": "2026-10-25T03:24:31.702272+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -3066,7 +3083,7 @@
     {
       "tool_id": "voto-sem-dono",
       "html_sha256": "fea90cfdc165e13a6297ee45ced6f9183236596aaa4612da887ff7da09bc81eb",
-      "evaluated_at": "2026-10-24T23:35:52.875357+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.408057+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
@@ -3083,7 +3100,7 @@
     {
       "tool_id": "voto-vizinho",
       "html_sha256": "decb717aa5cccd67512381f9cc8aa823427e581acbe4b9674a8b4c708bd9a006",
-      "evaluated_at": "2026-10-24T23:35:52.607853+00:00",
+      "evaluated_at": "2026-10-25T03:24:31.078907+00:00",
       "status": "catalogado",
       "total_score": 72.5,
       "dimension_scores": {
@@ -3100,7 +3117,7 @@
     {
       "tool_id": "voz-social-br",
       "html_sha256": "32e5758af8daefff8c5b78d90c07962411213b70b0beef4e6e4516c9036416fd",
-      "evaluated_at": "2026-10-24T23:36:07.800064+00:00",
+      "evaluated_at": "2026-10-25T03:24:43.556591+00:00",
       "status": "catalogado",
       "total_score": 75.5,
       "dimension_scores": {
