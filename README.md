@@ -174,11 +174,11 @@ Amarrados, os dois ritmos se estorvam. Por isso o repositório tem dois comandos
 | Comando | Quando roda | O que faz |
 | :--- | :--- | :--- |
 | `audit-all` | semanal (domingo, 03:00 UTC) | lê as 183 páginas, avalia e grava o laudo e o manifesto; captura o que mudou |
-| `preservar` | diário (04:00 UTC) | **não baixa página nenhuma**: lê catálogo e manifesto, submete o que está sem snapshot e grava o manifesto |
+| `preservar` | diário (04:00 UTC) | **não baixa página nenhuma**: lê catálogo e manifesto, consulta o índice, submete o que está sem snapshot e grava o manifesto |
 
-`preservar` mantém a fila andando no ritmo que o serviço aceita — 10 por execução, 12 s entre
-envios — e não toca no laudo, porque não avalia nada. Endereço sem snapshot que passa do limite
-fica registrado como `deferred` e volta na execução seguinte.
+`preservar` mantém a fila andando no ritmo que o serviço aceita — 25 por execução, 20 s entre
+submissões e 1 s entre consultas ao índice — e não toca no laudo, porque não avalia nada. Endereço
+sem snapshot que passa do limite fica registrado como `deferred` e volta na execução seguinte.
 
 ### Chaves do Internet Archive
 

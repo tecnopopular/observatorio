@@ -45,12 +45,13 @@ from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
 from .withdrawals import load as carregar_retiradas
 
 SUBMIT_INTERVAL = 20.0
+LOOKUP_INTERVAL = 1.0
 SUBMIT_TIMEOUT = 40
 SUBMIT_RETRY_PAUSE = 30.0
 SUBMIT_REFUSALS_TO_STOP = 2
 SUBMIT_NETWORK_FAILURES_TO_STOP = 3
 ARCHIVE_REUSE_WINDOW_DAYS = 30.0
-DEFAULT_ARCHIVE_LIMIT = 10
+DEFAULT_ARCHIVE_LIMIT = 25
 
 DEFAULT_CACHE_DIR = Path("data/raw/html_cache")
 
@@ -378,9 +379,11 @@ def run_archive_queue(
     dizendo não, e insistir piora — para na segunda. Falha de rede costuma ser passageira — TLS
     que não completa, conexão derrubada —, então tolera três endereços seguidos antes de parar.
 
-    O intervalo é de 20 s. Medido em 2026-10-24: com 12 s, um IP residencial preservou 12 de 12,
-    enquanto o IP compartilhado do runner preservou 12 de 20 em duas execuções — a diferença não
-    está no cliente, está em quantos pedidos a borda aceita daquele endereço por minuto.
+    O intervalo é de 20 s **entre submissões**, e de 1 s entre consultas ao índice. Medido em
+    2026-10-24: com 12 s, um IP residencial preservou 12 de 12, enquanto o IP compartilhado do
+    runner preservou 12 de 20 — a diferença não está no cliente, está em quantos pedidos a borda
+    aceita daquele endereço por minuto. Consulta ao índice não é submissão: cobrar 20 s por ela
+    faria um lote de 10 endereços já preservados levar três minutos sem enviar nada.
 
     Args:
         items: Pares (`tool_id`, endereço) na ordem de prioridade.
@@ -398,9 +401,10 @@ def run_archive_queue(
     recusas_consecutivas = 0
     falhas_de_rede = 0
 
+    pausa = 0.0
     for posicao, (tool_id, url) in enumerate(selecionados):
-        if posicao:
-            time.sleep(SUBMIT_INTERVAL)
+        if pausa:
+            time.sleep(pausa)
         existente = find_snapshot(url)
         if existente and snapshot_is_recent(existente, ARCHIVE_REUSE_WINDOW_DAYS):
             resultados[tool_id] = ArchiveOutcome(
@@ -411,11 +415,13 @@ def run_archive_queue(
             detalhes[tool_id] = resultados[tool_id].detail or ""
             recusas_consecutivas = 0
             falhas_de_rede = 0
+            pausa = LOOKUP_INTERVAL
             continue
         submissao = submit_archive(url, timeout=SUBMIT_TIMEOUT)
         if submissao.status == "failed":
             time.sleep(SUBMIT_RETRY_PAUSE)
             submissao = submit_archive(url, timeout=SUBMIT_TIMEOUT)
+        pausa = SUBMIT_INTERVAL
         resultados[tool_id] = submissao
         if submissao.job_id and not submissao.url:
             pendentes[tool_id] = ArchiveJob(job_id=submissao.job_id, target_url=url)
