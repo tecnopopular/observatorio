@@ -43,7 +43,8 @@ tarefas, com orçamento de espera por ciclo:
 * Envio serial com intervalo de 12 s e teto de 10 capturas por ciclo (`--archive-limit`), inclusive
   com autenticação: medido em 2026-10-24, uma rajada de 6 envios simultâneos teve todos os pedidos
   recusados com `Connection refused`, 4 envios com 8 s de intervalo terminaram em `HTTP 429` e 6
-  envios com 12 s de intervalo foram aceitos.
+  envios com 12 s de intervalo foram aceitos de um IP residencial, mas o mesmo intervalo rendeu 12
+  capturas em 20 tentativas a partir do IP compartilhado do runner, o que levou o intervalo a 20 s.
 * Estado entre ciclos: o manifesto versionado guarda `archive_url` e `archive_status` por
   iniciativa, para não recapturar conteúdo idêntico e para a fila não reiniciar sempre pelos mesmos
   endereços.

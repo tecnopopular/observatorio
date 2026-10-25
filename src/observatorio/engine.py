@@ -42,9 +42,9 @@ from .state import (
 from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
 from .withdrawals import load as carregar_retiradas
 
-SUBMIT_INTERVAL = 12.0
+SUBMIT_INTERVAL = 20.0
 SUBMIT_TIMEOUT = 40
-SUBMIT_RETRY_PAUSE = 20.0
+SUBMIT_RETRY_PAUSE = 30.0
 SUBMIT_REFUSALS_TO_STOP = 2
 SUBMIT_NETWORK_FAILURES_TO_STOP = 3
 DEFAULT_ARCHIVE_LIMIT = 10
@@ -374,6 +374,10 @@ def run_archive_queue(
     Recusa (`refused`) e falha de rede (`failed`) têm tolerâncias diferentes: recusa é o serviço
     dizendo não, e insistir piora — para na segunda. Falha de rede costuma ser passageira — TLS
     que não completa, conexão derrubada —, então tolera três endereços seguidos antes de parar.
+
+    O intervalo é de 20 s. Medido em 2026-10-24: com 12 s, um IP residencial preservou 12 de 12,
+    enquanto o IP compartilhado do runner preservou 12 de 20 em duas execuções — a diferença não
+    está no cliente, está em quantos pedidos a borda aceita daquele endereço por minuto.
 
     Args:
         items: Pares (`tool_id`, endereço) na ordem de prioridade.

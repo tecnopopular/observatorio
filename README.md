@@ -132,10 +132,12 @@ montado a partir do carimbo devolvido (`/web/AAAAMMDDhhmmss/<url>`), não de cab
   existe captura recente — inclusive feita por terceiros — o Internet Archive dispensa a nova e o
   cliente resolve o endereço no índice público, em uma consulta. O laudo registra isso como
   `captured`, e não como recusa.
-- **Envio serial, com intervalo.** As capturas são submetidas uma de cada vez, com 12 s entre
+- **Envio serial, com intervalo.** As capturas são submetidas uma de cada vez, com 20 s entre
   envios. Medido em 2026-10-24: em rajada de 6 envios simultâneos, todos falharam com `Connection
-  refused`; 4 envios com 8 s de intervalo terminaram em `HTTP 429`, enquanto 6 envios com 12 s
-  foram aceitos. Paralelismo aqui não acelera nada — só faz o serviço recusar o ciclo inteiro.
+  refused`; 4 envios com 8 s de intervalo terminaram em `HTTP 429`. Com 12 s, um IP residencial
+  preservou 12 de 12 e o IP compartilhado do runner preservou 12 de 20 — daí o intervalo maior, que
+  é a única alavanca do lado do cliente. Paralelismo aqui não acelera nada: só faz o serviço recusar
+  o lote inteiro.
 - **Teto por ciclo.** No máximo 10 capturas por ciclo (`--archive-limit`). O excedente fica com
   `archive_status=deferred` e volta no ciclo seguinte, porque sem snapshot gravado ele continua na
   fila. Conteúdo que mudou desde o último snapshot tem prioridade sobre endereço nunca preservado.
