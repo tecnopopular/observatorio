@@ -299,6 +299,18 @@ class TestPassoDePreservacao(unittest.TestCase):
 
         self.assertNotIn("https://gama.org/", submetidos)
 
+    def test_timeouts_seguidos_toleram_mais_que_recusas(self) -> None:
+        """Falha de rede para após três endereços; recusa, após dois."""
+        relatorios = [laudo(f"item{n}") for n in range(5)]
+        with patch("observatorio.engine.submit_archive") as mock_submit:
+            mock_submit.return_value = ArchiveOutcome(status="failed", detail="timed out")
+            with patch("observatorio.engine.time.sleep"):
+                _preserve(relatorios, {}, skip_archive=False, limit=10, budget=10)
+
+        self.assertEqual(mock_submit.call_count, 6)
+        self.assertEqual(relatorios[2].archive_status, "failed")
+        self.assertEqual(relatorios[3].archive_status, "deferred")
+
 
 if __name__ == "__main__":
     unittest.main()

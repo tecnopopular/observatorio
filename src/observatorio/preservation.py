@@ -44,6 +44,7 @@ IF_NOT_ARCHIVED_WITHIN = "30d"
 
 DEFAULT_ARCHIVE_BUDGET = 60.0
 POLL_INTERVAL = 5.0
+POLL_TIMEOUT = 30
 
 
 @dataclass(frozen=True)
@@ -277,7 +278,7 @@ def await_archives(
 
     while pendentes:
         for tool_id, job in list(pendentes.items()):
-            resultado = poll_archive(job)
+            resultado = poll_archive(job, timeout=POLL_TIMEOUT)
             resultados[tool_id] = resultado
             if resultado.status != "pending":
                 del pendentes[tool_id]

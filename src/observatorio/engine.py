@@ -43,9 +43,10 @@ from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
 from .withdrawals import load as carregar_retiradas
 
 SUBMIT_INTERVAL = 12.0
-SUBMIT_TIMEOUT = 20
-SUBMIT_FAILURES_TO_STOP = 2
+SUBMIT_TIMEOUT = 40
 SUBMIT_RETRY_PAUSE = 20.0
+SUBMIT_REFUSALS_TO_STOP = 2
+SUBMIT_NETWORK_FAILURES_TO_STOP = 3
 DEFAULT_ARCHIVE_LIMIT = 10
 
 DEFAULT_CACHE_DIR = Path("data/raw/html_cache")
@@ -370,6 +371,10 @@ def run_archive_queue(
     O núcleo é compartilhado pelo ciclo de auditoria e pelo passo de preservação avulso: a
     política de ritmo é a mesma nos dois, porque o limite é do serviço, não de quem chama.
 
+    Recusa (`refused`) e falha de rede (`failed`) têm tolerâncias diferentes: recusa é o serviço
+    dizendo não, e insistir piora — para na segunda. Falha de rede costuma ser passageira — TLS
+    que não completa, conexão derrubada —, então tolera três endereços seguidos antes de parar.
+
     Args:
         items: Pares (`tool_id`, endereço) na ordem de prioridade.
         limit: Número máximo de submissões nesta rodada.
@@ -383,7 +388,8 @@ def run_archive_queue(
     resultados: dict[str, ArchiveOutcome] = {}
     detalhes: dict[str, str] = {}
     pendentes: dict[str, ArchiveJob] = {}
-    falhas_consecutivas = 0
+    recusas_consecutivas = 0
+    falhas_de_rede = 0
 
     for posicao, (tool_id, url) in enumerate(selecionados):
         if posicao:
@@ -397,13 +403,24 @@ def run_archive_queue(
             pendentes[tool_id] = ArchiveJob(job_id=submissao.job_id, target_url=url)
         if submissao.detail:
             detalhes[tool_id] = submissao.detail
-        falhas_consecutivas = falhas_consecutivas + 1 if submissao.status in ("refused", "failed") else 0
-        if falhas_consecutivas >= SUBMIT_FAILURES_TO_STOP:
+        if submissao.status == "refused":
+            recusas_consecutivas += 1
+            falhas_de_rede = 0
+        elif submissao.status == "failed":
+            falhas_de_rede += 1
+            recusas_consecutivas = 0
+        else:
+            recusas_consecutivas = 0
+            falhas_de_rede = 0
+        if (
+            recusas_consecutivas >= SUBMIT_REFUSALS_TO_STOP
+            or falhas_de_rede >= SUBMIT_NETWORK_FAILURES_TO_STOP
+        ):
             restantes = selecionados[posicao + 1 :]
             preteridos.extend(tool_id for tool_id, _ in restantes)
             if restantes:
                 detalhes[restantes[0][0]] = (
-                    "envios interrompidos após recusas consecutivas; adiado para o próximo ciclo"
+                    "envios interrompidos após falhas consecutivas; adiado para a próxima execução"
                 )
             break
 
