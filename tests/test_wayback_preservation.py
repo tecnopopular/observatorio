@@ -11,6 +11,7 @@ import io
 import json
 import unittest
 import urllib.error
+from datetime import UTC, datetime, timedelta
 from unittest.mock import MagicMock, patch
 
 from observatorio.fetch import INSTITUTIONAL_USER_AGENT
@@ -20,6 +21,7 @@ from observatorio.preservation import (
     await_archives,
     find_snapshot,
     poll_archive,
+    snapshot_is_recent,
     snapshot_url,
     submit_archive,
 )
@@ -491,6 +493,24 @@ class TestIndiceDoWayback(unittest.TestCase):
 
         self.assertEqual(resultado.status, "failed")
         self.assertIn("Connection reset", resultado.detail or "")
+
+
+class TestJanelaDeReaproveitamento(unittest.TestCase):
+    """Idade do snapshot decide se vale gastar uma submissão."""
+
+    def test_captura_de_hoje_e_recente(self) -> None:
+        """Carimbo do dia entra na janela de reaproveitamento."""
+        agora = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
+        self.assertTrue(snapshot_is_recent(f"https://web.archive.org/web/{agora}/https://exemplo.org/"))
+
+    def test_captura_antiga_nao_e_recente(self) -> None:
+        """Carimbo fora da janela pede captura nova."""
+        antigo = (datetime.now(UTC) - timedelta(days=120)).strftime("%Y%m%d%H%M%S")
+        self.assertFalse(snapshot_is_recent(f"https://web.archive.org/web/{antigo}/https://exemplo.org/"))
+
+    def test_endereco_sem_carimbo_nao_e_recente(self) -> None:
+        """Endereço fora do formato devolve falso em vez de estourar exceção."""
+        self.assertFalse(snapshot_is_recent("https://exemplo.org/sem-carimbo"))
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ se submete por ciclo e o que o laudo registra quando a captura não acontece.
 import json
 import tempfile
 import unittest
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -83,7 +83,10 @@ class TestFaseDePreservacao(unittest.TestCase):
     def test_limite_pretere_o_excedente_como_deferred(self) -> None:
         """O que passa do limite não é submetido e fica registrado como `deferred`."""
         relatorios = [laudo("alfa"), laudo("beta"), laudo("gama")]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.return_value = ArchiveOutcome(status="pending", job_id="spn2-a")
             with patch("observatorio.engine.await_archives") as mock_await:
                 mock_await.return_value = {
@@ -102,7 +105,10 @@ class TestFaseDePreservacao(unittest.TestCase):
     def test_captura_concluida_grava_endereco(self) -> None:
         """Captura concluída grava o endereço perene no laudo."""
         relatorios = [laudo("painel")]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.return_value = ArchiveOutcome(status="pending", job_id="spn2-a")
             with patch("observatorio.engine.await_archives") as mock_await:
                 mock_await.return_value = {
@@ -123,7 +129,10 @@ class TestFaseDePreservacao(unittest.TestCase):
         relatorios = [laudo("painel", "c" * 64)]
         relatorios[0].archive_url = "https://web.archive.org/web/1/https://painel.org/"
         manifesto = {"painel": entrada("https://web.archive.org/web/1/https://painel.org/", "b" * 64)}
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.return_value = ArchiveOutcome(status="pending", job_id="spn2-a")
             with patch("observatorio.engine.await_archives") as mock_await:
                 mock_await.return_value = {
@@ -137,7 +146,10 @@ class TestFaseDePreservacao(unittest.TestCase):
     def test_recusas_consecutivas_interrompem_os_envios(self) -> None:
         """Recusa repetida para de enviar, em vez de insistir contra o serviço."""
         relatorios = [laudo("alfa"), laudo("beta"), laudo("gama")]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.return_value = ArchiveOutcome(status="refused", detail="HTTP 429")
             with patch("observatorio.engine.time.sleep"):
                 _preserve(relatorios, {}, skip_archive=False, limit=25, budget=60)
@@ -148,7 +160,10 @@ class TestFaseDePreservacao(unittest.TestCase):
     def test_skip_archive_registra_dispensa(self) -> None:
         """Com a preservação dispensada, cada laudo diz `skipped` em vez de ficar em silêncio."""
         relatorios = [laudo("alfa")]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             _preserve(relatorios, {}, skip_archive=True, limit=25, budget=60)
 
         mock_submit.assert_not_called()
@@ -157,7 +172,10 @@ class TestFaseDePreservacao(unittest.TestCase):
     def test_falha_de_rede_ganha_segunda_tentativa(self) -> None:
         """Uma instabilidade passageira não derruba o ciclo: a submissão é repetida uma vez."""
         relatorios = [laudo("alfa")]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.side_effect = [
                 ArchiveOutcome(status="failed", detail="falha de rede na submissão: ConnectionReset"),
                 ArchiveOutcome(status="pending", job_id="spn2-b"),
@@ -177,7 +195,10 @@ class TestFaseDePreservacao(unittest.TestCase):
     def test_recusa_nao_ganha_segunda_tentativa(self) -> None:
         """Recusa do serviço não melhora com insistência: não é repetida."""
         relatorios = [laudo("alfa")]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.return_value = ArchiveOutcome(status="refused", detail="HTTP 429")
             with patch("observatorio.engine.time.sleep"):
                 _preserve(relatorios, {}, skip_archive=False, limit=10, budget=60)
@@ -189,7 +210,10 @@ class TestFaseDePreservacao(unittest.TestCase):
         """Conteúdo inalterado herda o endereço já preservado, em vez de ficar sem estado."""
         relatorios = [laudo("painel")]
         manifesto = {"painel": entrada("https://web.archive.org/web/20261024213206/https://painel.org/")}
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             _preserve(relatorios, manifesto, skip_archive=False, limit=10, budget=60)
 
         mock_submit.assert_not_called()
@@ -259,6 +283,7 @@ class TestPassoDePreservacao(unittest.TestCase):
                 return ArchiveOutcome(status="pending", job_id=f"spn2-{len(submetidos)}")
 
             with (
+                patch("observatorio.engine.find_snapshot", return_value=None),
                 patch("observatorio.engine.submit_archive", side_effect=registro),
                 patch("observatorio.engine.await_archives") as mock_await,
             ):
@@ -302,7 +327,10 @@ class TestPassoDePreservacao(unittest.TestCase):
     def test_timeouts_seguidos_toleram_mais_que_recusas(self) -> None:
         """Falha de rede para após três endereços; recusa, após dois."""
         relatorios = [laudo(f"item{n}") for n in range(5)]
-        with patch("observatorio.engine.submit_archive") as mock_submit:
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=None),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
             mock_submit.return_value = ArchiveOutcome(status="failed", detail="timed out")
             with patch("observatorio.engine.time.sleep"):
                 _preserve(relatorios, {}, skip_archive=False, limit=10, budget=10)
@@ -310,6 +338,36 @@ class TestPassoDePreservacao(unittest.TestCase):
         self.assertEqual(mock_submit.call_count, 6)
         self.assertEqual(relatorios[2].archive_status, "failed")
         self.assertEqual(relatorios[3].archive_status, "deferred")
+
+    def test_snapshot_recente_dispensa_a_submissao(self) -> None:
+        """Índice com captura recente evita a submissão, que é o recurso escasso."""
+        relatorios = [laudo("painel")]
+        recente = datetime.now(UTC).strftime("https://web.archive.org/web/%Y%m%d%H%M%S/https://painel.org/")
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=recente),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
+            _preserve(relatorios, {}, skip_archive=False, limit=10, budget=10)
+
+        mock_submit.assert_not_called()
+        self.assertEqual(relatorios[0].archive_status, "reused")
+        self.assertEqual(relatorios[0].archive_url, recente)
+
+    def test_snapshot_antigo_ainda_pede_captura(self) -> None:
+        """Captura fora da janela é antiga: o endereço volta para a submissão."""
+        relatorios = [laudo("painel")]
+        antigo = (datetime.now(UTC) - timedelta(days=200)).strftime(
+            "https://web.archive.org/web/%Y%m%d%H%M%S/https://painel.org/"
+        )
+        with (
+            patch("observatorio.engine.find_snapshot", return_value=antigo),
+            patch("observatorio.engine.submit_archive") as mock_submit,
+        ):
+            mock_submit.return_value = ArchiveOutcome(status="refused", detail="HTTP 429")
+            with patch("observatorio.engine.time.sleep"):
+                _preserve(relatorios, {}, skip_archive=False, limit=10, budget=10)
+
+        mock_submit.assert_called_once()
 
 
 if __name__ == "__main__":

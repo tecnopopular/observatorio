@@ -24,6 +24,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 
 from .credentials import get_internet_archive_keys
 from .fetch import INSTITUTIONAL_USER_AGENT
@@ -39,6 +40,7 @@ STATUS_ENDPOINT = "https://web.archive.org/save/status/{job_id}"
 SNAPSHOT_ENDPOINT = "https://web.archive.org/web/{timestamp}/{target}"
 JOB_PATTERN = re.compile(r"spn2-[a-z0-9]+")
 EXISTING_SNAPSHOT_PATTERN = re.compile(r"web\.archive\.org/web/(\d{14})/")
+SNAPSHOT_TIMESTAMP_PATTERN = re.compile(r"/web/(\d{14})/")
 
 IF_NOT_ARCHIVED_WITHIN = "30d"
 
@@ -421,6 +423,30 @@ def _ultima_captura_no_cdx(target_url: str, timeout: int = 15) -> str | None:
     if not carimbo.isdigit() or len(carimbo) != 14:
         return None
     return snapshot_url(carimbo, target_url)
+
+
+def snapshot_is_recent(url: str, days: float = 30.0) -> bool:
+    """Indica se um endereço de snapshot do Wayback é recente o bastante para ser reaproveitado.
+
+    Evita pagar uma submissão para descobrir o que o índice público já responde de graça: quando
+    existe captura dentro da janela, submeter só consome limite do serviço.
+
+    Args:
+        url: Endereço perene no formato `https://web.archive.org/web/<carimbo>/<original>`.
+        days: Tamanho da janela de reaproveitamento, em dias.
+
+    Returns:
+        True quando o carimbo da captura está dentro da janela; False quando é antigo, ilegível
+        ou ausente.
+    """
+    achado = SNAPSHOT_TIMESTAMP_PATTERN.search(url)
+    if not achado:
+        return False
+    try:
+        momento = datetime.strptime(achado.group(1), "%Y%m%d%H%M%S").replace(tzinfo=UTC)
+    except ValueError:
+        return False
+    return (datetime.now(UTC) - momento) <= timedelta(days=days)
 
 
 def _reason_text(erro: Exception) -> str:

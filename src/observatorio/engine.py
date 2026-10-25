@@ -26,7 +26,9 @@ from .preservation import (
     await_archives,
     calculate_sha256,
     check_content_changed,
+    find_snapshot,
     has_credentials,
+    snapshot_is_recent,
     submit_archive,
 )
 from .robots import RobotsPolicy
@@ -47,6 +49,7 @@ SUBMIT_TIMEOUT = 40
 SUBMIT_RETRY_PAUSE = 30.0
 SUBMIT_REFUSALS_TO_STOP = 2
 SUBMIT_NETWORK_FAILURES_TO_STOP = 3
+ARCHIVE_REUSE_WINDOW_DAYS = 30.0
 DEFAULT_ARCHIVE_LIMIT = 10
 
 DEFAULT_CACHE_DIR = Path("data/raw/html_cache")
@@ -398,6 +401,17 @@ def run_archive_queue(
     for posicao, (tool_id, url) in enumerate(selecionados):
         if posicao:
             time.sleep(SUBMIT_INTERVAL)
+        existente = find_snapshot(url)
+        if existente and snapshot_is_recent(existente, ARCHIVE_REUSE_WINDOW_DAYS):
+            resultados[tool_id] = ArchiveOutcome(
+                status="reused",
+                url=existente,
+                detail="snapshot recente encontrado no índice; submissão dispensada",
+            )
+            detalhes[tool_id] = resultados[tool_id].detail or ""
+            recusas_consecutivas = 0
+            falhas_de_rede = 0
+            continue
         submissao = submit_archive(url, timeout=SUBMIT_TIMEOUT)
         if submissao.status == "failed":
             time.sleep(SUBMIT_RETRY_PAUSE)
