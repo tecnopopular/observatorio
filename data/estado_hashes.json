@@ -545,7 +545,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "brasil-melhor",
@@ -596,7 +596,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "carona-solidaria",
@@ -867,8 +867,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261025042925/https://dafemapp.streamlit.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "data2comms-acervo",
@@ -918,8 +918,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261025012911/https://travahacker.com.br/deolhonotse/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "decisivas",
@@ -936,7 +936,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "desmascara-brasil",
@@ -952,8 +952,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012155300/https://desmascarabrasil.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "devo-votar",
@@ -969,8 +969,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011061217/https://www.devovotar.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "dinheiro-em-perspectiva",
@@ -987,7 +987,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "direita-com-lula",
@@ -1003,8 +1003,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261017033232/https://direitacomlula.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "diretorio-13",
@@ -1020,8 +1020,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013101705/https://www.diretorio13.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "do-seu-bolso",
@@ -1037,8 +1037,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261014210546/https://doseubolso.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "eleicoes-2026-o-mapa-de-cada-local-de-votacao",
@@ -1055,7 +1055,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "eleicoes-rj",
@@ -1072,7 +1072,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "em-frente-calendario-de-atos",
@@ -1088,8 +1088,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013164110/https://em-frente.com/calendario",
+      "archive_status": "reused"
     },
     {
       "tool_id": "em-quem-jesus-votaria",
@@ -1105,8 +1105,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261025043403/https://emquemjesusvotaria.vercel.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "escolha-catolica",
@@ -1123,7 +1123,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "escolha-facil",
@@ -1140,7 +1140,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "eu-vou-votar",
@@ -1156,8 +1156,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012021123/https://euvouvotar.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "explorador-eleitoral",
@@ -1174,7 +1174,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "falas-de-flavio",
@@ -1190,8 +1190,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012010516/https://flaviofalou.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "fandoms-pelo-brasil",
@@ -1207,8 +1207,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261014171921/https://fandomspelobrasil.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "fediverse",
@@ -1224,8 +1224,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015200558/https://fediverse.info/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "flavio-bolsonaro-a-teia",
@@ -1241,8 +1241,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012030441/https://flavinho.pages.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "fortaleza-nas-urnas",
@@ -1258,8 +1258,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011829/https://fortalezanasurnas.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "fortaleza-por-lula",
@@ -1275,8 +1275,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011651/https://fortalezaporlula.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "fortaleza-vai-de-lula",
