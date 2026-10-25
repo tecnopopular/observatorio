@@ -442,8 +442,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261025002704/https://brasilacimadetudo.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-em-jogo",
@@ -527,8 +527,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20180407100825/http://brasil.io:80/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "brasil-maior-que-dois-lados",
@@ -545,7 +545,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "brasil-melhor",
@@ -561,8 +561,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024214909/https://brasil-melhor.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "cards-oficiais-da-campanha-por-area",
@@ -578,8 +578,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223628/https://lula.com.br/comparativo",
+      "archive_status": "reused"
     },
     {
       "tool_id": "carona-do-voto",
@@ -596,7 +596,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "carona-solidaria",
@@ -612,8 +612,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223420/https://carona.casamarighella.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "censura-digital-lula",
@@ -629,8 +629,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013145314/https://censuradigital.lula.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "como-isso-me-afeta",
@@ -646,8 +646,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261010014838/https://como-isso-me-afeta.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "como-meus-vizinhos-votam",
@@ -663,8 +663,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261006030653/https://comomeusvizinhosvotam.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "como-vira-voto",
@@ -680,8 +680,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261007090654/https://comoviravoto.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "compara-brasil",
@@ -697,8 +697,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261007202818/https://comparabrasil.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "confere-ai-ia-anti-fake-news",
@@ -714,8 +714,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012010637/https://confere-ai-five.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "conversa-na-rua",
@@ -731,8 +731,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261025012602/https://conversanarua.netlify.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "conversa-que-muda",
@@ -748,8 +748,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012111904/https://conversaquemuda.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "cortes-do-lula-orquestrador-de-pautas",
@@ -765,8 +765,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012014210/https://cortesdolula.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "criativos-pela-virada",
@@ -782,8 +782,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261006235945/https://criativospelavirada.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "crimeta-russa",
@@ -799,8 +799,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024015419/https://crimetarussa.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "curadoria-vira-voto",
@@ -816,8 +816,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024210525/https://acervolula13.lovable.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "da-pra-virar",
@@ -833,8 +833,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223538/https://dapravirar.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "dados-da-virada",
@@ -850,8 +850,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024170732/https://dadosdavirada.up.railway.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "dafem-observatorio-de-feminicidio",
@@ -868,7 +868,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "data2comms-acervo",
@@ -884,8 +884,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223701/https://data2comms.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "de-olho-na-meta",
@@ -901,8 +901,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261014010046/https://deolhonameta.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "de-olho-no-tse",
@@ -919,7 +919,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "decisivas",
