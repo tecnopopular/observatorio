@@ -255,8 +255,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261024224541/https://comitedetecnologia.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "apuracao-do-1o-turno-analises-independentes",
@@ -272,8 +272,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261024224515/https://travahacker.com.br/eleicoes2026/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "atendimento-cliatende",
@@ -290,7 +290,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "atlas-dado-popular",
@@ -306,8 +306,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223518/https://dadopopular.com.br/atlas",
+      "archive_status": "captured"
     },
     {
       "tool_id": "baixada-santista-com-lula",
@@ -323,8 +323,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024224557/https://baixadasantistacomlula.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "baralho-da-virada",
@@ -341,7 +341,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "baralho-interativo",
@@ -358,7 +358,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "base-dos-dados",
@@ -374,8 +374,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024224631/https://basedosdados.org/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "bora-lula",
@@ -391,8 +391,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024214911/https://bora-lula.online/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "bora-lula-2",
@@ -409,7 +409,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "bora-virar",
