@@ -289,8 +289,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261025002307/https://cliatende.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "atlas-dado-popular",
@@ -340,8 +340,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261025002253/https://viravotobrasil.com.br/baralhos/virada",
+      "archive_status": "reused"
     },
     {
       "tool_id": "baralho-interativo",
@@ -357,8 +357,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261024224713/https://baralhointerativo.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "base-dos-dados",
@@ -408,8 +408,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261024210517/https://boralula.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "bora-virar",
@@ -425,8 +425,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261008161604/https://boravirar.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-acima-de-tudo",
@@ -443,7 +443,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "brasil-em-jogo",
@@ -459,8 +459,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223400/https://brasilemjogo.ariu.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-em-jogo-2",
@@ -476,8 +476,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015213732/https://obrasilemjogo.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-feliz-de-novo",
@@ -493,8 +493,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024214909/https://brasil-feliz-de-novo.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-futuro-comparador-de-planos",
@@ -510,8 +510,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024204316/https://brasil-futuro.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-io",
