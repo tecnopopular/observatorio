@@ -935,8 +935,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026043329/https://decisivas.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "desmascara-brasil",
@@ -1071,8 +1071,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026043412/https://eleicoes-rj.streamlit.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "em-frente-calendario-de-atos",
@@ -1122,8 +1122,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026163547/https://escolhacatolica.org/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "escolha-facil",
@@ -1139,8 +1139,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026043726/https://escolhafacil.online/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "eu-vou-votar",
@@ -1377,8 +1377,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026043826/https://guiadenunciaflavio.github.io/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "ideias-em-comum",
@@ -1411,8 +1411,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026163751/https://accounts.google.com/v3/signin/identifier?continue=https://script.google.com/macros/s/AKfycbw1mNGQSUD5eS7l0TvAK20URcnB-EUxoePfcm8feAC6RhReoVSqlNIBIASWL-1zGxnadA/exec&followup=https://script.google.com/macros/s/AKfycbw1mNGQSUD5eS7l0TvAK20URcnB-EUxoePfcm8feAC6RhReoVSqlNIBIASWL-1zGxnadA/exec&passive=1209600&flowName=WebLiteSignIn&flowEntry=ServiceLogin&dsh=S-971512405:1793032668312175",
+      "archive_status": "captured"
     },
     {
       "tool_id": "janonometro",
@@ -1480,7 +1480,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "reused"
     },
     {
       "tool_id": "lula-filtro",
@@ -1565,7 +1565,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "mapa-de-abstencao-por-bairro",
@@ -1581,8 +1581,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164022/https://www.leosuricate.com.br/analises",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapa-de-abstencoes-rio-de-janeiro",
@@ -1598,8 +1598,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164219/https://abstencoes-rio.netlify.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapa-de-oportunidade",
@@ -1615,8 +1615,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011602/https://mapa-vira-voto.eleitoral.org.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mapa-do-2o-turno",
@@ -1632,8 +1632,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164257/https://mapa-segundo-turno.web.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapa-do-voto-joao-monlevade",
@@ -1650,7 +1650,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "mapa-duplas",
@@ -1666,8 +1666,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012150328/https://mapa-duplas.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mapa-eleitoral-de-sp",
@@ -1683,8 +1683,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164455/https://vaipaolla.com.br/eleicao",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapa-segundo-turno-materiais",
@@ -1701,7 +1701,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "mapeamento-de-zonas-prioritarias-sp",
@@ -1717,8 +1717,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011446/https://claude.ai/artifact/Fm6yiV6cYYBEmk4AsSWpbh",
+      "archive_status": "reused"
     },
     {
       "tool_id": "meu-voto-brasil",
@@ -1734,8 +1734,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261008172759/https://meuvotobrasil.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mobilizacao-travahacker",
@@ -1751,8 +1751,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164716/https://travahacker.com.br/voluntariado/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "momo-com-lula",
@@ -1768,8 +1768,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024170733/https://appmomo.com.br/guides/momo-com-lula",
+      "archive_status": "reused"
     },
     {
       "tool_id": "monitor-de-narrativas-eleicoes-2026",
@@ -1786,7 +1786,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "mutirao-dos-alunos-do-dcomp",
@@ -1803,7 +1803,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "na-ponta-do-lapis",
@@ -1819,8 +1819,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013172906/https://napontadolapis.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "nao-se-meta",
