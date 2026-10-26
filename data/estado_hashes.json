@@ -986,8 +986,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261025043048/https://dinheiro-em-perspectiva.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "direita-com-lula",
@@ -1054,8 +1054,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261025043128/https://ianr.dev/eleicoes-2026",
+      "archive_status": "reused"
     },
     {
       "tool_id": "eleicoes-rj",
@@ -1173,8 +1173,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026043743/https://lastroeleitoral.vercel.app/#/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "falas-de-flavio",
@@ -1292,8 +1292,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261010135854/https://fortalezavaidelula.lovable.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "fura-bolha",
@@ -1309,8 +1309,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015205151/https://fura-bolha.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "gamers-pelo-brasil",
@@ -1326,8 +1326,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261016222248/https://gamerspelobrasil.tech/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "ganha-voto",
@@ -1343,8 +1343,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012012029/https://ganhavoto.htmly.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "governos-brasileiros-em-dados",
@@ -1360,8 +1360,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261005134353/https://dados-30anos-govbrasileiro.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "guia-de-denuncia-flavio",
@@ -1378,7 +1378,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "ideias-em-comum",
@@ -1394,8 +1394,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012012838/https://ideiasemcomum.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "indice-de-potencial-de-conversao-ipc",
@@ -1412,7 +1412,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "janonometro",
@@ -1428,8 +1428,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024212237/https://janonometro.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "lab-livre-amazonia",
@@ -1445,8 +1445,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261006182432/https://lablivreamazonia.com.br/belem/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "levante-13",
@@ -1462,8 +1462,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261016161525/https://levante13.online/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "lula-com-vc",
@@ -1480,7 +1480,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "lula-filtro",
@@ -1496,8 +1496,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261017164602/https://lulafiltro.tbys.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "lula-x-bolsonaro",
@@ -1513,8 +1513,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261008223125/https://lulaxbolsonaro.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mapa-da-ia-soberana",
@@ -1530,8 +1530,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026044234/https://travahacker.com.br/mapa-ia-soberana/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapa-da-virada",
@@ -1547,8 +1547,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223722/https://mapadavirada26.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mapa-de-abstencao",
