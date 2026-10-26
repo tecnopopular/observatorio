@@ -1480,7 +1480,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "reused"
+      "archive_status": "failed"
     },
     {
       "tool_id": "lula-filtro",
@@ -1649,8 +1649,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026173501/https://mapadovotojm.pplx.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapa-duplas",
@@ -1785,8 +1785,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026173713/https://eleicoes2026.dashboard.adsray.clusterlab.lappis.rocks/analise",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mutirao-dos-alunos-do-dcomp",
@@ -1802,8 +1802,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026164931/https://felipequentino.github.io/mutirao/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "na-ponta-do-lapis",
@@ -1837,7 +1837,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "nordeste-decide",
@@ -1853,8 +1853,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026173907/https://nordeste-decide.vercel.app/#inicio",
+      "archive_status": "captured"
     },
     {
       "tool_id": "nunca-mais",
@@ -1870,8 +1870,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013152841/https://nuncamais.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-bafafa",
@@ -1887,8 +1887,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012005829/https://obafafa.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-brasil-mudou",
@@ -1904,8 +1904,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013163750/https://nadamudou.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-mapa-do-flavio",
@@ -1922,7 +1922,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-poder-do-seu-voto",
@@ -1939,7 +1939,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "o-que-esta-em-jogo",
@@ -1955,8 +1955,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261009175545/https://o-que-esta-em-jogo.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-que-esta-em-jogo-na-sua-cidade",
@@ -1972,8 +1972,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261019035839/https://oqueestaemjogo.ascaribe.tech/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-voto-decisivo",
@@ -1989,8 +1989,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011758/https://ovotodecisivo.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "obras-do-governo-federal",
@@ -2006,8 +2006,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026174327/https://obrasbr.online/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "observatorio-tech",
@@ -2023,8 +2023,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024170834/https://observatorio.tech/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "odeta-nlp-e-sentimento-politico",
@@ -2041,7 +2041,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "onde-buscar-votos-contradados",
@@ -2057,8 +2057,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261010213054/http://contradados.online/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "onde-da-pra-conversar",
@@ -2074,8 +2074,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026105327/https://www.ondedapraconversar.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "onde-panfletar",
@@ -2091,8 +2091,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261009234733/https://ondepanfletar.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "onde-votarei",
@@ -2109,7 +2109,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "openmaster",
