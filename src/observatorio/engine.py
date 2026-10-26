@@ -9,6 +9,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from .catalog import assign_tool_ids, slugify, validate_catalog
 from .evaluator import CivicEvaluator
@@ -18,6 +19,7 @@ from .models import (
     ArchiveStatus,
     AuditLevel,
     CivicAuditReport,
+    TelemetryInspection,
 )
 from .preservation import (
     DEFAULT_ARCHIVE_BUDGET,
@@ -40,6 +42,11 @@ from .state import (
     index_by_tool,
     load_manifest,
     write_manifest,
+)
+from .telemetry import (
+    build_radar_dataset,
+    export_radar_artifacts,
+    inspect_target_telemetry,
 )
 from .withdrawals import DEFAULT_REGISTRY, url_key, withdrawn_keys
 from .withdrawals import load as carregar_retiradas
@@ -106,10 +113,13 @@ def fetch_snapshot(
                     url=target_url,
                     provider="cache",
                     html=raw_html,
+                    status_code=metadados.get("status_code", 200),
                     latency_ms=0,
                     content_bytes=tamanho,
                     declared_bytes=metadados.get("declared_bytes") or tamanho,
                     truncated=bool(metadados.get("truncated")),
+                    server=metadados.get("server"),
+                    headers=metadados.get("headers") or {},
                     from_cache=True,
                 )
         except Exception:
@@ -128,6 +138,9 @@ def fetch_snapshot(
                         "truncated": resultado.truncated,
                         "provider": resultado.provider,
                         "limit_bytes": max_bytes,
+                        "server": resultado.server,
+                        "headers": resultado.headers,
+                        "status_code": resultado.status_code,
                     },
                     ensure_ascii=False,
                 ),
@@ -289,6 +302,7 @@ def audit_single_initiative(
         inspected=inspecionado,
         inspection_reason=no_read_reason,
         classifier=classifier,
+        server=snapshot.server,
     )
 
     tag = (
@@ -645,6 +659,101 @@ def target_key(item: dict) -> str:
     return url_key(item.get("url", ""))
 
 
+def generate_radar_artifacts(
+    input_file: Path,
+    audits_file: Path,
+    radar_file: Path,
+    telemetry_file: Path,
+    cache_dir: Path = DEFAULT_CACHE_DIR,
+) -> dict[str, Any]:
+    """Compila e grava os artefatos de telemetria e radar da infraestrutura cívica.
+
+    Lê os laudos já gerados e cruza com os metadados de cabeçalhos e corpos arquivados
+    no cache local de aquisição para inspecionar infraestrutura e rastreadores.
+
+    Args:
+        input_file: Arquivo do catálogo de iniciativas (JSON).
+        audits_file: Arquivo dos laudos consolidados de auditoria (JSON).
+        radar_file: Caminho de destino do arquivo radar_iniciativas.json.
+        telemetry_file: Caminho de destino do arquivo telemetria_iniciativas.json.
+        cache_dir: Diretório onde repousam os caches de HTML e metadados.
+
+    Returns:
+        Dicionário do dataset de radar consolidado.
+
+    Raises:
+        FileNotFoundError: Quando o catálogo ou os laudos de auditoria não existem.
+    """
+    if not input_file.exists():
+        raise FileNotFoundError(f"Catálogo não encontrado: {input_file}")
+    if not audits_file.exists():
+        raise FileNotFoundError(f"Laudos de auditoria não encontrados: {audits_file}")
+
+    with open(input_file, encoding="utf-8") as f:
+        targets = json.load(f)
+
+    assign_tool_ids(targets)
+
+    with open(audits_file, encoding="utf-8") as f:
+        raw_audits = json.load(f)
+
+    audits = [CivicAuditReport.model_validate(a) for a in raw_audits]
+    audits_by_id = {a.tool_id: a for a in audits}
+
+    telemetrias: list[TelemetryInspection] = []
+    for item in targets:
+        name = item["nome"]
+        url = item["url"]
+        slug = item.get("_tool_id") or slugify(name)
+        categoria = item.get("categoria", "Iniciativa Cívica")
+
+        cache_path = cache_dir / f"{slug}.html"
+        meta_path = cache_dir / f"{slug}.meta.json"
+
+        metadados = {}
+        if meta_path.exists():
+            try:
+                metadados = json.loads(meta_path.read_text(encoding="utf-8"))
+            except Exception:
+                metadados = {}
+
+        html_text = ""
+        if cache_path.exists():
+            try:
+                html_text = cache_path.read_bytes().decode("utf-8", errors="ignore")
+            except Exception:
+                html_text = ""
+
+        server = metadados.get("server")
+        headers = metadados.get("headers") or {}
+        status_code = metadados.get("status_code")
+
+        rep = audits_by_id.get(slug)
+        if rep:
+            if not server and rep.performance and rep.performance.server:
+                server = rep.performance.server
+            if status_code is None and rep.performance and rep.performance.http_status:
+                status_code = rep.performance.http_status
+            if status_code is None and rep.status in (AuditLevel.AUDITADO, AuditLevel.CATALOGADO):
+                status_code = 200
+
+        tel = inspect_target_telemetry(
+            nome=name,
+            url=url,
+            tool_id=slug,
+            categoria=categoria,
+            status_code=status_code,
+            server=server,
+            headers=headers,
+            raw_html=html_text,
+        )
+        telemetrias.append(tel)
+
+    dataset = build_radar_dataset(audits, telemetrias, targets)
+    export_radar_artifacts(dataset, telemetrias, radar_file, telemetry_file)
+    return dataset
+
+
 def run_batch_audit(
     input_file: Path,
     output_file: Path,
@@ -662,6 +771,9 @@ def run_batch_audit(
     cache_dir: Path = DEFAULT_CACHE_DIR,
     archive_budget: float = DEFAULT_ARCHIVE_BUDGET,
     archive_limit: int = DEFAULT_ARCHIVE_LIMIT,
+    generate_radar: bool = True,
+    radar_file: Path | None = None,
+    telemetry_file: Path | None = None,
 ) -> list[CivicAuditReport]:
     """
     Executa a bateria completa do observatório sobre as iniciativas catalogadas.
@@ -703,6 +815,9 @@ def run_batch_audit(
             Archive antes de registrar as pendentes como pendentes.
         archive_limit: Número máximo de capturas submetidas por ciclo, para não esgotar o limite
             do serviço; o restante fica registrado como `deferred` e volta no ciclo seguinte.
+        generate_radar: Quando verdadeiro, compila os datasets de radar e telemetria após a auditoria.
+        radar_file: Caminho de saída do radar_iniciativas.json; padrão no mesmo diretório de output_file.
+        telemetry_file: Caminho de saída do telemetria_iniciativas.json; padrão no mesmo diretório de output_file.
 
     Returns:
         Laudos do ciclo, ordenados por pontuação total decrescente; iniciativas sem nota
@@ -856,5 +971,18 @@ def run_batch_audit(
         f"[+] Manifesto de estado salvo em: {manifest_file} ({manifest_bytes} bytes, {manifest.total} entradas)"
     )
     print(f"[+] Iniciativas novas ou com hash alterado neste ciclo: {len(reavaliadas)}")
+
+    if generate_radar:
+        radar_dest = radar_file or (output_file.parent / "radar_iniciativas.json")
+        tel_dest = telemetry_file or (output_file.parent / "telemetria_iniciativas.json")
+        generate_radar_artifacts(
+            input_file=input_file,
+            audits_file=output_file,
+            radar_file=radar_dest,
+            telemetry_file=tel_dest,
+            cache_dir=cache_dir,
+        )
+        print(f"[+] Radar da infraestrutura cívica salvo em: {radar_dest}")
+        print(f"[+] Telemetria consolidada salva em: {tel_dest}")
 
     return reports

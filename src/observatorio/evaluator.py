@@ -244,6 +244,7 @@ class CivicEvaluator:
         inspected: bool = True,
         inspection_reason: str | None = None,
         classifier: SemanticClassifier | None = None,
+        server: str | None = None,
     ) -> CivicAuditReport:
         """Executa a avaliação pura das 5 dimensões sobre o conteúdo HTML fornecido.
 
@@ -272,6 +273,7 @@ class CivicEvaluator:
             inspected: Indica se houve leitura útil do documento.
             inspection_reason: Motivo registrado quando a inspeção não se realiza.
             classifier: Camada semântica opcional que complementa a dimensão de enquadramento.
+            server: Identificação de servidor ou tecnologia extraída dos cabeçalhos HTTP.
 
         Returns:
             Laudo completo da iniciativa, com dimensões, cobertura e sumário em Markdown.
@@ -300,6 +302,7 @@ class CivicEvaluator:
             bytes_scanned=bytes_scanned or len(raw_html.encode("utf-8", errors="ignore")),
             inspection_truncated=inspection_truncated,
             inspection_limit_bytes=inspection_limit_bytes,
+            server=server,
         )
 
         dim_scores: dict[DimensionType, DimensionScore] = {
@@ -874,6 +877,7 @@ class CivicEvaluator:
         bytes_scanned: int = 0,
         inspection_truncated: bool = False,
         inspection_limit_bytes: int | None = None,
+        server: str | None = None,
     ) -> tuple[DimensionScore, PerformanceDetail]:
         """Avalia a dimensão de acessibilidade e desempenho em conexões periféricas.
 
@@ -886,6 +890,7 @@ class CivicEvaluator:
             bytes_scanned: Bytes efetivamente lidos na inspeção.
             inspection_truncated: Indica interrupção da aquisição por limite de tamanho.
             inspection_limit_bytes: Limite de bytes que interrompeu a aquisição.
+            server: Identificação de servidor ou tecnologia extraída dos cabeçalhos HTTP.
 
         Returns:
             Pontuação da dimensão e o detalhamento de desempenho.
@@ -915,6 +920,7 @@ class CivicEvaluator:
                 payload_bytes_declared=html_bytes or None,
                 inspection_truncated=inspection_truncated,
                 inspection_limit_bytes=inspection_limit_bytes,
+                server=server,
             )
             ds = DimensionScore(
                 dimension=DimensionType.ACESSIBILIDADE_DESEMPENHO,
@@ -965,6 +971,7 @@ class CivicEvaluator:
             payload_bytes_declared=html_bytes or None,
             inspection_truncated=inspection_truncated,
             inspection_limit_bytes=inspection_limit_bytes,
+            server=server,
         )
         ds = DimensionScore(
             dimension=DimensionType.ACESSIBILIDADE_DESEMPENHO,

@@ -182,6 +182,45 @@ class PerformanceDetail(BaseModel):
         False, description="Verdadeiro quando a inspeção cobriu apenas parte do documento"
     )
     inspection_limit_bytes: int | None = Field(None, description="Limite de leitura aplicado nesta inspeção")
+    server: str | None = Field(
+        default=None, description="Identificação de servidor ou tecnologia extraída dos cabeçalhos HTTP"
+    )
+
+
+class HostingProvider(str, Enum):
+    """Provedores de hospedagem e infraestrutura de borda categorizados."""
+
+    CLOUDFLARE = "Cloudflare (Pages / Workers / Edge CDN)"
+    VERCEL = "Vercel (Serverless Edge)"
+    GITHUB_PAGES = "GitHub Pages (Microsoft)"
+    NETLIFY = "Netlify (Jamstack)"
+    AWS = "Amazon Web Services (AWS S3)"
+    SOVEREIGN_VPS = "VPS / Servidor Soberano Próprio (Nginx/Apache)"
+    INACTIVE = "Inativo / Indisponível"
+    OTHER = "Outros Provedores (Framer, CDNs)"
+
+
+class TelemetryInspection(BaseModel):
+    """Inspeção de infraestrutura, conectividade e telemetria de uma iniciativa."""
+
+    nome: str = Field(..., description="Nome da iniciativa cívica")
+    categoria: str = Field("Iniciativa Cívica", description="Eixo temático no catálogo")
+    url: str = Field(..., description="Endereço da iniciativa inspecionada")
+    tool_id: str | None = Field(None, description="Slug canônico da iniciativa")
+    status_code: int | None = Field(None, description="Código de resposta HTTP")
+    final_url: str | None = Field(None, description="Endereço final após redirecionamentos")
+    server: str | None = Field(None, description="Identificação de servidor ou CDN declarada")
+    hosting_provider: str = Field(
+        HostingProvider.OTHER.value, description="Provedor de infraestrutura categorizado"
+    )
+    is_online: bool = Field(False, description="Verdadeiro quando respondeu código HTTP válido")
+    analytics_detected: list[str] = Field(
+        default_factory=list, description="Rastreadores e métricas identificados"
+    )
+    analytics_details: dict[str, list[str]] = Field(
+        default_factory=dict, description="Identificadores e tokens de rastreamento encontrados"
+    )
+    error: str | None = Field(None, description="Descrição de erro de conexão, quando houver")
 
 
 class AuditRubric(BaseModel):

@@ -23,7 +23,7 @@ from .catalog import (
     strip_fragment,
     validate_entry,
 )
-from .engine import run_batch_audit, run_preservation_pass
+from .engine import generate_radar_artifacts, run_batch_audit, run_preservation_pass
 from .fetch import probe_https
 from .privacy_guard import CivicPrivacyGuard, ViolationSeverity
 from .robots import RobotsPolicy
@@ -45,13 +45,15 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
 
     Args:
         args: Namespace do argparse com `input`, `output`, `manifest`, `workers`, `refresh`,
-            `skip_archive`, `archive_budget`, `archive_limit`, `timeout`, `semantic` e `max_bytes`.
+            `skip_archive`, `archive_budget`, `archive_limit`, `timeout`, `semantic`,
+            `max_bytes` e `no_radar`.
 
     Returns:
         0 quando a esteira conclui; 1 quando uma exceção interrompe a execução.
     """
     input_file = Path(args.input)
     output_file = Path(args.output)
+    no_radar = getattr(args, "no_radar", False)
 
     try:
         run_batch_audit(
@@ -67,10 +69,36 @@ def cmd_audit_all(args: argparse.Namespace) -> int:
             withdrawals_file=Path(args.retiradas),
             archive_budget=args.archive_budget,
             archive_limit=args.archive_limit,
+            generate_radar=not no_radar,
         )
         return 0
     except Exception as e:
         print(f"[-] Erro fatal na execução da esteira: {e}", file=sys.stderr)
+        return 1
+
+
+def cmd_gerar_radar(args: argparse.Namespace) -> int:
+    """Gera os artefatos de telemetria e radar da infraestrutura cívica.
+
+    Args:
+        args: Namespace do argparse com `input`, `audits`, `radar`, `telemetry` e `cache_dir`.
+
+    Returns:
+        0 em caso de sucesso; 1 em caso de erro.
+    """
+    try:
+        generate_radar_artifacts(
+            input_file=Path(args.input),
+            audits_file=Path(args.audits),
+            radar_file=Path(args.radar),
+            telemetry_file=Path(args.telemetry),
+            cache_dir=Path(args.cache_dir),
+        )
+        print(f"[+] Radar da infraestrutura cívica salvo em: {args.radar}")
+        print(f"[+] Telemetria consolidada salva em: {args.telemetry}")
+        return 0
+    except Exception as e:
+        print(f"[-] Erro ao compilar radar: {e}", file=sys.stderr)
         return 1
 
 
@@ -506,6 +534,11 @@ def build_parser() -> argparse.ArgumentParser:
         default="data/retiradas.json",
         help="Registro de retiradas acatadas; endereços ali não são auditados",
     )
+    audit_command_parser.add_argument(
+        "--no-radar",
+        action="store_true",
+        help="Desativa a geração automática dos artefatos de radar e telemetria",
+    )
 
     withdraw_command_parser = subparsers.add_parser(
         "retirar", help="Registra retirada a pedido e remove a iniciativa do catálogo"
@@ -589,6 +622,31 @@ def build_parser() -> argparse.ArgumentParser:
         "--orcamento", type=float, default=60.0, help="Segundos de espera pelas capturas em andamento"
     )
 
+    radar_command_parser = subparsers.add_parser(
+        "gerar-radar", help="Gera os artefatos de telemetria e radar a partir dos laudos e cache"
+    )
+    radar_command_parser.add_argument(
+        "--input", "-i", default="data/data_iniciativas.json", help="Caminho do catálogo base"
+    )
+    radar_command_parser.add_argument(
+        "--audits", "-a", default="dist/auditoria_iniciativas.json", help="Caminho dos laudos consolidados"
+    )
+    radar_command_parser.add_argument(
+        "--radar",
+        "-r",
+        default="dist/radar_iniciativas.json",
+        help="Caminho de saída do radar_iniciativas.json",
+    )
+    radar_command_parser.add_argument(
+        "--telemetry",
+        "-t",
+        default="dist/telemetria_iniciativas.json",
+        help="Caminho de saída do telemetria_iniciativas.json",
+    )
+    radar_command_parser.add_argument(
+        "--cache-dir", default="data/raw/html_cache", help="Diretório com o cache de corpos e metadados"
+    )
+
     privacy_command_parser = subparsers.add_parser(
         "verify-privacy", help="Executa o portão de privacidade (LGPD)"
     )
@@ -638,6 +696,8 @@ def main() -> None:
         sys.exit(cmd_readmit(args))
     elif args.command == "preservar":
         sys.exit(cmd_preservar(args))
+    elif args.command == "gerar-radar":
+        sys.exit(cmd_gerar_radar(args))
 
 
 if __name__ == "__main__":

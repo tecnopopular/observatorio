@@ -55,6 +55,12 @@ class FetchResult(BaseModel):
     truncated: bool = Field(
         default=False, description="Verdadeiro quando a leitura foi interrompida no limite"
     )
+    server: str | None = Field(
+        default=None, description="Identificação de servidor ou tecnologia extraída dos cabeçalhos"
+    )
+    headers: dict[str, str] = Field(
+        default_factory=dict, description="Cabeçalhos HTTP retornados pelo servidor"
+    )
     tls_verified: bool = True
     from_cache: bool = False
     final_url: str | None = None
@@ -168,21 +174,25 @@ class HttpFetcher:
                 ) as response:
                     elapsed = int((time.time() - start) * 1000)
                     final = getattr(response, "url", atual)
+                    headers_dict = {}
+                    if hasattr(response, "headers") and response.headers:
+                        headers_dict = {str(k).lower(): str(v) for k, v in response.headers.items()}
+                    server_val = headers_dict.get("server") or headers_dict.get("x-powered-by")
                     if self._looks_like_gate(final):
                         return FetchResult(
                             url=url,
                             provider=self.name,
                             status_code=getattr(response, "status", None),
                             latency_ms=elapsed,
+                            server=server_val,
+                            headers=headers_dict,
                             tls_verified=self.verify_tls,
                             final_url=final,
                             access_gate=True,
                             error="acesso restrito: redirecionado para autenticação",
                         )
                     declarado = None
-                    cabecalho = (
-                        response.headers.get("Content-Length") if hasattr(response, "headers") else None
-                    )
+                    cabecalho = headers_dict.get("content-length")
                     if cabecalho and str(cabecalho).isdigit():
                         declarado = int(cabecalho)
                     bruto = response.read(self.max_bytes + 1)
@@ -199,12 +209,18 @@ class HttpFetcher:
                         if declarado is not None
                         else (len(raw) if not truncado else None),
                         truncated=truncado,
+                        server=server_val,
+                        headers=headers_dict,
                         tls_verified=self.verify_tls,
                         final_url=final,
                     )
             except urllib.error.HTTPError as exc:
+                err_headers = {}
+                if exc.headers:
+                    err_headers = {str(k).lower(): str(v) for k, v in exc.headers.items()}
+                err_server = err_headers.get("server") or err_headers.get("x-powered-by")
                 if exc.code in (301, 302, 303, 307, 308):
-                    destino = exc.headers.get("Location") if exc.headers else None
+                    destino = err_headers.get("location")
                     if not destino:
                         elapsed = int((time.time() - start) * 1000)
                         return FetchResult(
@@ -212,6 +228,8 @@ class HttpFetcher:
                             provider=self.name,
                             status_code=exc.code,
                             latency_ms=elapsed,
+                            server=err_server,
+                            headers=err_headers,
                             tls_verified=self.verify_tls,
                             final_url=atual,
                             error=f"HTTP {exc.code} sem Location",
@@ -224,6 +242,8 @@ class HttpFetcher:
                             provider=self.name,
                             status_code=exc.code,
                             latency_ms=elapsed,
+                            server=err_server,
+                            headers=err_headers,
                             tls_verified=self.verify_tls,
                             final_url=proximo,
                             access_gate=True,
@@ -238,6 +258,8 @@ class HttpFetcher:
                         provider=self.name,
                         status_code=exc.code,
                         latency_ms=elapsed,
+                        server=err_server,
+                        headers=err_headers,
                         tls_verified=self.verify_tls,
                         final_url=atual,
                         access_gate=True,
@@ -248,6 +270,8 @@ class HttpFetcher:
                     provider=self.name,
                     status_code=exc.code,
                     latency_ms=elapsed,
+                    server=err_server,
+                    headers=err_headers,
                     tls_verified=self.verify_tls,
                     final_url=atual,
                     error=f"HTTP {exc.code}",
