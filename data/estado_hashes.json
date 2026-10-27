@@ -1700,8 +1700,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027205613/https://mapasegundoturno.com.br/inicio",
+      "archive_status": "captured"
     },
     {
       "tool_id": "mapeamento-de-zonas-prioritarias-sp",
@@ -2040,8 +2040,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027205705/https://odeta.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "onde-buscar-votos-contradados",
@@ -2210,8 +2210,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027044200/https://humanidadesdigitais.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "pauta-da-urna",
@@ -2295,8 +2295,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261022092750/https://www.politicometro.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "promessas-e-registros",
@@ -2346,8 +2346,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027044449/https://vncsvr.github.io/quanto-a-6x1-tira/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quem-apoia-quem",
@@ -2380,8 +2380,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013102455/https://quemcomparavotalula13.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "querido-diario",
@@ -2397,8 +2397,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261027205923/https://queridodiario.org.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "quiz-de-politicas-publicas",
@@ -2414,8 +2414,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012020724/https://incomparable-parfait-0c4bc1.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "radar-ceara",
@@ -2431,8 +2431,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261027210005/https://radar-ceara.pages.dev/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "radar-da-virada",
@@ -2448,8 +2448,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013102038/https://radardavirada.pages.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "radar-do-voto",
@@ -2465,8 +2465,8 @@
         "acessibilidade_desempenho": 70.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024210624/https://radardovoto.app.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "risco-real",
@@ -2482,8 +2482,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011140306/https://riscoreal.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "salve-a-padroeira",
@@ -2499,8 +2499,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015053724/https://salveapadroeira.com",
+      "archive_status": "captured"
     },
     {
       "tool_id": "santinho-virtual",
@@ -2517,7 +2517,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "segundo-turno-com-lula",
@@ -2534,7 +2534,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "reused"
     },
     {
       "tool_id": "seu-voto-decide",
@@ -2550,8 +2550,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261014200009/https://seuvotodecide.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "simulador-da-virada-do-2o-turno",
@@ -2568,7 +2568,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "sistema-donas-automacao",
@@ -2584,8 +2584,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261003011930/https://sistemadonas.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "sou-do-bem",
@@ -2601,8 +2601,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015230801/https://soudobem.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-flavio-world",
@@ -2618,8 +2618,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026192354/https://www.superflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-lula-world",
