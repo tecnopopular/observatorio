@@ -1480,7 +1480,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "reused"
     },
     {
       "tool_id": "lula-filtro",
@@ -1836,8 +1836,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027043454/https://naosemeta.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "nordeste-decide",
@@ -1921,7 +1921,7 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
+      "archive_url": "https://web.archive.org/web/20261010050050/https://omapadoflavio.com/",
       "archive_status": "reused"
     },
     {
@@ -1938,8 +1938,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027043536/https://opoderdoseuvoto.github.io/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "o-que-esta-em-jogo",
@@ -2108,8 +2108,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261026174510/https://ondevotarei.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "openmaster",
@@ -2125,8 +2125,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261027043733/https://open-master-delta.vercel.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "operacao-serenata-de-amor",
@@ -2142,8 +2142,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261014135115/https://serenata.ai/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "paginas-tematicas-mobilizacao",
@@ -2159,8 +2159,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011615/https://naovaidebet.github.io",
+      "archive_status": "captured"
     },
     {
       "tool_id": "painel-de-eleitores-70",
@@ -2176,8 +2176,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261027043937/https://eleitores70mais.vercel.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "parlamentometro",
@@ -2194,7 +2194,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "patrao-6x1",
@@ -2211,7 +2211,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "pauta-da-urna",
@@ -2227,8 +2227,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012013019/https://pautadaurna.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "pelos-seus-frutos",
@@ -2244,8 +2244,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261027044329/https://pelos-seus-frutos.netlify.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "perspectiva-progressista",
@@ -2261,8 +2261,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012121329/https://perspectiva-progressista.github.io/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "pode-espalhar",
@@ -2278,8 +2278,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026133230/https://podeespalhar.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "politicometro",
@@ -2296,7 +2296,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "promessas-e-registros",
@@ -2312,8 +2312,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012010453/https://fatos-bolsonaro.github.io/Promessas-e-Registros/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "qual-seu-flavio",
@@ -2329,8 +2329,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011073535/https://qualseuflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quanto-a-6x1-tira",
@@ -2347,7 +2347,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "quem-apoia-quem",
@@ -2363,8 +2363,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261010011622/https://www.quemapoiaquem.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quem-compara-vota-lula",
