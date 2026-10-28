@@ -2856,8 +2856,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261028044556/https://viravoto.coletivo.net.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-voto-jogo-de-persuasao",
@@ -2958,8 +2958,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261028044803/https://cadeafonte.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vote-consciente",
@@ -3043,8 +3043,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261028045051/https://votodopovo.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-em-movimento",
@@ -3128,8 +3128,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015033334/https://voz.social.br/",
+      "archive_status": "reused"
     }
   ]
 }
