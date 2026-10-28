@@ -2193,8 +2193,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027214103/https://parlamentometro.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "patrao-6x1",
@@ -2516,8 +2516,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027214211/https://santinhovirtual.web.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "segundo-turno-com-lula",
@@ -2567,8 +2567,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261027214417/https://187.boravirar.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "sistema-donas-automacao",
@@ -2703,7 +2703,7 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
+      "archive_url": "https://web.archive.org/web/20261013233553/https://tropaviravoto.com/",
       "archive_status": "reused"
     },
     {
@@ -2924,8 +2924,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012020414/https://virarvoto13.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "viravoto-rats",
@@ -2941,8 +2941,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013021748/https://viravotorats.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voce-cairia-nessa",
@@ -2959,7 +2959,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "vote-consciente",
@@ -2976,7 +2976,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "vote-pela-democracia",
@@ -2992,8 +2992,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013010951/https://votedemocracia.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vote-sabendo",
@@ -3009,8 +3009,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012015102/https://votesabendo.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-as-cegas",
@@ -3026,8 +3026,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261016201442/https://votoascegas.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-do-povo",
@@ -3044,7 +3044,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "voto-em-movimento",
@@ -3060,8 +3060,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015221116/https://voto-em-movimento.vercel.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-la-fora",
@@ -3077,8 +3077,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015194147/https://votolafora.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-sem-dono",
@@ -3094,8 +3094,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012011651/https://votosemdono.pages.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-vizinho",
@@ -3111,8 +3111,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012012206/https://voto-vizinho.momoi-labs.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voz-social-br",
