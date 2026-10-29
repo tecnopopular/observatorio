@@ -267,9 +267,23 @@ def audit_single_initiative(
     prev_sha256 = prev.get("html_sha256") if prev else None
     prev_archive = prev.get("archive_url") if prev else None
 
+    prev_floss_repo = (
+        prev.get("floss", {}).get("public_repository_url")
+        if prev and isinstance(prev.get("floss"), dict)
+        else None
+    )
+    repo_diverge = bool(
+        prev
+        and (
+            (declared_repo == "NONE" and prev_floss_repo is not None)
+            or (declared_repo and declared_repo != "NONE" and declared_repo != prev_floss_repo)
+        )
+    )
+
     if (
         prev
         and not refresh_cache
+        and not repo_diverge
         and current_sha256
         and not check_content_changed(current_sha256, prev_sha256)
     ):

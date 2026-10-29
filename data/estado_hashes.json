@@ -1842,15 +1842,15 @@
     {
       "tool_id": "nordeste-decide",
       "html_sha256": "e8b83747968b5e615a8553cc31e82e4b8e783317d88693df97f0c2556f3623c8",
-      "evaluated_at": "2026-10-25T03:24:41.562410+00:00",
+      "evaluated_at": "2026-10-29T01:26:29.759443Z",
       "status": "auditado",
-      "total_score": 89.8,
+      "total_score": 80.2,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 80.0,
+        "codigo_aberto_floss": 40.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261026173907/https://nordeste-decide.vercel.app/#inicio",
