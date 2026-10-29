@@ -601,19 +601,19 @@ def _preserve(
         limit: Número máximo de submissões por ciclo.
         budget: Tempo total de espera pelas capturas em andamento, em segundos.
     """
-    if skip_archive:
-        for relatorio in reports:
-            if relatorio.archive_status is None:
-                relatorio.archive_status = "skipped"
-        print("[*] Preservação: dispensada por --skip-archive")
-        return
-
     for relatorio in reports:
         entrada = previous.get(relatorio.tool_id)
         if entrada is None or not entrada.archive_url or _needs_capture(relatorio, previous):
             continue
         relatorio.archive_url = relatorio.archive_url or entrada.archive_url
         relatorio.archive_status = "reused"
+
+    if skip_archive:
+        for relatorio in reports:
+            if relatorio.archive_status is None:
+                relatorio.archive_status = "skipped"
+        print("[*] Preservação: dispensada por --skip-archive")
+        return
 
     modo = "conta do Internet Archive" if has_credentials() else "anônima"
     print(f"[*] Preservação: submissão com {modo}")

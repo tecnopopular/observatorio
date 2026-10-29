@@ -6,15 +6,15 @@
     {
       "tool_id": "14-sinais-de-alerta-do-facismo",
       "html_sha256": "89443e4f93e786b012900dfe3f573174b00502172b70041c660ff0860c6a2a26",
-      "evaluated_at": "2026-10-25T03:24:36.552890+00:00",
+      "evaluated_at": "2026-10-24T16:53:47.660612Z",
       "status": "auditado",
-      "total_score": 85.2,
+      "total_score": 83.8,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 70.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215506/https://pirracabr.github.io/dossie-democratico-br/",
@@ -57,15 +57,15 @@
     {
       "tool_id": "acoes-2o-turno-agenda-e-mapa",
       "html_sha256": "8ef53deb9a3d03a18aaa40692c313310e9c54c09ed379677512581da5abc6243",
-      "evaluated_at": "2026-10-25T03:24:27.097475+00:00",
+      "evaluated_at": "2026-10-29T03:04:59.693183Z",
       "status": "catalogado",
-      "total_score": 72.5,
+      "total_score": 79.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 40.0,
+        "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024223913/https://guipfranco.github.io/acoes-segundo-turno/",
@@ -159,15 +159,15 @@
     {
       "tool_id": "analise-cuiaba-votos",
       "html_sha256": "ba9ff87f53ffcde6e2fbf09de914da4c8b4abd9560166f3c57eb876c0fa55d91",
-      "evaluated_at": "2026-10-25T03:24:28.134661+00:00",
+      "evaluated_at": "2026-10-29T03:04:59.693011Z",
       "status": "catalogado",
-      "total_score": 72.5,
+      "total_score": 79.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 40.0,
+        "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215813/https://noguerabreno.github.io/analisecuiabavotos/",
@@ -176,15 +176,15 @@
     {
       "tool_id": "analise-de-esforco-por-bairros",
       "html_sha256": "143254166a3db2f431aa7f5cb34a6ebfa13ceb8e4fe5105debb374dc848d06e6",
-      "evaluated_at": "2026-10-25T03:24:29.586126+00:00",
+      "evaluated_at": "2026-10-29T03:04:59.697670Z",
       "status": "catalogado",
-      "total_score": 72.5,
+      "total_score": 79.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 40.0,
+        "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261024215812/https://rafadaguia.github.io/analise-de-esforco-por-bairros-lula-2026/",
@@ -210,15 +210,15 @@
     {
       "tool_id": "analise-vira-voto-tse",
       "html_sha256": "65ffe70ec3b31d9db98cb3325f4f83a738f80098567dba95062cfa9167fc3bec",
-      "evaluated_at": "2026-10-25T03:24:30.297214+00:00",
+      "evaluated_at": "2026-10-29T03:04:59.723522Z",
       "status": "catalogado",
-      "total_score": 71.8,
+      "total_score": 78.2,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 40.0,
+        "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 75.0
+        "acessibilidade_desempenho": 65.0
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261024224435/https://tatipara.github.io/vira_voto/",
@@ -1519,15 +1519,15 @@
     {
       "tool_id": "mapa-da-ia-soberana",
       "html_sha256": "cfef7716e5a35ad0f8d949ca22c90497bf03ab0b2d537e4b2e3854946972cb4b",
-      "evaluated_at": "2026-10-25T03:24:33.161766+00:00",
+      "evaluated_at": "2026-10-24T16:53:46.312148Z",
       "status": "auditado",
-      "total_score": 83.5,
+      "total_score": 82.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261026044234/https://travahacker.com.br/mapa-ia-soberana/",
@@ -1553,15 +1553,15 @@
     {
       "tool_id": "mapa-de-abstencao",
       "html_sha256": "0fa6977ffb02a142cc2e7700dc4846a5ea5bcee61e15f57f9b98a7e606e8ff6c",
-      "evaluated_at": "2026-10-25T03:24:41.757749+00:00",
+      "evaluated_at": "2026-10-29T03:04:59.797024Z",
       "status": "catalogado",
-      "total_score": 72.5,
+      "total_score": 79.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 40.0,
+        "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": null,
@@ -2335,15 +2335,15 @@
     {
       "tool_id": "quanto-a-6x1-tira",
       "html_sha256": "82de06f97421f073a97d4116c5feb593481887e41a2187271315caccbe9a4f1b",
-      "evaluated_at": "2026-10-25T03:24:35.631687+00:00",
-      "status": "catalogado",
-      "total_score": 78.8,
+      "evaluated_at": "2026-10-29T03:04:59.753148Z",
+      "status": "auditado",
+      "total_score": 85.2,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 40.0,
+        "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 80.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20261027044449/https://vncsvr.github.io/quanto-a-6x1-tira/",

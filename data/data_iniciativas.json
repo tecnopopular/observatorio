@@ -307,7 +307,8 @@
     "url": "https://guipfranco.github.io/acoes-segundo-turno",
     "dominio": "guipfranco.github.io",
     "categoria": "Plataformas e Mobilização",
-    "descricao": "Ferramenta para encontrar e cadastrar ações de panfletagem, atos e mobilização perto do usuário."
+    "descricao": "Ferramenta para encontrar e cadastrar ações de panfletagem, atos e mobilização perto do usuário.",
+    "repositorio": "https://github.com/guipfranco/acoes-segundo-turno"
   },
   {
     "nome": "Ideias em comum",
@@ -404,7 +405,8 @@
     "url": "https://noguerabreno.github.io/analisecuiabavotos",
     "dominio": "noguerabreno.github.io",
     "categoria": "Dados e Mapas",
-    "descricao": "SPA indicando seções, bairros e zonas eleitorais em Cuiabá comparando dados de 2024 e 2026."
+    "descricao": "SPA indicando seções, bairros e zonas eleitorais em Cuiabá comparando dados de 2024 e 2026.",
+    "repositorio": "https://github.com/NogueraBreno/analisecuiabavotos"
   },
   {
     "nome": "Nunca Mais",
@@ -532,7 +534,8 @@
     "url": "https://rafadaguia.github.io/analise-de-esforco-por-bairros-lula-2026",
     "dominio": "rafadaguia.github.io",
     "categoria": "Dados e Mapas",
-    "descricao": "Mapeamento tático, relatórios e tabelas que apontam bairros e cidades onde o esforço de campanha rende mais votos."
+    "descricao": "Mapeamento tático, relatórios e tabelas que apontam bairros e cidades onde o esforço de campanha rende mais votos.",
+    "repositorio": "https://github.com/rafadaguia/analise-de-esforco-por-bairros-lula-2026"
   },
   {
     "nome": "Seu voto decide",
@@ -572,7 +575,8 @@
     "url": "https://tatipara.github.io/vira_voto",
     "dominio": "tatipara.github.io",
     "categoria": "Dados e Mapas",
-    "descricao": "Análise interativa e mapas por local de votação para identificar e focar nos locais com maior abstenção."
+    "descricao": "Análise interativa e mapas por local de votação para identificar e focar nos locais com maior abstenção.",
+    "repositorio": "https://github.com/tatipara/vira_voto"
   },
   {
     "nome": "Tropa Vira Voto",
@@ -740,7 +744,8 @@
     "descricao": "Mapeamento nacional de candidaturas que abordam inteligência artificial e soberania digital em planos de governo.",
     "fontes_primarias": [
       "TSE"
-    ]
+    ],
+    "repositorio": "https://huggingface.co/spaces/Veronyka/mapa-ia-soberana"
   },
   {
     "nome": "Apuração do 1º Turno (Análises Independentes)",
@@ -1092,7 +1097,8 @@
     "url": "https://vncsvr.github.io/quanto-a-6x1-tira",
     "dominio": "vncsvr.github.io",
     "categoria": "Informação e Persuasão",
-    "descricao": "\"Quanto a 6x1 tira\" é um app web gratuito: o trabalhador informa a própria escala e o salário e vê, em números concretos, quanto tempo"
+    "descricao": "\"Quanto a 6x1 tira\" é um app web gratuito: o trabalhador informa a própria escala e o salário e vê, em números concretos, quanto tempo",
+    "repositorio": "https://github.com/vncsvr/quanto-a-6x1-tira"
   },
   {
     "nome": "Vote Consciente",
@@ -1172,7 +1178,8 @@
     "url": "https://pirracabr.github.io/dossie-democratico-br",
     "dominio": "pirracabr.github.io",
     "categoria": "Informação e Persuasão",
-    "descricao": "Site para alertar as pessoas sobre a onda do fascismo e como isso pode estar ligado ao bolsonarismo. Isso é feito usando os 14 alertas do fascismo e relacionando cada item com eventos ligados ao círculo bolsonarista, sempre trazendo fontes verificadas para embasar cada item."
+    "descricao": "Site para alertar as pessoas sobre a onda do fascismo e como isso pode estar ligado ao bolsonarismo. Isso é feito usando os 14 alertas do fascismo e relacionando cada item com eventos ligados ao círculo bolsonarista, sempre trazendo fontes verificadas para embasar cada item.",
+    "repositorio": "https://github.com/pirracabr/dossie-democratico-br"
   },
   {
     "nome": "Painel de eleitores 70+",
@@ -1494,7 +1501,8 @@
     "url": "https://programadorespd-campanha-app.hf.space",
     "dominio": "programadorespd-campanha-app.hf.space",
     "categoria": "Abstenção e Virada",
-    "descricao": "Combina dados públicos do TSE (1º turno de 2026) com dados do Censo 2022 para traçar o perfil eleitoral de cada zona da cidade, considerando abstenções e a disputa entre candidatos. Atenção: cidades grandes podem demorar mais para carregar devido ao volume de dados. Vídeo explicativo: https://www.youtube.com/watch?v=w8W89sQhtec"
+    "descricao": "Combina dados públicos do TSE (1º turno de 2026) com dados do Censo 2022 para traçar o perfil eleitoral de cada zona da cidade, considerando abstenções e a disputa entre candidatos. Atenção: cidades grandes podem demorar mais para carregar devido ao volume de dados. Vídeo explicativo: https://www.youtube.com/watch?v=w8W89sQhtec",
+    "repositorio": "https://huggingface.co/spaces/ProgramadoresPD/Vira_Voto_EFFICIENTE"
   },
   {
     "nome": "Flávio Bolsonaro: a teia",
