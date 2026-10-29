@@ -122,30 +122,30 @@ def clean_and_validate_repo_url(url: str | None) -> str | None:
         if owner not in {"datasets", "spaces", "docs", "blog", "models", "api", "pricing", "join", "login"}:
             return f"https://huggingface.co/{hf_model.group(1)}/{hf_model.group(2)}"
 
-    gh_match = re.match(r"https?://github\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)", url, re.I)
+    gh_match = re.match(r"https?://github\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_.]+)", url, re.I)
     if gh_match:
         owner = gh_match.group(1)
-        repo = gh_match.group(2)
+        repo = gh_match.group(2).rstrip("/")
         if repo.endswith(".git"):
             repo = repo[:-4]
         if owner.lower() in IGNORED_REPO_ORGS:
             return None
         return f"https://github.com/{owner}/{repo}"
 
-    gl_match = re.match(r"https?://gitlab\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)", url, re.I)
+    gl_match = re.match(r"https?://gitlab\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_.]+)", url, re.I)
     if gl_match:
         owner = gl_match.group(1)
-        repo = gl_match.group(2)
+        repo = gl_match.group(2).rstrip("/")
         if repo.endswith(".git"):
             repo = repo[:-4]
         if owner.lower() in IGNORED_REPO_ORGS:
             return None
         return f"https://gitlab.com/{owner}/{repo}"
 
-    cb_match = re.match(r"https?://codeberg\.org/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)", url, re.I)
+    cb_match = re.match(r"https?://codeberg\.org/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_.]+)", url, re.I)
     if cb_match:
         owner = cb_match.group(1)
-        repo = cb_match.group(2)
+        repo = cb_match.group(2).rstrip("/")
         if repo.endswith(".git"):
             repo = repo[:-4]
         if owner.lower() in IGNORED_REPO_ORGS:
@@ -703,9 +703,9 @@ class CivicEvaluator:
             for pat in [
                 r"https?://huggingface\.co/spaces/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)",
                 r"https?://huggingface\.co/datasets/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)",
-                r"https?://github\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)",
-                r"https?://gitlab\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)",
-                r"https?://codeberg\.org/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_]+)",
+                r"https?://github\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_.]+)",
+                r"https?://gitlab\.com/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_.]+)",
+                r"https?://codeberg\.org/([a-zA-Z0-9\-_]+)/([a-zA-Z0-9\-_.]+)",
             ]:
                 m = re.search(pat, ev.visible_text, re.IGNORECASE)
                 if m:

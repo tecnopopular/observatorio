@@ -331,7 +331,8 @@
     "url": "https://lablivreamazonia.com.br/belem",
     "dominio": "lablivreamazonia.com.br",
     "categoria": "Dados e Mapas",
-    "descricao": "Dados que detalha os resultados das Eleições 2026 em Belém (PA), mostrando a votação por local e seção eleitoral."
+    "descricao": "Dados que detalha os resultados das Eleições 2026 em Belém (PA), mostrando a votação por local e seção eleitoral.",
+    "repositorio": "NONE"
   },
   {
     "nome": "Cards oficiais da campanha por área",
@@ -1251,7 +1252,8 @@
     "url": "https://pautadaurna.com.br",
     "dominio": "pautadaurna.com.br",
     "categoria": "Dados e Mapas",
-    "descricao": "O sistema traça os dados públicos do IBGE em comparação com o TSE para campanhas direcionadas aos perfis que não votaram, com questões semelhantes e"
+    "descricao": "O sistema traça os dados públicos do IBGE em comparação com o TSE para campanhas direcionadas aos perfis que não votaram, com questões semelhantes e",
+    "repositorio": "https://github.com/CamaraHacks/pautadaurna"
   },
   {
     "nome": "Radar Ceará",

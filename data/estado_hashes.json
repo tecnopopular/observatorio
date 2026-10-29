@@ -516,15 +516,15 @@
     {
       "tool_id": "brasil-io",
       "html_sha256": "6793e8e713a6cf3d198cc55d848ec1a9c7b9313ccfbca06ff8998db6918d8d10",
-      "evaluated_at": "2026-10-25T03:24:34.194133+00:00",
+      "evaluated_at": "2026-10-29T02:06:52.914275Z",
       "status": "rejeitado",
-      "total_score": 68.5,
+      "total_score": 67.0,
       "dimension_scores": {
         "proveniencia_dados": 50.0,
         "privacidade_e_soberania": 40.0,
         "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 100.0
+        "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
       "archive_url": "https://web.archive.org/web/20180407100825/http://brasil.io:80/",
@@ -1434,15 +1434,15 @@
     {
       "tool_id": "lab-livre-amazonia",
       "html_sha256": "79b215ecd3132727435ac2a8e5686f3e78962173e618191f887877f06a0db782",
-      "evaluated_at": "2026-10-25T03:24:31.158485+00:00",
+      "evaluated_at": "2026-10-29T02:06:52.897954Z",
       "status": "auditado",
-      "total_score": 90.0,
+      "total_score": 80.5,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
-        "codigo_aberto_floss": 100.0,
+        "codigo_aberto_floss": 60.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 75.0
+        "acessibilidade_desempenho": 65.0
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261006182432/https://lablivreamazonia.com.br/belem/",
@@ -2216,15 +2216,15 @@
     {
       "tool_id": "pauta-da-urna",
       "html_sha256": "e3a537c85d1a4c851fa43a9b12c83273571bb94a31aa8d79db1dd4b5829fd887",
-      "evaluated_at": "2026-10-25T03:24:37.749228+00:00",
+      "evaluated_at": "2026-10-29T02:06:52.979313Z",
       "status": "auditado",
-      "total_score": 86.0,
+      "total_score": 84.5,
       "dimension_scores": {
         "proveniencia_dados": 75.0,
         "privacidade_e_soberania": 100.0,
         "codigo_aberto_floss": 80.0,
         "enquadramento_republicano": 100.0,
-        "acessibilidade_desempenho": 75.0
+        "acessibilidade_desempenho": 65.0
       },
       "coverage_complete": false,
       "archive_url": "https://web.archive.org/web/20261012013019/https://pautadaurna.com.br/",
