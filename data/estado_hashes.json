@@ -2534,7 +2534,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "reused"
+      "archive_status": "failed"
     },
     {
       "tool_id": "seu-voto-decide",
@@ -2669,8 +2669,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261028223625/https://tesouranocomercio.pplx.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "transporte-gratuito-na-eleicao",
@@ -2975,8 +2975,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261028223837/https://voteconsciente.github.io/eleicoes2026/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vote-pela-democracia",
