@@ -1463,7 +1463,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "reused"
     },
     {
       "tool_id": "lula-filtro",
@@ -1564,8 +1564,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164022/https://www.leosuricate.com.br/analises",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mapa-de-abstencoes-rio-de-janeiro",
@@ -1700,8 +1700,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024223429/https://claude.ai/artifact/Fm6yiV6cYYBEmk4AsSWpbh",
+      "archive_status": "reused"
     },
     {
       "tool_id": "meu-voto-brasil",
@@ -1734,8 +1734,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026164716/https://travahacker.com.br/voluntariado/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "momo-com-lula",
@@ -1751,8 +1751,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024225148/https://appmomo.com.br/guides/momo-com-lula",
+      "archive_status": "reused"
     },
     {
       "tool_id": "monitor-de-narrativas-eleicoes-2026",
@@ -1819,8 +1819,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261025044044/https://naosemeta.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "nordeste-decide",
@@ -1887,8 +1887,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013163750/https://nadamudou.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-mapa-do-flavio",
@@ -1904,8 +1904,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024224600/https://omapadoflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-poder-do-seu-voto",
@@ -1955,8 +1955,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261019035839/https://oqueestaemjogo.ascaribe.tech/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-voto-decisivo",
@@ -1989,8 +1989,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026174327/https://obrasbr.online/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "observatorio-tech",
@@ -2057,8 +2057,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026105327/https://www.ondedapraconversar.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "onde-panfletar",
@@ -2125,8 +2125,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261014135115/https://serenata.ai/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "paginas-tematicas-mobilizacao",
@@ -2261,8 +2261,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026133230/https://podeespalhar.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "politicometro",
@@ -2312,8 +2312,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011073535/https://qualseuflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quanto-a-6x1-tira",
@@ -2346,8 +2346,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261010011622/https://www.quemapoiaquem.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quem-compara-vota-lula",
@@ -2381,7 +2381,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "quiz-de-politicas-publicas",
@@ -2431,8 +2431,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261013102038/https://radardavirada.pages.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "radar-do-voto",
@@ -2448,8 +2448,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024210624/https://radardovoto.app.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "risco-real",
@@ -2465,8 +2465,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011140306/https://riscoreal.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "salve-a-padroeira",
@@ -2517,7 +2517,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "reused"
     },
     {
       "tool_id": "seu-voto-decide",
@@ -2584,8 +2584,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015230801/https://soudobem.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-flavio-world",
@@ -2601,8 +2601,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261017201144/https://www.superflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-lula-world",
@@ -2635,8 +2635,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015023404/https://techcontrabolsonaro.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "tesoura-no-comercio",
