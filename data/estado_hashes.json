@@ -2516,8 +2516,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "reused"
+      "archive_url": "https://web.archive.org/web/20261104045423/https://segundoturnocomlula.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "seu-voto-decide",
@@ -2806,7 +2806,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-voto",
@@ -2975,8 +2975,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261013010951/https://votedemocracia.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vote-sabendo",
