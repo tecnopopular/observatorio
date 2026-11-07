@@ -579,7 +579,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "reused"
     },
     {
       "tool_id": "carona-solidaria",
