@@ -2312,8 +2312,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011073535/https://qualseuflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quanto-a-6x1-tira",
@@ -2347,7 +2347,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "quem-compara-vota-lula",
@@ -2431,8 +2431,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261029202401/https://radardavirada.pages.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "radar-do-voto",
@@ -2448,8 +2448,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261024210624/https://radardovoto.app.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "risco-real",
@@ -2465,8 +2465,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261011140306/https://riscoreal.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "salve-a-padroeira",
@@ -2568,7 +2568,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "sou-do-bem",
@@ -2584,8 +2584,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015230801/https://soudobem.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-flavio-world",
@@ -2601,8 +2601,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026192354/https://www.superflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-lula-world",
@@ -2635,8 +2635,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015023404/https://techcontrabolsonaro.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "tesoura-no-comercio",
@@ -2771,8 +2771,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012224701/https://levops.cc/publico/furando_a_bolha/viralulaia",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-seguro",
@@ -2806,7 +2806,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-voto",
@@ -2839,8 +2839,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261028044556/https://viravoto.coletivo.net.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-voto-jogo-de-persuasao",
@@ -2874,7 +2874,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "virada-no-bairro",
@@ -2958,8 +2958,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261028223837/https://voteconsciente.github.io/eleicoes2026/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "vote-pela-democracia",
@@ -2992,8 +2992,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261012015102/https://votesabendo.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "voto-as-cegas",
@@ -3111,8 +3111,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261015033334/https://voz.social.br/",
+      "archive_status": "reused"
     }
   ]
 }
