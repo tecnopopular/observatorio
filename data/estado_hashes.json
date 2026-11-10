@@ -579,7 +579,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "reused"
+      "archive_status": "failed"
     },
     {
       "tool_id": "carona-solidaria",
@@ -2346,8 +2346,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261109050231/https://quemapoiaquem.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "quem-compara-vota-lula",
