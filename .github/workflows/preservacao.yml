@@ -1,4 +1,4 @@
-name: Preservação no Internet Archive
+name: "Preservação: Captura Diária no Internet Archive"
 
 # Passo separado do ciclo de auditoria porque o ritmo é outro: o Internet Archive aceita
 # poucas capturas por vez (medido: ~8 a 16 por execução), enquanto a auditoria completa

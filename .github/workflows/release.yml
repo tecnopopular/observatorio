@@ -1,4 +1,4 @@
-name: Publicar laudo do ciclo
+name: "Release: Empacotamento de Versão (Tag v*)"
 
 on:
   push:

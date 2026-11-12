@@ -19,6 +19,7 @@ from .models import (
     ArchiveStatus,
     AuditLevel,
     CivicAuditReport,
+    InspectionCoverage,
     TelemetryInspection,
 )
 from .preservation import (
@@ -220,19 +221,13 @@ def audit_single_initiative(
             no cache do repositório.
 
     Returns:
-        Laudo da iniciativa, reaproveitado do ciclo anterior ou recém-emitido. Nulo quando o
-        site proíbe a leitura no `robots.txt`: nesse caso não há laudo, e a entrada permanece
-        apenas no catálogo.
+        Laudo da iniciativa, reaproveitado do ciclo anterior ou recém-emitido. Quando o
+        site proíbe a leitura no `robots.txt`, emite laudo com status NOT_INSPECTED e motivo
+        explícito, preservando o histórico do último snapshot caso exista.
     """
     name = item["nome"]
     url = item["url"]
     slug = item.get("_tool_id") or slugify(name)
-
-    if robots_policy is not None:
-        decisao = robots_policy.decide(url)
-        if not decisao.allowed:
-            print(f" [PULA] {name[:28]:<28} | robots.txt | {decisao.detail}")
-            return None
 
     declared_repo = item.get("repositorio")
     if not declared_repo and any(
@@ -241,6 +236,65 @@ def audit_single_initiative(
         declared_repo = url
 
     declared_sources = item.get("fontes_primarias", [])
+
+    if robots_policy is not None:
+        decisao = robots_policy.decide(url)
+        if not decisao.allowed:
+            print(f" [S/LEI] {name[:28]:<28} | robots.txt | {decisao.detail}")
+            prev = previous_audits.get(slug)
+            if prev:
+                try:
+                    prev_report = CivicAuditReport.model_validate(prev)
+                    return CivicAuditReport(
+                        tool_id=slug,
+                        tool_name=name,
+                        target_url=url,
+                        evaluated_at=prev_report.evaluated_at,
+                        status=AuditLevel.NOT_INSPECTED,
+                        total_score=None,
+                        html_sha256=prev_report.html_sha256,
+                        archive_url=prev_report.archive_url,
+                        archive_status="reused" if prev_report.archive_url else None,
+                        has_critical_blocker=prev_report.has_critical_blocker,
+                        critical_blockers=prev_report.critical_blockers,
+                        dimension_scores=prev_report.dimension_scores,
+                        provenance=prev_report.provenance,
+                        privacy=prev_report.privacy,
+                        floss=prev_report.floss,
+                        framing=prev_report.framing,
+                        performance=prev_report.performance,
+                        badge_label="Não Inspecionado (sem leitura útil)",
+                        summary_markdown=prev_report.summary_markdown,
+                        coverage=InspectionCoverage(
+                            inspected=False,
+                            reason="bloqueio de leitura por diretiva robots.txt",
+                            complete=False,
+                        ),
+                    )
+                except Exception:
+                    pass
+            return evaluator.evaluate_content(
+                tool_id=slug,
+                tool_name=name,
+                target_url=url,
+                raw_html="",
+                declared_repo=declared_repo,
+                declared_sources=declared_sources,
+                response_time_ms=0,
+                html_bytes=0,
+                html_sha256=None,
+                archive_url=None,
+                archive_status=None,
+                fetch_provider="robots",
+                http_status=None,
+                bytes_scanned=0,
+                inspection_truncated=False,
+                inspection_limit_bytes=max_bytes,
+                inspected=False,
+                inspection_reason="bloqueio de leitura por diretiva robots.txt",
+                classifier=classifier,
+                server=None,
+            )
 
     snapshot = fetch_snapshot(
         url,
@@ -817,10 +871,8 @@ def run_batch_audit(
         fetcher: Provedor de aquisição já construído; quando nulo, é construído a partir
         robots_policy: Política de `robots.txt` já construída; quando nula e
             `respect_robots` é verdadeiro, uma política nova é criada com o `timeout` do ciclo.
-        respect_robots: Quando verdadeiro, sites que proíbem a leitura em `robots.txt` não
-            recebem laudo e permanecem apenas no catálogo.
-        cache_dir: Diretório do cache de corpos; testes passam um temporário para não escrever
-            no cache do repositório.
+        respect_robots: Quando verdadeiro, sites que proíbem a leitura em `robots.txt`
+            recebem laudo com status NOT_INSPECTED (sem leitura útil) preservando histórico.
         cache_dir: Diretório do cache de corpos; testes passam um temporário para não escrever
             no cache do repositório.
         withdrawals_file: Registro de retiradas acatadas. Um endereço retirado a pedido não é
@@ -835,7 +887,7 @@ def run_batch_audit(
 
     Returns:
         Laudos do ciclo, ordenados por pontuação total decrescente; iniciativas sem nota
-        ficam ao final. Iniciativas puladas por `robots.txt` não aparecem na lista.
+        ficam ao final.
 
     Raises:
         FileNotFoundError: Quando o arquivo de catálogo não existe.
