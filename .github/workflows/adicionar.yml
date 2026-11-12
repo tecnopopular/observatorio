@@ -1,4 +1,4 @@
-name: Incluir iniciativa no catálogo
+name: "Catálogo: Incluir Iniciativa"
 
 on:
   workflow_dispatch:

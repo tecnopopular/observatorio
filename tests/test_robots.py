@@ -14,7 +14,9 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from observatorio.engine import run_batch_audit
+from observatorio.evaluator import CivicEvaluator
 from observatorio.fetch import CRAWLER_TOKEN, FetchResult
+from observatorio.models import AuditLevel
 from observatorio.robots import RobotsPolicy
 
 
@@ -203,8 +205,8 @@ class TestCasamentoDeAgente(unittest.TestCase):
 class TestEsteiraRespeitaRobots(unittest.TestCase):
     """Verifica o efeito da proibição no ciclo completo."""
 
-    def test_site_proibido_nao_gera_laudo(self):
-        """Iniciativa proibida deve sair do laudo e não aparecer no manifesto."""
+    def test_site_proibido_gera_laudo_nao_inspecionado(self):
+        """Iniciativa proibida gera laudo com status NOT_INSPECTED e motivo robots.txt."""
 
         def _resposta(request, timeout=None):
             """Serve `robots.txt` diferente por host.
@@ -258,10 +260,87 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
             gravados = json.loads(laudo.read_text(encoding="utf-8"))
             current_state = json.loads(manifesto.read_text(encoding="utf-8"))
 
-        self.assertEqual([r.tool_id for r in relatorios], ["livre"])
-        self.assertEqual([r["tool_id"] for r in gravados], ["livre"])
-        self.assertEqual([e["tool_id"] for e in current_state["entries"]], ["livre"])
+        por_id = {r.tool_id: r for r in relatorios}
+        self.assertIn("livre", por_id)
+        self.assertIn("proibido", por_id)
+        proibido = por_id["proibido"]
+        self.assertEqual(proibido.status, AuditLevel.NOT_INSPECTED)
+        self.assertIsNone(proibido.total_score)
+        self.assertIsNotNone(proibido.coverage)
+        self.assertFalse(proibido.coverage.inspected)
+        self.assertEqual(proibido.coverage.reason, "bloqueio de leitura por diretiva robots.txt")
+
+        ids_gravados = {r["tool_id"] for r in gravados}
+        self.assertEqual(ids_gravados, {"livre", "proibido"})
+        ids_estado = {e["tool_id"] for e in current_state["entries"]}
+        self.assertEqual(ids_estado, {"livre", "proibido"})
         provedor.fetch.assert_called_once()
+
+    def test_site_proibido_com_laudo_anterior_preserva_historico(self):
+        """Iniciativa proibida reaproveita snapshot e notas de dimensão anteriores."""
+
+        def _resposta(request, *args, **kwargs):
+            """Serve `robots.txt` proibindo o host.
+
+            Args:
+                request: Requisição montada pela política.
+                *args: Argumentos posicionais adicionais.
+                **kwargs: Argumentos nomeados adicionais como timeout e context.
+
+            Returns:
+                Resposta simulada com a recusa ao crawler.
+            """
+            return RespostaSimulada(200, "User-agent: *\nDisallow: /\n")
+
+        catalog = [{"nome": "Proibido", "url": "https://proibido.org"}]
+        politica = RobotsPolicy(timeout=1)
+        provedor = MagicMock()
+        evaluator = CivicEvaluator()
+        rep_anterior = evaluator.evaluate_content(
+            tool_id="proibido",
+            tool_name="Proibido",
+            target_url="https://proibido.org",
+            raw_html="<html><body><p>Conteúdo anterior auditado.</p></body></html>",
+            html_sha256="abc123sha",
+            archive_url="https://web.archive.org/web/20261024120000/https://proibido.org",
+            archive_status="captured",
+        )
+        laudo_anterior = [rep_anterior.model_dump(mode="json")]
+        data_anterior_esperada = rep_anterior.evaluated_at.isoformat()
+        with (
+            patch("urllib.request.urlopen", side_effect=_resposta),
+            tempfile.TemporaryDirectory() as tmp,
+        ):
+            caminho = Path(tmp)
+            entry = caminho / "cat.json"
+            entry.write_text(json.dumps(catalog), encoding="utf-8")
+            laudo = caminho / "laudo.json"
+            laudo.write_text(json.dumps(laudo_anterior), encoding="utf-8")
+            manifesto = caminho / "estado.json"
+            relatorios = run_batch_audit(
+                input_file=entry,
+                output_file=laudo,
+                manifest_file=manifesto,
+                skip_archive=True,
+                refresh_cache=True,
+                max_workers=1,
+                fetcher=provedor,
+                robots_policy=politica,
+                cache_dir=caminho / "cache",
+            )
+
+        self.assertEqual(len(relatorios), 1)
+        rep = relatorios[0]
+        self.assertEqual(rep.status, AuditLevel.NOT_INSPECTED)
+        self.assertIsNone(rep.total_score)
+        self.assertEqual(rep.html_sha256, "abc123sha")
+        self.assertEqual(rep.archive_url, "https://web.archive.org/web/20261024120000/https://proibido.org")
+        self.assertEqual(rep.archive_status, "reused")
+        self.assertIsNotNone(rep.coverage)
+        self.assertFalse(rep.coverage.inspected)
+        self.assertEqual(rep.coverage.reason, "bloqueio de leitura por diretiva robots.txt")
+        self.assertEqual(rep.evaluated_at.isoformat(), data_anterior_esperada)
+        provedor.fetch.assert_not_called()
 
     def test_sem_politica_nada_e_pulado(self):
         """Sem consulta de `robots.txt`, todas as iniciativas são auditadas."""

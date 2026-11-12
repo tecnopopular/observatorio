@@ -334,7 +334,7 @@ Três verificações antecedem a gravação:
 Nome e, quando informada, descrição passam pelo portão de privacidade: são publicados no catálogo.
 
 Em produção, o mesmo comando roda por workflow, sem depender de acesso local: em **Actions →
-Incluir iniciativa no catálogo → Run workflow**, informe URL, nome, categoria e descrição. O
+Catálogo: Incluir Iniciativa → Run workflow**, informe URL, nome, categoria e descrição. O
 workflow executa os portões de qualidade e privacidade, inclui a entrada e grava o commit em `main`;
 o ciclo de auditoria seguinte avalia a iniciativa nova.
 

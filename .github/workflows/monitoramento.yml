@@ -1,4 +1,4 @@
-name: Observatorio Monitoramento Civico
+name: "Auditoria: Reavaliação Semanal do Catálogo"
 
 on:
   schedule:
