@@ -87,9 +87,9 @@ class TestObservatorioModels(unittest.TestCase):
             tool_id="radar-da-virada",
             tool_name="Radar da Virada",
             target_url="https://radardavirada.pages.dev",
-            status=AuditLevel.AUDITADO,
+            status=AuditLevel.CERTIFICADO,
             total_score=total,
-            badge_label="Certificado TecnoPopular",
+            badge_label="Certificado",
             html_sha256="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
             archive_url="https://web.archive.org/web/20261020000000/https://radardavirada.pages.dev",
             dimension_scores=dim_scores,
@@ -98,8 +98,8 @@ class TestObservatorioModels(unittest.TestCase):
         data = rep.model_dump(mode="json")
         self.assertEqual(data["tool_id"], "radar-da-virada")
         self.assertEqual(data["total_score"], 90.0)
-        self.assertEqual(data["status"], "auditado")
-        self.assertEqual(data["badge_label"], "Certificado TecnoPopular")
+        self.assertEqual(data["status"], "certificado")
+        self.assertEqual(data["badge_label"], "Certificado")
         self.assertIn("web.archive.org", data["archive_url"])
 
 

@@ -205,8 +205,8 @@ class TestCasamentoDeAgente(unittest.TestCase):
 class TestEsteiraRespeitaRobots(unittest.TestCase):
     """Verifica o efeito da proibição no ciclo completo."""
 
-    def test_site_proibido_gera_laudo_nao_inspecionado(self):
-        """Iniciativa proibida gera laudo com status NOT_INSPECTED e motivo robots.txt."""
+    def test_site_proibido_gera_laudo_nao_avaliado(self):
+        """Iniciativa proibida gera laudo com status NAO_AVALIADO e motivo robots.txt."""
 
         def _resposta(request, timeout=None):
             """Serve `robots.txt` diferente por host.
@@ -264,7 +264,7 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
         self.assertIn("livre", por_id)
         self.assertIn("proibido", por_id)
         proibido = por_id["proibido"]
-        self.assertEqual(proibido.status, AuditLevel.NOT_INSPECTED)
+        self.assertEqual(proibido.status, AuditLevel.NAO_AVALIADO)
         self.assertIsNone(proibido.total_score)
         self.assertIsNotNone(proibido.coverage)
         self.assertFalse(proibido.coverage.inspected)
@@ -331,7 +331,7 @@ class TestEsteiraRespeitaRobots(unittest.TestCase):
 
         self.assertEqual(len(relatorios), 1)
         rep = relatorios[0]
-        self.assertEqual(rep.status, AuditLevel.NOT_INSPECTED)
+        self.assertEqual(rep.status, AuditLevel.NAO_AVALIADO)
         self.assertIsNone(rep.total_score)
         self.assertEqual(rep.html_sha256, "abc123sha")
         self.assertEqual(rep.archive_url, "https://web.archive.org/web/20261024120000/https://proibido.org")

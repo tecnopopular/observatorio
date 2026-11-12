@@ -222,7 +222,7 @@ def audit_single_initiative(
 
     Returns:
         Laudo da iniciativa, reaproveitado do ciclo anterior ou recém-emitido. Quando o
-        site proíbe a leitura no `robots.txt`, emite laudo com status NOT_INSPECTED e motivo
+        site proíbe a leitura no `robots.txt`, emite laudo com status NAO_AVALIADO e motivo
         explícito, preservando o histórico do último snapshot caso exista.
     """
     name = item["nome"]
@@ -250,7 +250,7 @@ def audit_single_initiative(
                         tool_name=name,
                         target_url=url,
                         evaluated_at=prev_report.evaluated_at,
-                        status=AuditLevel.NOT_INSPECTED,
+                        status=AuditLevel.NAO_AVALIADO,
                         total_score=None,
                         html_sha256=prev_report.html_sha256,
                         archive_url=prev_report.archive_url,
@@ -263,7 +263,7 @@ def audit_single_initiative(
                         floss=prev_report.floss,
                         framing=prev_report.framing,
                         performance=prev_report.performance,
-                        badge_label="Não Inspecionado (sem leitura útil)",
+                        badge_label="Não Avaliado",
                         summary_markdown=prev_report.summary_markdown,
                         coverage=InspectionCoverage(
                             inspected=False,
@@ -374,21 +374,13 @@ def audit_single_initiative(
     )
 
     tag = (
-        "[SELO]"
-        if report.status == AuditLevel.AUDITADO
-        else (
-            "[DIR ]"
-            if report.status == AuditLevel.CATALOGADO
-            else (
-                "[REV ]"
-                if report.status == AuditLevel.EM_REVISAO
-                else ("[S/LEI]" if report.status == AuditLevel.NOT_INSPECTED else "[BLOQ]")
-            )
-        )
+        "[CERT ]"
+        if report.status == AuditLevel.CERTIFICADO
+        else ("[CATAL]" if report.status == AuditLevel.CATALOGADO else "[S/LEI]")
     )
     score = f"{report.total_score:4.1f}" if report.total_score is not None else " n/d"
     print(
-        f" {tag} {report.tool_name[:28]:<28} | Score: {score} | {report.status.value.upper():<10} | {report.badge_label}"
+        f" {tag} {report.tool_name[:28]:<28} | Score: {score} | {report.status.value.upper():<12} | {report.badge_label}"
     )
 
     return report
@@ -802,7 +794,7 @@ def generate_radar_artifacts(
                 server = rep.performance.server
             if status_code is None and rep.performance and rep.performance.http_status:
                 status_code = rep.performance.http_status
-            if status_code is None and rep.status in (AuditLevel.AUDITADO, AuditLevel.CATALOGADO):
+            if status_code is None and rep.status in (AuditLevel.CERTIFICADO, AuditLevel.CATALOGADO):
                 status_code = 200
 
         tel = inspect_target_telemetry(
@@ -872,7 +864,7 @@ def run_batch_audit(
         robots_policy: Política de `robots.txt` já construída; quando nula e
             `respect_robots` é verdadeiro, uma política nova é criada com o `timeout` do ciclo.
         respect_robots: Quando verdadeiro, sites que proíbem a leitura em `robots.txt`
-            recebem laudo com status NOT_INSPECTED (sem leitura útil) preservando histórico.
+            recebem laudo com status NAO_AVALIADO preservando histórico.
         cache_dir: Diretório do cache de corpos; testes passam um temporário para não escrever
             no cache do repositório.
         withdrawals_file: Registro de retiradas acatadas. Um endereço retirado a pedido não é
@@ -1003,22 +995,18 @@ def run_batch_audit(
         json.dump(serialized, f, ensure_ascii=False, indent=2)
 
     counts = {
-        AuditLevel.AUDITADO.value: sum(1 for r in reports if r.status == AuditLevel.AUDITADO),
+        AuditLevel.CERTIFICADO.value: sum(1 for r in reports if r.status == AuditLevel.CERTIFICADO),
         AuditLevel.CATALOGADO.value: sum(1 for r in reports if r.status == AuditLevel.CATALOGADO),
-        AuditLevel.EM_REVISAO.value: sum(1 for r in reports if r.status == AuditLevel.EM_REVISAO),
-        AuditLevel.REJEITADO.value: sum(1 for r in reports if r.status == AuditLevel.REJEITADO),
-        AuditLevel.NOT_INSPECTED.value: sum(1 for r in reports if r.status == AuditLevel.NOT_INSPECTED),
+        AuditLevel.NAO_AVALIADO.value: sum(1 for r in reports if r.status == AuditLevel.NAO_AVALIADO),
     }
 
     print("\n" + "=" * 60)
     print("      CONSOLIDAÇÃO DO OBSERVATÓRIO TECNOPOPULAR")
     print("=" * 60)
-    print(f"  [AUDITADO] Certificado TecnoPopular (Selo):     {counts['auditado']}")
-    print(f"  [CATALOG ] Diretório Aberto:                     {counts['catalogado']}")
-    print(f"  [REVISAO ] Pendências Técnicas:                  {counts['em_revisao']}")
-    print(f"  [REJEITA ] Bloqueadores Críticos:                {counts['rejeitado']}")
-    print(f"  [SEM LEIT] Não Inspecionadas:                    {counts['nao_inspecionado']}")
-    print(f"  [TOTAL   ] Iniciativas Inspecionadas:            {len(reports)}")
+    print(f"  [CERTIFICADO ] Certificado:                      {counts['certificado']}")
+    print(f"  [CATALOGADO  ] Catalogado:                       {counts['catalogado']}")
+    print(f"  [NAO AVALIADO] Não Avaliado:                     {counts['nao_avaliado']}")
+    print(f"  [TOTAL       ] Iniciativas Processadas:          {len(reports)}")
     if skipped:
         print(f"  [PULADAS ] Proibidas por robots.txt:             {len(skipped)}")
     print(f"\n[+] Relatório estruturado salvo com sucesso em: {output_file}")

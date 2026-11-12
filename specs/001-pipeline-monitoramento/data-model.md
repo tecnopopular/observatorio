@@ -38,7 +38,7 @@ erDiagram
 
     CivicAuditReport {
         string tool_id PK "slug único do catálogo"
-        string status "auditado, catalogado, em_revisao, rejeitado, nao_inspecionado"
+        string status "certificado, catalogado, nao_avaliado"
         float total_score "0 a 100, nulo quando não houve leitura"
         string html_sha256 "hash do corpo inspecionado"
         string archive_url "URL perene no Wayback"
@@ -136,7 +136,7 @@ class InspectionCoverage(BaseModel):
 Duas limitações independentes compõem `complete`: o corte de bytes na aquisição
 (`inspection_truncated`) e o corte dos escopos de texto no parser (`text_truncated`,
 `inline_scripts_truncated`). `inspected=False` significa ausência de leitura útil, e é o que
-determina o estado `nao_inspecionado`.
+determina o estado `nao_avaliado`.
 
 ### 2.4 Detalhes por dimensão
 
@@ -274,10 +274,8 @@ class CivicAuditReport(BaseModel):
 ```python
 class AuditLevel(str, Enum):
     CATALOGADO = "catalogado"
-    AUDITADO = "auditado"
-    EM_REVISAO = "em_revisao"
-    REJEITADO = "rejeitado"
-    NOT_INSPECTED = "nao_inspecionado"
+    CERTIFICADO = "certificado"
+    NAO_AVALIADO = "nao_avaliado"
 
 
 class DimensionType(str, Enum):
@@ -367,10 +365,10 @@ recusadas, de modo que o histórico nunca fica ambíguo.
 
 ## 3. Regras de Estado e Validação
 
-1. **Precedência do estado.** `nao_inspecionado` prevalece sobre qualquer nota: sem leitura útil não
-   existe avaliação de qualidade. `rejeitado` prevalece sobre a nota quando há bloqueador crítico.
-2. **Cortes.** `auditado` exige `total_score >= 80.0` e zero bloqueadores; `catalogado` exige
-   `>= 50.0`; abaixo disso o laudo fica em `em_revisao`.
+1. **Precedência do estado.** `nao_avaliado` prevalece sobre qualquer nota: sem leitura útil não
+   existe avaliação de qualidade.
+2. **Cortes.** `certificado` exige `total_score >= 80.0` e zero bloqueadores críticos; as demais
+   iniciativas inspecionadas permanecem em `catalogado`.
 3. **Invalidação de cache.** Se o hash do snapshot atual for igual ao `html_sha256` do laudo
    anterior, o laudo é reaproveitado e não há nova avaliação.
 4. **Integridade.** `html_sha256` é o SHA-256 do corpo HTTP efetivamente inspecionado e nunca é

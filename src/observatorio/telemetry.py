@@ -322,7 +322,7 @@ def build_radar_dataset(
         analytics_detected = t_item.analytics_detected if t_item else []
         is_clean_analytics = len(analytics_detected) == 0
         is_online = (
-            t_item.is_online if t_item else (report.status in (AuditLevel.AUDITADO, AuditLevel.CATALOGADO))
+            t_item.is_online if t_item else (report.status in (AuditLevel.CERTIFICADO, AuditLevel.CATALOGADO))
         )
         server_str = (
             (t_item.server if t_item else None)
@@ -381,15 +381,13 @@ def build_radar_dataset(
     total_telemetria = len(telemetrias) if telemetrias else total_iniciativas
     status_counts = Counter(item["status"] for item in iniciativas)
 
-    cnt_certified = status_counts.get(AuditLevel.AUDITADO.value, 0)
+    cnt_certified = status_counts.get(AuditLevel.CERTIFICADO.value, 0)
     cnt_cataloged = status_counts.get(AuditLevel.CATALOGADO.value, 0)
-    cnt_rejected = status_counts.get(AuditLevel.REJEITADO.value, 0)
-    cnt_review = status_counts.get(AuditLevel.EM_REVISAO.value, 0)
+    cnt_not_evaluated = status_counts.get(AuditLevel.NAO_AVALIADO.value, 0)
 
     pct_certified = round((cnt_certified / total_iniciativas) * 100, 1) if total_iniciativas else 0.0
     pct_cataloged = round((cnt_cataloged / total_iniciativas) * 100, 1) if total_iniciativas else 0.0
-    pct_rejected = round((cnt_rejected / total_iniciativas) * 100, 1) if total_iniciativas else 0.0
-    pct_review = round((cnt_review / total_iniciativas) * 100, 1) if total_iniciativas else 0.0
+    pct_not_evaluated = round((cnt_not_evaluated / total_iniciativas) * 100, 1) if total_iniciativas else 0.0
 
     online_count = (
         sum(1 for t in telemetrias if t.is_online)
@@ -501,10 +499,8 @@ def build_radar_dataset(
             "certified_pct": pct_certified,
             "cataloged_count": cnt_cataloged,
             "cataloged_pct": pct_cataloged,
-            "rejected_count": cnt_rejected,
-            "rejected_pct": pct_rejected,
-            "review_count": cnt_review,
-            "review_pct": pct_review,
+            "not_evaluated_count": cnt_not_evaluated,
+            "not_evaluated_pct": pct_not_evaluated,
             "online_count": online_count,
             "online_pct": pct_online,
             "offline_count": offline_count,

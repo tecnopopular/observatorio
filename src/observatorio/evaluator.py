@@ -329,21 +329,15 @@ class CivicEvaluator:
 
         publishable_score: float | None = round(total_score, 1)
         if not inspected:
-            status = AuditLevel.NOT_INSPECTED
-            badge_label = "Não Inspecionado (sem leitura útil)"
+            status = AuditLevel.NAO_AVALIADO
+            badge_label = "Não Avaliado"
             publishable_score = None
-        elif has_critical:
-            status = AuditLevel.REJEITADO
-            badge_label = "Bloqueador Crítico de Privacidade"
-        elif total_score >= self.rubric.seal_threshold:
-            status = AuditLevel.AUDITADO
-            badge_label = "Certificado TecnoPopular"
-        elif total_score >= self.rubric.directory_threshold:
-            status = AuditLevel.CATALOGADO
-            badge_label = "Catalogado no Diretório Aberto"
+        elif total_score >= self.rubric.seal_threshold and not has_critical:
+            status = AuditLevel.CERTIFICADO
+            badge_label = "Certificado"
         else:
-            status = AuditLevel.EM_REVISAO
-            badge_label = "Em Revisão Técnica"
+            status = AuditLevel.CATALOGADO
+            badge_label = "Catalogado"
 
         summary_md = self._render_markdown_summary(
             tool_name=tool_name,

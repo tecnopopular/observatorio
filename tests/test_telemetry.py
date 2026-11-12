@@ -203,7 +203,7 @@ class TestTelemetry(unittest.TestCase):
             tool_id="ferramenta-alfa",
             tool_name="Ferramenta Alfa",
             target_url="https://alfa.org",
-            status=AuditLevel.AUDITADO,
+            status=AuditLevel.CERTIFICADO,
             total_score=85.0,
             badge_label="Certificado",
             dimension_scores={
