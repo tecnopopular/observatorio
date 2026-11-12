@@ -146,7 +146,7 @@ def main() -> None:
     print("=== distribuição de status ===")
     for rotulo, conjunto in (("anterior", antes), ("atual", agora)):
         contagem = Counter(e["status"] for e in conjunto.values())
-        selos = contagem.get("auditado", 0)
+        selos = contagem.get("certificado", 0)
         print(f"  {rotulo:<9} selos={selos:<4} " + " ".join(f"{k}={v}" for k, v in sorted(contagem.items())))
 
     novos = sorted(t for t in agora if t not in antes)
@@ -166,10 +166,14 @@ def main() -> None:
         print(f"  {url_key:<40} {n}")
 
     perdeu = [
-        t for t in agora if antes.get(t, {}).get("status") == "auditado" and agora[t]["status"] != "auditado"
+        t
+        for t in agora
+        if antes.get(t, {}).get("status") == "certificado" and agora[t]["status"] != "certificado"
     ]
     ganhou = [
-        t for t in agora if antes.get(t, {}).get("status") != "auditado" and agora[t]["status"] == "auditado"
+        t
+        for t in agora
+        if antes.get(t, {}).get("status") != "certificado" and agora[t]["status"] == "certificado"
     ]
 
     print(f"\n=== selos perdidos ({len(perdeu)}) ===")
@@ -190,8 +194,8 @@ def main() -> None:
 
     bruto = json.loads(atual_path.read_text(encoding="utf-8"))
     if isinstance(bruto, list):
-        sem_leitura = [r for r in bruto if r["status"] == "nao_inspecionado"]
-        print(f"\n=== não inspecionados ({len(sem_leitura)}) ===")
+        sem_leitura = [r for r in bruto if r["status"] == "nao_avaliado"]
+        print(f"\n=== não avaliados ({len(sem_leitura)}) ===")
         for r in sem_leitura:
             motivo = (r.get("coverage") or {}).get("reason") or "-"
             http = (r.get("performance") or {}).get("http_status")

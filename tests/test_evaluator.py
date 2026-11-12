@@ -43,14 +43,14 @@ class TestCivicEvaluator(unittest.TestCase):
             html_sha256="abc123sha",
         )
 
-        self.assertEqual(report.status, AuditLevel.AUDITADO)
+        self.assertEqual(report.status, AuditLevel.CERTIFICADO)
         self.assertFalse(report.has_critical_blocker)
         self.assertGreaterEqual(report.total_score, 80.0)
-        self.assertEqual(report.badge_label, "Certificado TecnoPopular")
+        self.assertEqual(report.badge_label, "Certificado")
         self.assertEqual(report.html_sha256, "abc123sha")
 
-    def test_commercial_tracker_triggers_rejection(self):
-        """Presença de Meta Pixel ou GA4 deve acionar bloqueador crítico (status rejeitado)."""
+    def test_commercial_tracker_triggers_blocker(self):
+        """Presença de Meta Pixel ou GA4 deve acionar bloqueador crítico mantendo status catalogado."""
         html = """
         <html>
         <head>
@@ -69,12 +69,12 @@ class TestCivicEvaluator(unittest.TestCase):
             html_bytes=len(html.encode("utf-8")),
         )
 
-        self.assertEqual(report.status, AuditLevel.REJEITADO)
+        self.assertEqual(report.status, AuditLevel.CATALOGADO)
         self.assertTrue(report.has_critical_blocker)
-        self.assertEqual(report.badge_label, "Bloqueador Crítico de Privacidade")
+        self.assertEqual(report.badge_label, "Catalogado")
         self.assertTrue(any("Meta Pixel" in b for b in report.critical_blockers))
 
-    def test_cpf_input_triggers_rejection(self):
+    def test_cpf_input_triggers_blocker(self):
         """Presença de campo solicitando CPF de cidadãos deve acionar bloqueador crítico."""
         html = """
         <html>
@@ -95,7 +95,7 @@ class TestCivicEvaluator(unittest.TestCase):
             html_bytes=len(html.encode("utf-8")),
         )
 
-        self.assertEqual(report.status, AuditLevel.REJEITADO)
+        self.assertEqual(report.status, AuditLevel.CATALOGADO)
         self.assertTrue(report.has_critical_blocker)
 
 

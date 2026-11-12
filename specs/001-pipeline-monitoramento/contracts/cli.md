@@ -57,11 +57,10 @@ a fila andando por meses.
 * **Saída Padrão (stdout):**
   * Linhas estruturadas sem emojis informando o status de cada iniciativa:
     ```text
-    [SELO] baralho-da-virada        | Score: 88.0 | AUDITADO          | Certificado TecnoPopular
-    [DIR ] mapa-do-voto             | Score: 72.5 | CATALOGADO        | Catalogado no Diretório Aberto
-    [S/LEI] dafem-observatorio      | Score:  n/d | NAO_INSPECIONADO  | Não Inspecionado (sem leitura útil)
-    [BLOQ] ferramenta-com-tracker   | Score: 45.0 | REJEITADO         | Bloqueador Crítico de Privacidade
-    [PULA] site-que-proibe-leitura  |            | robots.txt        | robots.txt proíbe este endereço para todos os agentes
+    [CERT ] baralho-da-virada        | Score: 88.0 | CERTIFICADO  | Certificado
+    [CATAL] mapa-do-voto             | Score: 72.5 | CATALOGADO   | Catalogado
+    [S/LEI] dafem-observatorio       | Score:  n/d | NAO_AVALIADO | Não Avaliado
+    [S/LEI] site-que-proibe-leitura  | robots.txt  | robots.txt proíbe este endereço para todos os agentes
     ```
 
   A nota aparece como `n/d` quando não houve leitura útil: nesse caso o laudo não atribui nota.

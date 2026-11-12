@@ -22,7 +22,7 @@ O observatório opera em três eixos principais:
 
 O motor é uma esteira de sete etapas: o catálogo é a entrada, cada etapa pode recusar a iniciativa
 ou registrar uma ressalva, e a saída são dois arquivos com papéis distintos. Nenhuma etapa escreve
-no laudo o que não conseguiu observar — ausência de leitura vira `nao_inspecionado`, não nota baixa.
+no laudo o que não conseguiu observar — ausência de leitura vira `nao_avaliado`, não nota baixa.
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -32,13 +32,13 @@ no laudo o que não conseguiu observar — ausência de leitura vira `nao_inspec
                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ 2. POLÍTICA   robots.RobotsPolicy — uma consulta por host, por ciclo         │
-│               proibido -> [PULA]: fica no catálogo, não recebe laudo         │
+│               proibido -> [S/LEI]: fica no catálogo como nao_avaliado        │
 └───────────────────────────────────┬──────────────────────────────────────────┘
                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ 3. AQUISIÇÃO  fetch.HttpFetcher — HTTP direto, sem serviço externo           │
 │               TLS verificado, User-Agent institucional, cap 4.000.000 B      │
-│               gate de login -> nao_inspecionado                              │
+│               gate de login -> nao_avaliado                                  │
 │               cache data/raw/html_cache por tool_id; SHA igual = reaproveita │
 │               preservação: Wayback por tarefa; archive_status no laudo       │
 └───────────────────────────────────┬──────────────────────────────────────────┘
@@ -56,8 +56,8 @@ no laudo o que não conseguiu observar — ausência de leitura vira `nao_inspec
 └───────────────────────────────────┬──────────────────────────────────────────┘
                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ 6. RESULTADO  >= 80 auditado (selo) · >= 50 catalogado ·                     │
-│               < 50 rejeitado · sem leitura útil -> nao_inspecionado          │
+│ 6. RESULTADO  >= 80 sem bloqueador -> certificado ·                          │
+│               demais inspecionadas -> catalogado · sem leitura -> nao_avaliado│
 └───────────────────────────────────┬──────────────────────────────────────────┘
                                     ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -463,7 +463,7 @@ Com `--semantic off` (padrão), o motor é 100% determinístico e nenhuma chamad
 | :--- | :--- |
 | `uv run python tools/verify_cache.py` | Confere se o cache de HTML reproduz os hashes do manifesto — é o que sustenta recalcular as notas offline |
 | `uv run python tools/compare_cycles.py` | Compara o laudo publicado (git `HEAD`) com o ciclo atual em `dist/`: mudanças de status, selos perdidos/ganhos e laudos sem leitura |
-| `uv run python tools/reevaluate_subset.py --status rejeitado` | Reaudita um recorte do catálogo e mostra quais status mudaram |
+| `uv run python tools/reevaluate_subset.py --status catalogado` | Reaudita um recorte do catálogo e mostra quais status mudaram |
 
 As duas leem apenas artefatos reais e falham com mensagem explícita quando o laudo não existe —
 nenhuma inventa um ciclo a partir de dados em `/tmp`.
@@ -491,13 +491,11 @@ portão que ninguém lê.
 
 | Estado | Significado |
 | :--- | :--- |
-| `auditado` | nota ≥ 80 e nenhum bloqueador crítico — Selo Certificado TecnoPopular |
-| `catalogado` | nota ≥ 50 e < 80 — Diretório Aberto |
-| `em_revisao` | nota < 50 |
-| `rejeitado` | bloqueador crítico de privacidade |
-| `nao_inspecionado` | **não houve leitura útil** (site fora do ar, 404/5xx, timeout ou redirecionamento para autenticação) |
+| `certificado` | nota ≥ 80 e nenhum bloqueador crítico — Certificado |
+| `catalogado` | iniciativa inspecionada que permanece no catálogo (nota < 80 ou com bloqueador crítico de privacidade) |
+| `nao_avaliado` | **não houve leitura útil** (site fora do ar, 404/5xx, timeout, proibição em `robots.txt` ou redirecionamento para autenticação) |
 
-`nao_inspecionado` não é um degrau da escala: é a ausência de avaliação. Página que não pôde ser lida
+`nao_avaliado` não é um degrau da escala: é a ausência de avaliação. Página que não pôde ser lida
 não recebe nota de qualidade, porque a nota calculada sobre conteúdo vazio mede o motor, não a
 iniciativa. O motivo fica em `coverage.reason`.
 

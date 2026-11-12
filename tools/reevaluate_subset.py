@@ -1,7 +1,7 @@
 """Reavalia um recorte do catálogo e compara com o laudo publicado.
 
 Uso:
-    uv run python tools/reevaluate_subset.py --status rejeitado [--limite 10]
+    uv run python tools/reevaluate_subset.py --status catalogado [--limite 10]
 
 Serve para medir o efeito de mudanças de heurística sobre avaliações já publicadas.
 """
@@ -29,7 +29,7 @@ def main() -> None:
         SystemExit: Quando o laudo publicado não existe.
     """
     parser = argparse.ArgumentParser(description="Reavalia um recorte do catálogo.")
-    parser.add_argument("--status", default="rejeitado", help="status publicado a revisar")
+    parser.add_argument("--status", default="catalogado", help="status publicado a revisar")
     parser.add_argument("--limite", type=int, default=0, help="máximo de iniciativas (0 = todas)")
     parser.add_argument("--timeout", type=int, default=10)
     args = parser.parse_args()

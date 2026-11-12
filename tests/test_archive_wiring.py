@@ -35,7 +35,7 @@ def laudo(tool_id: str, sha: str = "a" * 64) -> CivicAuditReport:
         status=AuditLevel.CATALOGADO,
         total_score=70.0,
         dimension_scores={},
-        badge_label="Diretório Aberto",
+        badge_label="Catalogado",
         html_sha256=sha,
     )
 

@@ -91,16 +91,14 @@ Como oficial de conformidade e privacidade (LGPD), quero garantir que nenhum dad
 - **FR-004**: O sistema DEVE comparar o hash calculado com o hash da avaliação imediatamente anterior, pulando reavaliações analíticas custosas se o conteúdo for idêntico.
 - **FR-005**: O sistema DEVE executar a avaliação estruturada e auditável sob as **5 dimensões cívicas do Protocolo TecnoPopular**:
   - **FR-005A (Proveniência de Dados - Peso 25%):** Inspecionar se há declaração e links diretos para bases oficiais de custódia pública (TSE, IBGE, DATASUS, CGU), assegurando reprodutibilidade do dado.
-  - **FR-005B (Privacidade e Soberania - Peso 25%):** Varrer o DOM em busca de pixels e rastreadores comerciais de Big Techs (Meta Pixel, Google Tag Manager, GA4, Hotjar, Clarity) e formulários de captura de dados pessoais (CPF/telefone), atribuindo bloqueador crítico (`rejeitado`) se identificada telemetria comercial invasiva.
+  - **FR-005B (Privacidade e Soberania - Peso 25%):** Varrer o DOM em busca de pixels e rastreadores comerciais de Big Techs (Meta Pixel, Google Tag Manager, GA4, Hotjar, Clarity) e formulários de captura de dados pessoais (CPF/telefone), atribuindo bloqueador crítico de certificação se identificada telemetria comercial invasiva.
   - **FR-005C (Código Aberto e FLOSS - Peso 20%):** Validar a presença de repositório público de código (GitHub, GitLab, Codeberg, Hugging Face) e presença de licença livre aprovada pela OSI para software (MIT, GPL-3.0, Apache-2.0). Licenças de conteúdo (Creative Commons) são registradas, mas não contam como código aberto.
   - **FR-005D (Enquadramento Propositivo - Peso 15%):** Avaliar a presença de vocabulário de utilidade pública e direitos materiais (transparência, cidadania, serviços essenciais) e penalizar terminologias de ataques *ad hominem* polarizadores que acionem o *backfire effect* cognitivo (Lakoff) ou riscos jurídicos.
   - **FR-005E (Acessibilidade e Desempenho - Peso 15%):** Mensurar latência de resposta, peso do payload transferido (< 500 KB) e ausência de paywalls comerciais ou banners publicitários, garantindo usabilidade em celulares periféricos.
 - **FR-006**: O sistema DEVE calcular a nota final ponderada (0 a 100) e classificar o status cívico conforme a nota de corte da rubrica:
-  - `auditado` (Selo Certificado TecnoPopular): Nota $\ge 80$ e zero bloqueadores críticos.
-  - `catalogado` (Diretório Aberto): Nota $\ge 50$ e $< 80$.
-  - `em_revisao`: Nota $< 50$.
-  - `rejeitado`: Presença de bloqueador crítico de privacidade.
-  - `nao_inspecionado`: ausência de leitura útil (sem resposta, erro HTTP, timeout ou redirecionamento para autenticação). Prevalece sobre as demais classificações e não expressa juízo de qualidade.
+  - `certificado` (Certificado): Nota $\ge 80$ e zero bloqueadores críticos.
+  - `catalogado` (Catalogado): Iniciativa inspecionada que não atingiu os requisitos de certificação ou possui bloqueador crítico de privacidade.
+  - `nao_avaliado` (Não Avaliado): Ausência de leitura útil (sem resposta, erro HTTP, timeout, proibição em `robots.txt` ou redirecionamento para autenticação). Prevalece sobre as demais classificações e não expressa juízo de qualidade.
 - **FR-007**: O sistema DEVE acionar a solicitação assíncrona de captura histórica no Internet Archive apenas quando for detectada alteração no hash ou em novas iniciativas cadastradas.
 - **FR-008**: O sistema DEVE consolidar todos os resultados em relatório estruturado centralizado, mantendo consistência estrita de pontuações, datas e identificadores.
 - **FR-009**: O sistema DEVE validar preventivamente a ausência de dados pessoais privados (PII) e segredos de ambiente antes de qualquer gravação ou publicação de dados.

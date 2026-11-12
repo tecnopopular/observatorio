@@ -85,7 +85,7 @@ class TestNaoInspecionado(unittest.TestCase):
     """Garante que ausência de leitura não recebe avaliação de qualidade."""
 
     def test_pagina_vazia_nao_recebe_avaliacao(self):
-        """Página vazia deve resultar em não inspecionado, sem nota publicável."""
+        """Página vazia deve resultar em não avaliado, sem nota publicável."""
         r = CivicEvaluator().evaluate_content(
             tool_id="vazio",
             tool_name="Vazio",
@@ -95,8 +95,8 @@ class TestNaoInspecionado(unittest.TestCase):
             html_bytes=0,
             classifier=NullClassifier(),
         )
-        self.assertEqual(r.status, AuditLevel.NOT_INSPECTED)
-        self.assertIn("Não Inspecionado", r.badge_label)
+        self.assertEqual(r.status, AuditLevel.NAO_AVALIADO)
+        self.assertEqual(r.badge_label, "Não Avaliado")
         self.assertIsNone(r.total_score)
         self.assertIn("não atribuída", r.summary_markdown or "")
         self.assertFalse(_cov(r).inspected)
@@ -104,7 +104,7 @@ class TestNaoInspecionado(unittest.TestCase):
         self.assertEqual(_cov(r).reason, "sem conteúdo legível")
 
     def test_acesso_restrito_nao_recebe_avaliacao(self):
-        """Página atrás de autenticação deve ser marcada como não inspecionada."""
+        """Página atrás de autenticação deve ser marcada como não avaliada."""
         r = CivicEvaluator().evaluate_content(
             tool_id="gate",
             tool_name="Gate",
@@ -114,7 +114,7 @@ class TestNaoInspecionado(unittest.TestCase):
             inspection_reason="acesso restrito: redirecionado para autenticação",
             classifier=NullClassifier(),
         )
-        self.assertEqual(r.status, AuditLevel.NOT_INSPECTED)
+        self.assertEqual(r.status, AuditLevel.NAO_AVALIADO)
         self.assertEqual(_cov(r).reason, "acesso restrito: redirecionado para autenticação")
 
     def test_pagina_lida_continua_com_avaliacao(self):
@@ -129,7 +129,7 @@ class TestNaoInspecionado(unittest.TestCase):
             html_bytes=len(html),
             classifier=NullClassifier(),
         )
-        self.assertNotEqual(r.status, AuditLevel.NOT_INSPECTED)
+        self.assertNotEqual(r.status, AuditLevel.NAO_AVALIADO)
         self.assertTrue(_cov(r).inspected)
 
 

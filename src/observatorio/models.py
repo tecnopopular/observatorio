@@ -26,18 +26,14 @@ class AuditLevel(str, Enum):
     """Níveis de governança e reconhecimento do ecossistema TecnoPopular.
 
     Attributes:
-        CATALOGADO: Diretório Aberto, com elegibilidade básica de utilidade pública.
-        AUDITADO: Certificação TecnoPopular, com selo aprovado no protocolo.
-        EM_REVISAO: Pendência técnica ou documental identificada.
-        REJEITADO: Descumprimento grave de privacidade ou telemetria invasiva.
-        NAO_INSPECIONADO: Não houve leitura útil, portanto não há nota de qualidade.
+        CATALOGADO: Iniciativa catalogada com elegibilidade básica de utilidade pública.
+        CERTIFICADO: Iniciativa certificada no protocolo TecnoPopular.
+        NAO_AVALIADO: Não houve leitura útil, portanto não há avaliação nem nota de qualidade.
     """
 
     CATALOGADO = "catalogado"
-    AUDITADO = "auditado"
-    EM_REVISAO = "em_revisao"
-    REJEITADO = "rejeitado"
-    NOT_INSPECTED = "nao_inspecionado"
+    CERTIFICADO = "certificado"
+    NAO_AVALIADO = "nao_avaliado"
 
 
 NivelConformidade = AuditLevel
