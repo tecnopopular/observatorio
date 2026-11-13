@@ -85,8 +85,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024215751/https://adoteumindeciso.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "agenda-coletiva-campinas",
@@ -119,8 +119,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024233646/https://agendapopular.pages.dev/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "alquimidia",
@@ -136,8 +136,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261029003533/https://alquimidia.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "amigos-do-flavio",
@@ -204,8 +204,8 @@
         "acessibilidade_desempenho": 60.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024224058/https://analiseeleitoral.site/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "analise-vira-voto-tse",
@@ -306,8 +306,8 @@
         "acessibilidade_desempenho": 75.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024223518/https://dadopopular.com.br/atlas",
+      "archive_status": "reused"
     },
     {
       "tool_id": "baixada-santista-com-lula",
@@ -374,8 +374,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261028165334/https://basedosdados.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "bora-lula",
@@ -425,8 +425,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024224600/https://boravirar.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "brasil-acima-de-tudo",
@@ -527,8 +527,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20180407100825/http://brasil.io:80/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "brasil-maior-que-dois-lados",
@@ -545,7 +545,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "skipped"
+      "archive_status": "failed"
     },
     {
       "tool_id": "brasil-melhor",
@@ -596,7 +596,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "skipped"
+      "archive_status": "failed"
     },
     {
       "tool_id": "carona-solidaria",
@@ -748,8 +748,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261105062155/https://conversaquemuda.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "cortes-do-lula-orquestrador-de-pautas",
@@ -799,8 +799,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261028131109/https://crimetarussa.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "curadoria-vira-voto",
@@ -816,8 +816,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024210525/https://acervolula13.lovable.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "da-pra-virar",
@@ -901,8 +901,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261029154947/https://deolhonameta.com.br",
+      "archive_status": "reused"
     },
     {
       "tool_id": "de-olho-no-tse",
@@ -1003,8 +1003,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261019210528/https://direitacomlula.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "diretorio-13",
@@ -1089,7 +1089,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "skipped"
+      "archive_status": "failed"
     },
     {
       "tool_id": "em-quem-jesus-votaria",
@@ -1122,8 +1122,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261026163547/https://escolhacatolica.org/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "escolha-facil",
@@ -1326,8 +1326,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024224600/https://futurobr-revisao.netlify.app/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "gamers-pelo-brasil",
@@ -1360,8 +1360,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024224600/https://ganhavoto.htmly.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "governos-brasileiros-em-dados",
@@ -1412,7 +1412,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "skipped"
+      "archive_status": "failed"
     },
     {
       "tool_id": "indice-de-potencial-de-conversao-ipc",
@@ -1496,8 +1496,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261113045902/https://lula.com.vc/13",
+      "archive_status": "captured"
     },
     {
       "tool_id": "lula-filtro",
@@ -1581,8 +1581,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261029030659/https://programadorespd-campanha-app.hf.space/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mapa-de-abstencao-por-bairro",
@@ -1734,8 +1734,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261024223429/https://claude.ai/artifact/Fm6yiV6cYYBEmk4AsSWpbh",
+      "archive_status": "reused"
     },
     {
       "tool_id": "meu-voto-brasil",
@@ -1802,8 +1802,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261026173713/https://eleicoes2026.dashboard.adsray.clusterlab.lappis.rocks/analise",
+      "archive_status": "reused"
     },
     {
       "tool_id": "mutirao-dos-alunos-do-dcomp",
@@ -1853,8 +1853,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "skipped"
+      "archive_url": "https://web.archive.org/web/20261028083046/https://naosemeta.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "nordeste-decide",
