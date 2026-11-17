@@ -2602,7 +2602,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "sou-do-bem",
@@ -2618,8 +2618,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261117050303/https://soudobem.app/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "super-flavio-world",
@@ -2635,8 +2635,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261026192354/https://www.superflavio.com/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "super-lula-world",
@@ -2670,7 +2670,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "tesoura-no-comercio",
@@ -2805,8 +2805,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261117050630/https://levops.cc/publico/furando_a_bolha/viralulaia",
+      "archive_status": "captured"
     },
     {
       "tool_id": "vira-seguro",
@@ -2840,7 +2840,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-voto",
@@ -2874,7 +2874,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "reused"
     },
     {
       "tool_id": "vira-voto-jogo-de-persuasao",
@@ -2908,7 +2908,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     },
     {
       "tool_id": "vira-votos",
@@ -2924,8 +2924,8 @@
         "acessibilidade_desempenho": 30.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261117051210/https://viravoto13.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "virada-no-bairro",
@@ -3043,8 +3043,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "deferred"
+      "archive_url": "https://web.archive.org/web/20261117051310/https://votesabendo.com.br/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "voto-as-cegas",
@@ -3163,7 +3163,7 @@
       },
       "coverage_complete": true,
       "archive_url": null,
-      "archive_status": "deferred"
+      "archive_status": "failed"
     }
   ]
 }
