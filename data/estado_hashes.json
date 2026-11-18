@@ -596,7 +596,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "failed"
+      "archive_status": "reused"
     },
     {
       "tool_id": "carona-solidaria",
@@ -1904,8 +1904,8 @@
         "acessibilidade_desempenho": 90.0
       },
       "coverage_complete": false,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261117045629/https://obafafa.com.br/",
+      "archive_status": "reused"
     },
     {
       "tool_id": "o-brasil-mudou",
@@ -2669,8 +2669,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261118050446/https://techcontrabolsonaro.dev/",
+      "archive_status": "captured"
     },
     {
       "tool_id": "tesoura-no-comercio",
@@ -2873,7 +2873,7 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
+      "archive_url": "https://web.archive.org/web/20261103045346/https://viravoto.coletivo.net.br/",
       "archive_status": "reused"
     },
     {
