@@ -596,7 +596,7 @@
       },
       "coverage_complete": false,
       "archive_url": null,
-      "archive_status": "reused"
+      "archive_status": "failed"
     },
     {
       "tool_id": "carona-solidaria",
@@ -3162,8 +3162,8 @@
         "acessibilidade_desempenho": 100.0
       },
       "coverage_complete": true,
-      "archive_url": null,
-      "archive_status": "failed"
+      "archive_url": "https://web.archive.org/web/20261118050810/https://voz.social.br/",
+      "archive_status": "reused"
     }
   ]
 }
